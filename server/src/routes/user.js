@@ -19,7 +19,9 @@ router.post("/register", async (req, res) => {
   const newUser = new UserModel({username, password: hashedPassword});
   await newUser.save()
 
-  res.json({message: "User Registered Successfully"});
+  const token = jwt.sign({id: newUser._id}, process.env.SECRET)
+
+  res.json({message: "User Registered Successfully", token, userID: newUser._id});
 })
 
 router.post("/login", async (req, res) => {
@@ -33,7 +35,7 @@ router.post("/login", async (req, res) => {
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if(!isPasswordValid) {
-    return res.json({message: "username or password is incorrect"})
+    return res.json({message: "sorry, invalid credentials..."})
   }
 
   const token = jwt.sign({id: user._id}, process.env.SECRET)
