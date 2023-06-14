@@ -1,8 +1,8 @@
-export const AuthForm = ({username, setUsername, password, setPassword, handleSubmit, authText}) => {
+export const AuthForm = ({username, setUsername, password, setPassword, handleSubmit, label}) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2>{authText}</h2>
+        <h2>{label}</h2>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -21,7 +21,7 @@ export const AuthForm = ({username, setUsername, password, setPassword, handleSu
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        <button type="submit">{authText}</button>
+        <button type="submit">{label}</button>
       </form>
     </div>
   );

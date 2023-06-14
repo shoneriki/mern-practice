@@ -44,7 +44,7 @@ const Register = () => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
-      authText="Register"
+      label="Register"
     />
   );
 };
@@ -86,7 +86,7 @@ const Login = () => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
-      authText="Login"
+      label="Login"
     />
   );
 };

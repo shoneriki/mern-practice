@@ -41,7 +41,7 @@ export const Login = () => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
-      authText="Login"
+      label="Login"
     />
   );
 };

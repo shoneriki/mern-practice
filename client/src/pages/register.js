@@ -35,7 +35,7 @@ export const Register = () => {
       password={password}
       setPassword={setPassword}
       handleSubmit={handleSubmit}
-      authText="Register"
+      label="Register"
     />
   );
 }
