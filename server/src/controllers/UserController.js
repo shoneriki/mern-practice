@@ -42,4 +42,18 @@ const login = async (req, res) => {
   res.json({ token, userID: user._id });
 };
 
-export { register, login };
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    jwt.verify(authHeader, "secret", (err) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
+
+export { register, login, verifyToken};

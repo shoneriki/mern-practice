@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { RecipesModel } from "../models/Recipes.js";
 import { UserModel } from "../models/Users.js";
-// import { verifyToken } from "./user.js";
+import { verifyToken } from "../controllers/UserController.js";
 
 const router = express.Router();
 
@@ -16,44 +16,35 @@ router.get("/", async (req, res) => {
 });
 
 // Create a new recipe
-// router.post("/", verifyToken, async (req, res) => {
-//   const recipe = new RecipesModel({
-//     _id: new mongoose.Types.ObjectId(),
-//     name: req.body.name,
-//     image: req.body.image,
-//     ingredients: req.body.ingredients,
-//     instructions: req.body.instructions,
-//     imageUrl: req.body.imageUrl,
-//     cookingTime: req.body.cookingTime,
-//     userOwner: req.body.userOwner,
-//   });
-//   console.log(recipe);
+router.post("/", verifyToken, async (req, res) => {
+  const recipe = new RecipesModel({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    image: req.body.image,
+    ingredients: req.body.ingredients,
+    instructions: req.body.instructions,
+    imageUrl: req.body.imageUrl,
+    cookingTime: req.body.cookingTime,
+    userOwner: req.body.userOwner,
+  });
+  console.log(recipe);
 
-//   try {
-//     const result = await recipe.save();
-//     res.status(201).json({
-//       createdRecipe: {
-//         name: result.name,
-//         image: result.image,
-//         ingredients: result.ingredients,
-//         instructions: result.instructions,
-//         _id: result._id,
-//       },
-//     });
-//   } catch (err) {
-//     // console.log(err);
-//     res.status(500).json(err);
-//   }
-// });
-router.post("/", async (req,res) => {
-  const recipe = new RecipesModel(req.body)
   try {
     const result = await recipe.save();
-    res.json(result)
+    res.status(201).json({
+      createdRecipe: {
+        name: result.name,
+        image: result.image,
+        ingredients: result.ingredients,
+        instructions: result.instructions,
+        _id: result._id,
+      },
+    });
   } catch (err) {
-    res.json(err)
+    // console.log(err);
+    res.status(500).json(err);
   }
-})
+});
 
 // Get a recipe by ID
 router.get("/:recipeId", async (req, res) => {
