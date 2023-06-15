@@ -2,21 +2,21 @@ import express from "express";
 import mongoose from "mongoose";
 import { RecipesModel } from "../models/Recipes.js";
 import { UserModel } from "../models/Users.js";
-import { verifyToken } from "../controllers/UserController.js";
+// import { verifyToken } from "../controllers/UserController.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
     const result = await RecipesModel.find({});
-    res.status(200).json(result);
+    res.json(result);
   } catch (err) {
-    res.status(500).json(err);
+    res.json(err);
   }
 });
 
-// Create a new recipe
-router.post("/", verifyToken, async (req, res) => {
+// Create a new recipe, add verifyToken when usable
+router.post("/", async (req, res) => {
   const recipe = new RecipesModel({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -42,7 +42,7 @@ router.post("/", verifyToken, async (req, res) => {
     });
   } catch (err) {
     // console.log(err);
-    res.status(500).json(err);
+    res.json(err);
   }
 });
 
@@ -50,9 +50,9 @@ router.post("/", verifyToken, async (req, res) => {
 router.get("/:recipeId", async (req, res) => {
   try {
     const result = await RecipesModel.findById(req.params.recipeId);
-    res.status(200).json(result);
+    res.json(result);
   } catch (err) {
-    res.status(500).json(err);
+    res.json(err);
   }
 });
 
@@ -63,9 +63,9 @@ router.put("/", async (req, res) => {
   try {
     user.savedRecipes.push(recipe);
     await user.save();
-    res.status(201).json({ savedRecipes: user.savedRecipes });
+    res.json({ savedRecipes: user.savedRecipes });
   } catch (err) {
-    res.status(500).json(err);
+    res.json(err);
   }
 });
 
@@ -73,10 +73,10 @@ router.put("/", async (req, res) => {
 router.get("/savedRecipes/ids/:userId", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId);
-    res.status(201).json({ savedRecipes: user?.savedRecipes });
+    res.json({ savedRecipes: user?.savedRecipes });
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.json(err);
   }
 });
 
@@ -89,10 +89,10 @@ router.get("/savedRecipes/:userId", async (req, res) => {
     });
 
     console.log(savedRecipes);
-    res.status(201).json({ savedRecipes });
+    res.json({ savedRecipes });
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    res.json(err);
   }
 });
 
