@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const practicePlanSchema = new mongoose.Schema(
   {
@@ -10,8 +10,8 @@ const practicePlanSchema = new mongoose.Schema(
     },
     excerpts: [
       {
-      type: String,
-    }
+        type: String,
+      },
     ],
     movements: {
       type: String,
@@ -24,7 +24,7 @@ const practicePlanSchema = new mongoose.Schema(
     timesPerWeek: { type: Number, min: 1, max: 7 },
     untilDate: { type: Date },
     practiceLengthInMinutes: { type: Number, min: 1, max: 1440 },
-    notes: {type: String},
+    notes: { type: String },
     userOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -34,4 +34,7 @@ const practicePlanSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const practicePlanModel = mongoose.model("PracticePlans", practicePlanSchema)
+export const PracticePlansModel = mongoose.model(
+  "PracticePlans",
+  practicePlanSchema
+);
