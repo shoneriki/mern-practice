@@ -16,6 +16,11 @@ const practicePlanSchema = new mongoose.Schema({
   endMetronomeGoal: {
     type: Number,
   },
+  practiceDates: [{type: Date}],
+  daily: {type: Boolean, default: false},
+  timesPerWeek: {type: Number, min: 1, max: 7},
+  untilDate: {type: Date},
+  practiceLengthInMinutes: {type: Number, min: 1, max: 1440},
   userOwner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -24,4 +29,3 @@ const practicePlanSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 export const practicePlanModel = mongoose.model("PracticePlans", practicePlanSchema)
-
