@@ -24,6 +24,7 @@ const practicePlanSchema = new mongoose.Schema(
     timesPerWeek: { type: Number, min: 1, max: 7 },
     untilDate: { type: Date },
     practiceLengthInMinutes: { type: Number, min: 1, max: 1440 },
+    notes: {type: String},
     userOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
