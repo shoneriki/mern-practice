@@ -22,9 +22,8 @@ router.post("/", async (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     numOfPieces: req.body.numOfPieces,
-    pieces: req.body.excerpts,
+    pieces: req.body.pieces,
     intermission: req.body.intermission,
-    lengthInMinutes: req.body.lengthInMinutes,
   });
   console.log(programPlan);
 
