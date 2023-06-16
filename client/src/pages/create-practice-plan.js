@@ -105,18 +105,19 @@ export const CreatePracticePlan = () => {
           />
           No
         </div>
-        {/* {
-          if(!practicePlan.daily) {
-          <label htmlFor="timesPerWeek">Times Per Week</label>
-          <input
-            type="number"
-            id="name"
-            name="name"
-            value={practicePlan.timesPerWeek}
-            onChange={handleChange}
-          />
-          }
-        } */}
+        {!practicePlan.daily ? (
+          <>
+            <label htmlFor="timesPerWeek">Times Per Week</label>
+            <input
+              type="number"
+              id="timesPerWeek"
+              name="timesPerWeek"
+              value={practicePlan.timesPerWeek}
+              onChange={handleChange}
+            />
+          </>
+
+        ) : null}
         <label htmlFor="untilDate">Until Date:</label>
         <input
           type="date"
@@ -125,7 +126,9 @@ export const CreatePracticePlan = () => {
           value={practicePlan.untilDate}
           onChange={handleChange}
         />
-        <label htmlFor="practiceLengthInMinutes">Length of practice session</label>
+        <label htmlFor="practiceLengthInMinutes">
+          Length of practice session
+        </label>
         <input
           type="number"
           id="practiceLengthInMinutes"
