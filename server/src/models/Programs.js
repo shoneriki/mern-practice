@@ -16,7 +16,6 @@ const pieceSchema = new mongoose.Schema(
   {timestamps: true},
 )
 
-
 const programSchema = new mongoose.Schema(
   {
     name: {

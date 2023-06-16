@@ -5,6 +5,7 @@ import "dotenv/config.js";
 import {userRouter} from './routes/users.js'
 import {recipesRouter} from './routes/recipes.js'
 import {practicePlansRouter} from './routes/practicePlans.js'
+import {programsRouter} from './routes/programs.js'
 
 const app = express();
 
