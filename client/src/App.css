@@ -91,16 +91,38 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   background-color: white;
-  border-radius: 5px;
+  border-radius: .25rem;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  width: 400px;
+  margin: 1.25rem;
+  width: 90%;
 }
 .create-program form {
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.create-program .piece {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  border: 4px solid yellow;
+  border-radius: 1rem;
+  padding: 0 1rem;
+}
+
+.piece .btn-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.btn-div button {
+  width: 50%;
 }
 
 .create-practice-plan {

@@ -63,7 +63,8 @@ export const CreateProgram = () => {
           onChange={handleChangeProgram}
         />
         {program.pieces.map((piece, index) => {
-          <div key={index}>
+          return (
+          <div key={index} class="piece">
             <h3>Piece #{index + 1}</h3>
             <label htmlFor={`piece-${index}-name`}>Piece Name:</label>
             <input
@@ -80,7 +81,7 @@ export const CreateProgram = () => {
               onChange={(event) => handleChangePiece(event, index)}
             />
             <label htmlFor={`piece-${index}-lengthInSeconds`}>
-              Piece Name:
+              Length (in seconds):
             </label>
             <input
               id={`piece-${index}-lengthInSeconds`}
@@ -88,11 +89,14 @@ export const CreateProgram = () => {
               value={piece.lengthInSeconds}
               onChange={(event) => handleChangePiece(event, index)}
             />
-          </div>;
+            <div className="btn-div">
+              <button type="button" onClick={addPiece}>
+                Add New Piece?
+              </button>
+            </div>
+          </div>
+          )
         })}
-        <button type="button" onClick={addPiece}>
-          Add Piece?
-        </button>
         <label htmlFor="numOfPieces">Number of Pieces:</label>
         <input
           type="number"
@@ -122,21 +126,3 @@ export const CreateProgram = () => {
     </div>
   );
 }
-
-/*
-      name: {
-      type: String,
-      required: true,
-    },
-    numOfPieces: {
-      type: Number,
-      required: true,
-    },
-    pieces: [pieceSchema],
-    intermission: {
-      type: Number,
-    },
-    length: {
-      type: String,
-    },
-*/
