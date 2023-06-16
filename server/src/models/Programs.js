@@ -9,7 +9,7 @@ const pieceSchema = new mongoose.Schema(
     composer: {
       type: String,
     },
-    lengthInMinutes: {
+    lengthInSeconds: {
       type: Number,
     },
   },
@@ -30,19 +30,28 @@ const programSchema = new mongoose.Schema(
     intermission: {
       type: Number,
     },
-    lengthInMinutes: {
-      type: Number,
+    length: {
+      type: String,
     },
   },
   { timestamps: true }
 );
 
 programSchema.pre("save", function (next) {
-  let totalLength = 0;
+  let totalLengthInSeconds = 0;
   for (let i = 0; i < this.pieces.length; i++) {
-    totalLength += this.pieces[i].lengthInMinutes;
+    totalLengthInSeconds += this.pieces[i].lengthInSeconds;
   }
-  this.lengthInMinutes = totalLength;
+  this.length = formatSeconds(totalLengthInSeconds);
+
+  function formatSeconds(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours}hr:${minutes}m:${seconds}sec`;
+  }
   next();
 });
 

@@ -34,9 +34,9 @@ router.post("/", async (req, res) => {
         _id: result._id,
         name: result.name,
         numOfPieces: result.numOfPieces,
-        pieces: result.excerpts,
+        pieces: result.pieces,
         intermission: result.intermission,
-        lengthInMinutes: result.lengthInMinutes,
+        length: result.length,
       },
     });
   } catch (err) {
