@@ -13,6 +13,8 @@ app.use(cors());
 app.use("/auth", userRouter)
 app.use("/recipes", recipesRouter)
 
+app.use("/programs", programsRouter)
+
 app.use("/practiceplans", practicePlansRouter)
 
 
