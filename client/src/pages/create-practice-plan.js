@@ -63,16 +63,16 @@ export const CreatePracticePlan = () => {
         <label htmlFor="Composer">Composer:</label>
         <input
           type="text"
-          id="name"
-          name="name"
+          id="composer"
+          name="composer"
           value={practicePlan.composer}
           onChange={handleChange}
         />
         <label htmlFor="Piece Name">Piece Name:</label>
         <input
           type="text"
-          id="name"
-          name="name"
+          id="pieceName"
+          name="pieceName"
           value={practicePlan.pieceName}
           onChange={handleChange}
         />
@@ -126,7 +126,7 @@ export const CreatePracticePlan = () => {
           onChange={handleChange}
         />
         <label htmlFor="practiceLengthInMinutes">
-          Length of practice session
+          Length of practice session(minutes)
         </label>
         <input
           type="number"
@@ -143,6 +143,7 @@ export const CreatePracticePlan = () => {
           value={practicePlan.notes}
           onChange={handleChange}
         />
+        <button type="submit">Create Plan</button>
       </form>
     </div>
   );
