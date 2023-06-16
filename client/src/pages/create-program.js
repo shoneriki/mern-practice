@@ -23,16 +23,24 @@ export const CreateProgram = () => {
     setProgram({...program, [name]: value})
   };
 
-  const handleChangePiece = (event, index) => {
-    const {name, value} = event.target;
-    const newPieces = [...program.pieces];
+const handleChangePiece = (event, index) => {
+  const { name, value } = event.target;
+  setProgram((prevState) => {
+    const newPieces = [...prevState.pieces];
     newPieces[index][name] = value;
-    setProgram({...program, pieces: newPieces})
-  };
+    return {
+      ...prevState,
+      pieces: newPieces,
+    };
+  });
+};
+
+
 
   const addPiece = () => {
     setProgram({
       ...program,
+      numOfPieces: program.numOfPieces + 1,
       pieces: [...program.pieces, {name: "", composer: "", lengthInSeconds: 0}],
     });
   };
@@ -124,5 +132,5 @@ export const CreateProgram = () => {
         <button type="submit">Create Program</button>
       </form>
     </div>
-  );
+  )
 }
