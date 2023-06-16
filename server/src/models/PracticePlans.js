@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const practicePlanSchema = new mongoose.Schema(
   {
-    pieceName: {
+    composer: {
       type: String,
     },
-    composer: {
+    pieceName: {
       type: String,
     },
     excerpts: [

@@ -20,8 +20,8 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const practicePlan = new PracticePlansModel({
     _id: new mongoose.Types.ObjectId(),
-    pieceName: req.body.pieceName,
     composer: req.body.composer,
+    pieceName: req.body.pieceName,
     excerpts: req.body.excerpts,
     movements: req.body.movements,
     endMetronomeGoal: req.body.endMetronomeGoal,
@@ -38,11 +38,18 @@ router.post("/", async (req, res) => {
     const result = await practicePlan.save();
     res.status(201).json({
       createdPracticePlan: {
-        name: result.name,
-        image: result.image,
-        ingredients: result.ingredients,
-        instructions: result.instructions,
         _id: result._id,
+        composer: result.composer,
+        pieceName: result.pieceName,
+        excerpts: result.excerpts,
+        movements: result.movements,
+        endMetronomeGoal: result.endMetronomeGoal,
+        practiceStartDate: result.practiceStartDate,
+        daily: result.daily,
+        timesPerWeek: result.timesPerWeek,
+        untilDate: result.untilDate,
+        practiceLengthInMinutes: result.practiceLengthInMinutes,
+        userOwner: result.userOwner,
       },
     });
   } catch (err) {
@@ -51,54 +58,5 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get a recipe by ID
-router.get("/:recipeId", async (req, res) => {
-  try {
-    const result = await RecipesModel.findById(req.params.recipeId);
-    res.json(result);
-  } catch (err) {
-    res.json(err);
-  }
-});
-
-// Save a Recipe
-router.put("/", async (req, res) => {
-  const recipe = await RecipesModel.findById(req.body.recipeID);
-  const user = await UserModel.findById(req.body.userID);
-  try {
-    user.savedRecipes.push(recipe);
-    await user.save();
-    res.json({ savedRecipes: user.savedRecipes });
-  } catch (err) {
-    res.json(err);
-  }
-});
-
-// Get id of saved recipes
-router.get("/savedRecipes/ids/:userId", async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.params.userId);
-    res.json({ savedRecipes: user?.savedRecipes });
-  } catch (err) {
-    console.log(err);
-    res.json(err);
-  }
-});
-
-// Get saved recipes
-router.get("/savedRecipes/:userId", async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.params.userId);
-    const savedRecipes = await RecipesModel.find({
-      _id: { $in: user.savedRecipes },
-    });
-
-    console.log(savedRecipes);
-    res.json({ savedRecipes });
-  } catch (err) {
-    console.log(err);
-    res.json(err);
-  }
-});
 
 export { router as practicePlansRouter };

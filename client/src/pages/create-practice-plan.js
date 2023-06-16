@@ -60,20 +60,20 @@ export const CreatePracticePlan = () => {
     <div className="create-recipe">
       <h2>Create Practice Plan</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="Piece Name">Piece Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={practicePlan.pieceName}
-          onChange={handleChange}
-        />
         <label htmlFor="Composer">Composer:</label>
         <input
           type="text"
           id="name"
           name="name"
           value={practicePlan.composer}
+          onChange={handleChange}
+        />
+        <label htmlFor="Piece Name">Piece Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={practicePlan.pieceName}
           onChange={handleChange}
         />
         <label htmlFor="Practice Start Date">Date of Practice Start:</label>
@@ -116,7 +116,6 @@ export const CreatePracticePlan = () => {
               onChange={handleChange}
             />
           </>
-
         ) : null}
         <label htmlFor="untilDate">Until Date:</label>
         <input
