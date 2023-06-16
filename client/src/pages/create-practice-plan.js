@@ -13,7 +13,7 @@ export const CreatePracticePlan = () => {
     excerpts: [],
     movements: "",
     endMetronomeGoal: 0,
-    practiceDates: new Date().toISOString().split("T")[0],
+    practiceStartDate: new Date().toISOString().split("T")[0],
     daily: false,
     timesPerWeek: 1,
     untilDate: new Date().toISOString().split("T")[0],
@@ -26,8 +26,17 @@ export const CreatePracticePlan = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setPracticePlan({ ...practicePlan, [name]: value });
+
+    // check if the name is 'daily'
+    if (name === "daily") {
+      const parsedValue = value === "true";
+      setPracticePlan({ ...practicePlan, [name]: parsedValue });
+    } else {
+      setPracticePlan({ ...practicePlan, [name]: value });
+    }
   };
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -67,27 +76,71 @@ export const CreatePracticePlan = () => {
           value={practicePlan.composer}
           onChange={handleChange}
         />
-        <label htmlFor="Practice Dates">Dates to Practice:</label>
+        <label htmlFor="Practice Start Date">Date of Practice Start:</label>
         <input
-          type="text"
-          id="name"
-          name="name"
-          value={practicePlan.practiceDates}
+          type="date"
+          id="practiceStartDate"
+          name="practiceStartDate"
+          value={practicePlan.practiceStartDate}
           onChange={handleChange}
         />
-
-        {/*
-          
-    excerpts: [],
-    movements: "",
-    endMetronomeGoal: 0,
-    practiceDates: new Date().toISOString().split("T")[0],
-    daily: false,
-    timesPerWeek: 1,
-    untilDate: new Date().toISOString().split("T")[0],
-    practiceLengthInMinutes: 1,
-    notes: "",
-         */}
+        <div>
+          <label htmlFor="daily">Daily?</label>
+          <input
+            type="radio"
+            id="daily-yes"
+            name="daily"
+            value={true}
+            checked={practicePlan.daily === true}
+            onChange={handleChange}
+          />
+          Yes
+          <input
+            type="radio"
+            id="daily-no"
+            name="daily"
+            value={false}
+            checked={practicePlan.daily === false}
+            onChange={handleChange}
+          />
+          No
+        </div>
+        {/* {
+          if(!practicePlan.daily) {
+          <label htmlFor="timesPerWeek">Times Per Week</label>
+          <input
+            type="number"
+            id="name"
+            name="name"
+            value={practicePlan.timesPerWeek}
+            onChange={handleChange}
+          />
+          }
+        } */}
+        <label htmlFor="untilDate">Until Date:</label>
+        <input
+          type="date"
+          id="untilDate"
+          name="untilDate"
+          value={practicePlan.untilDate}
+          onChange={handleChange}
+        />
+        <label htmlFor="practiceLengthInMinutes">Length of practice session</label>
+        <input
+          type="number"
+          id="practiceLengthInMinutes"
+          name="practiceLengthInMinutes"
+          value={practicePlan.practiceLengthInMinutes}
+          onChange={handleChange}
+        />
+        <label htmlFor="notes">Extra notes?:</label>
+        <textarea
+          type="date"
+          id="notes"
+          name="notes"
+          value={practicePlan.notes}
+          onChange={handleChange}
+        />
       </form>
     </div>
   );

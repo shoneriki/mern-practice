@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
     excerpts: req.body.excerpts,
     movements: req.body.movements,
     endMetronomeGoal: req.body.endMetronomeGoal,
-    practiceDates: req.body.practiceDates,
+    practiceStartDate: req.body.practiceStartDate,
     daily: req.body.daily,
     timesPerWeek: req.body.timesPerWeek,
     untilDate: req.body.untilDate,

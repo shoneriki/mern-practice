@@ -19,7 +19,7 @@ const practicePlanSchema = new mongoose.Schema(
     endMetronomeGoal: {
       type: Number,
     },
-    practiceDates: [{ type: Date }],
+    practiceStartDate: [{ type: Date }],
     daily: { type: Boolean, default: false },
     timesPerWeek: { type: Number, min: 1, max: 7 },
     untilDate: { type: Date },
