@@ -8,6 +8,8 @@ import { CreateRecipe } from "./pages/create-recipe";
 import { Home } from "./pages/home";
 import { SavedRecipes } from "./pages/saved-recipes";
 import {CreatePracticePlan} from "./pages/create-practice-plan"
+import {CreateProgram} from "./pages/create-program"
+
 
 function App() {
   return (
@@ -21,7 +23,8 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/login" element={<Login />} />
-          <Route path="create-practice-plan" element=<CreatePracticePlan/>/>
+          <Route path="create-practice-plan" element={<CreatePracticePlan/>}/>
+          <Route path="create-program" element={<CreateProgram/>}/>
         </Routes>
       </Router>
     </div>

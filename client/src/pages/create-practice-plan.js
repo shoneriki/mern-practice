@@ -57,7 +57,7 @@ export const CreatePracticePlan = () => {
   };
 
   return (
-    <div className="create-recipe">
+    <div className="create-practice-plan">
       <h2>Create Practice Plan</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="Composer">Composer:</label>

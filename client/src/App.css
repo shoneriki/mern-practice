@@ -85,6 +85,40 @@ a {
   display: flex;
   flex-direction: column;
 }
+
+.create-program {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  width: 400px;
+}
+.create-program form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-practice-plan {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  width: 400px;
+}
+.create-practice-plan form {
+  display: flex;
+  flex-direction: column;
+}
 ul {
   list-style: none;
   padding: 0;
