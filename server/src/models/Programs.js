@@ -9,9 +9,11 @@ const pieceSchema = new mongoose.Schema(
     composer: {
       type: String,
     },
-    lengthInSeconds: {
-      type: Number,
-    },
+    length: {
+      hours: {type: Number, default: 0},
+      minutes: {type: Number, min: 0, max: 59, default:0},
+      seconds: {type: Number, min: 0, max: 59, default: 0},
+    }
   },
   {timestamps: true},
 )
@@ -22,6 +24,10 @@ const programSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
     numOfPieces: {
       type: Number,
       required: true,
@@ -31,7 +37,9 @@ const programSchema = new mongoose.Schema(
       type: Number,
     },
     length: {
-      type: String,
+      hours: { type: Number, default: 0 },
+      minutes: { type: Number, min: 0, max: 59, default: 0 },
+      seconds: { type: Number, min: 0, max: 59, default: 0 },
     },
   },
   { timestamps: true }
@@ -40,18 +48,18 @@ const programSchema = new mongoose.Schema(
 programSchema.pre("save", function (next) {
   let totalLengthInSeconds = 0;
   for (let i = 0; i < this.pieces.length; i++) {
-    totalLengthInSeconds += this.pieces[i].lengthInSeconds;
+    const piece = this.pieces[i];
+    totalLengthInSeconds +=
+      piece.length.hours * 3600 +
+      piece.length.minutes * 60 +
+      piece.length.seconds;
   }
-  this.length = formatSeconds(totalLengthInSeconds);
 
-  function formatSeconds(totalSeconds) {
-    const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
+  this.length.hours = Math.floor(totalLengthInSeconds / 3600);
+  totalLengthInSeconds %= 3600;
+  this.length.minutes = Math.floor(totalLengthInSeconds / 60);
+  this.length.seconds = totalLengthInSeconds % 60;
 
-    return `${hours}hr:${minutes}m:${seconds}sec`;
-  }
   next();
 });
 

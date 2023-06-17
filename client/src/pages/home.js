@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
+import { format } from "date-fns";
 
 export const Home = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [savedRecipes, setSavedRecipes] = useState([]);
+  // const [recipes, setRecipes] = useState([]);
+  // const [savedRecipes, setSavedRecipes] = useState([]);
 
   const userID = useGetUserID();
 
@@ -32,7 +33,7 @@ export const Home = () => {
         }
       }
       fetchPrograms()
-  });
+  }, []);
 
   //   const fetchSavedRecipes = async () => {
   //     try {
@@ -74,31 +75,37 @@ export const Home = () => {
             <li key={program._id}>
               <section>
                 <h2>{program.name}</h2>
+                <h2>
+                  Date: {format(new Date(program.date), "MMMM do, yyyy H:mm")}
+                </h2>
                 <div>
                   {program.pieces.map((piece, index) => {
+                    const {
+                      hours: pieceHours,
+                      minutes: pieceMinutes,
+                      seconds: pieceSeconds,
+                    } = piece.length;
                     return (
-                      <div key={piece._id}>
-                        <p>Piece {index + 1}: {piece.name}</p>
-                        <p>Composer: {piece.composer}</p>
+                      <div className="piece-display" key={piece._id}>
                         <p>
-                          {(() => {
-                            const hours = Math.floor(
-                              piece.lengthInSeconds / 3600
-                            );
-                            const minutes = Math.floor(
-                              (piece.lengthInSeconds % 3600) / 60
-                            );
-                            const seconds = piece.lengthInSeconds % 60;
-
-                            return `Length: ${hours}hr: ${minutes}min: ${seconds}sec`;
-                          })()}
+                          Piece {index + 1}: {piece.name}
+                        </p>
+                        <p>
+                          Piece {index + 1} Composer: {piece.composer}
+                        </p>
+                        <p>
+                          Piece {index + 1} Length: {pieceHours}hr:{" "}
+                          {pieceMinutes}min: {pieceSeconds}sec
                         </p>
                       </div>
                     );
                   })}
                 </div>
                 <p>Intermission: {program.intermission} minutes</p>
-                <p>Length: {program.length}</p>
+                <p>
+                  Length: {program.length.hours}hr: {program.length.minutes}min:{" "}
+                  {program.length.seconds}sec
+                </p>
               </section>
             </li>
           );

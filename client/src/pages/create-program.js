@@ -4,17 +4,33 @@ import { useGetUserID } from "../hooks/useGetUserID";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
+
 export const CreateProgram = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
 
+  const [piece, setPiece] = useState({
+    name: "",
+    composer: "",
+    length: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0
+    }
+  })
+
   const [program, setProgram] = useState({
     name: "",
     numOfPieces: 1,
-    pieces: [{name: "", composer: "", lengthInSeconds: 0}],
+    pieces: [
+      { name: "", composer: "", length: { hours: 0, minutes: 0, seconds: 0 } },
+    ],
     length: "",
+    date: "",
+    time: "",
     userOwner: userID,
   });
+
 
   const navigate = useNavigate();
 
@@ -23,11 +39,15 @@ export const CreateProgram = () => {
     setProgram({...program, [name]: value})
   };
 
-const handleChangePiece = (event, index) => {
+const handleChangePiece = (event, index, subfield) => {
   const { name, value } = event.target;
   setProgram((prevState) => {
     const newPieces = [...prevState.pieces];
-    newPieces[index][name] = value;
+    if (subfield) {
+      newPieces[index][name][subfield] = Number(value);
+    } else {
+      newPieces[index][name] = value;
+    }
     return {
       ...prevState,
       pieces: newPieces,
@@ -36,19 +56,22 @@ const handleChangePiece = (event, index) => {
 };
 
 
-
-  const addPiece = () => {
-    setProgram({
-      ...program,
-      numOfPieces: program.numOfPieces + 1,
-      pieces: [...program.pieces, {name: "", composer: "", lengthInSeconds: 0}],
-    });
-  };
+const addPiece = () => {
+  setProgram({
+    ...program,
+    numOfPieces: program.numOfPieces + 1,
+    pieces: [
+      ...program.pieces,
+      { name: "", composer: "", length: { hours: 0, minutes: 0, seconds: 0 } },
+    ],
+  });
+};
 
   const handleSubmit = async(event) => {
     event.preventDefault();
+    const dateTime = new Date(`${program.date} at ${program.time}`)
     try {
-      await axios.post("http://localhost:3001/programs", program, {
+      await axios.post("http://localhost:3001/programs", {...program, date: dateTime}, {
         headers: { authorization: cookies.access_token },
       });
       alert("New Program Added");
@@ -70,40 +93,85 @@ const handleChangePiece = (event, index) => {
           value={program.name}
           onChange={handleChangeProgram}
         />
+        <label htmlFor="date">Performance Date:</label>
+        <input
+          type="date"
+          id="date"
+          name="date"
+          value={program.date}
+          onChange={handleChangeProgram}
+        />
+        <label htmlFor="time">Performance Time:</label>
+        <input
+          type="time"
+          id="time"
+          name="time"
+          value={program.time}
+          onChange={handleChangeProgram}
+        />
         {program.pieces.map((piece, index) => {
           return (
-          <div key={index} class="piece">
-            <h3>Piece #{index + 1}</h3>
-            <label htmlFor={`piece-${index}-name`}>Piece Name:</label>
-            <input
-              id={`piece-${index}-name`}
-              name="name"
-              value={piece.name}
-              onChange={(event) => handleChangePiece(event, index)}
-            />
-            <label htmlFor={`piece-${index}-composer`}>Composer:</label>
-            <input
-              id={`piece-${index}-composer`}
-              name="composer"
-              value={piece.composer}
-              onChange={(event) => handleChangePiece(event, index)}
-            />
-            <label htmlFor={`piece-${index}-lengthInSeconds`}>
-              Length (in seconds):
-            </label>
-            <input
-              id={`piece-${index}-lengthInSeconds`}
-              name="lengthInSeconds"
-              value={piece.lengthInSeconds}
-              onChange={(event) => handleChangePiece(event, index)}
-            />
-            <div className="btn-div">
-              <button type="button" onClick={addPiece}>
-                Add New Piece?
-              </button>
+            <div key={index} class="piece">
+              <h3>Piece #{index + 1}</h3>
+              <label htmlFor={`piece-${index}-name`}>Piece Name:</label>
+              <input
+                id={`piece-${index}-name`}
+                name="name"
+                value={piece.name}
+                onChange={(event) => handleChangePiece(event, index)}
+              />
+              <label htmlFor={`piece-${index}-composer`}>Composer:</label>
+              <input
+                id={`piece-${index}-composer`}
+                name="composer"
+                value={piece.composer}
+                onChange={(event) => handleChangePiece(event, index)}
+              />
+              <label htmlFor={`piece-${index}-lengthInSeconds`}>Length:</label>
+              <div className="time-input">
+                <article>
+                  <input
+                    type="number"
+                    id={`piece-${index}-hours`}
+                    name="length"
+                    value={piece.length.hours}
+                    onChange={(event) => handleChangePiece(event, index, "hours")}
+                  />
+                  <label htmlFor={`piece-${index}-hours`}>hr</label>
+                </article>
+                <article>
+                  <input
+                    type="number"
+                    id={`piece-${index}-minutes`}
+                    name="length"
+                    value={piece.length.minutes}
+                    onChange={(event) =>
+                      handleChangePiece(event, index, "minutes")
+                    }
+                  />
+                  <label htmlFor={`piece-${index}-minutes`}>min</label>
+                </article>
+                <article>
+                  <input
+                    type="number"
+                    id={`piece-${index}-seconds`}
+                    name="length"
+                    value={piece.length.seconds}
+                    onChange={(event) =>
+                      handleChangePiece(event, index, "seconds")
+                    }
+                  />
+                  <label htmlFor={`piece-${index}-seconds`}>sec</label>
+                </article>
+              </div>
+
+              <div className="btn-div">
+                <button type="button" onClick={addPiece}>
+                  Add New Piece?
+                </button>
+              </div>
             </div>
-          </div>
-          )
+          );
         })}
         <label htmlFor="numOfPieces">Number of Pieces:</label>
         <input
@@ -121,16 +189,8 @@ const handleChangePiece = (event, index) => {
           value={program.intermission}
           onChange={handleChangeProgram}
         />
-        {/* <label htmlFor="length">Program Length:</label>
-        <index
-          type="text"
-          id="length"
-          name="length"
-          value={program.length}
-          onChange={handleChangeProgram}
-        /> */}
         <button type="submit">Create Program</button>
       </form>
     </div>
-  )
+  );
 }

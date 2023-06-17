@@ -125,6 +125,35 @@ a {
   width: 50%;
 }
 
+.piece .time-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.time-input article {
+  display: flex;
+  align-items: center;
+  width: 10%;
+}
+
+.time-input article input {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  border: 1px solid black;
+  width: 50%;
+}
+
+.time-input article label {
+  width: 10%;
+}
+
+.piece-display {
+  background-color: yellow;
+}
+
+
 .create-practice-plan {
   display: flex;
   flex-direction: column;
