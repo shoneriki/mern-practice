@@ -69,7 +69,7 @@ const addPiece = () => {
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    const dateTime = new Date(`${program.date} at ${program.time}`)
+    const dateTime = new Date(`${program.date}T${program.time}`).toISOString();
     try {
       await axios.post("http://localhost:3001/programs", {...program, date: dateTime}, {
         headers: { authorization: cookies.access_token },
