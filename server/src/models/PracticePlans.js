@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const practicePlanSchema = new mongoose.Schema(
   {
     composer: {
@@ -25,6 +26,10 @@ const practicePlanSchema = new mongoose.Schema(
     untilDate: { type: Date },
     practiceLengthInMinutes: { type: Number, min: 1, max: 1440 },
     notes: { type: String },
+    programId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Programs"
+    },
     userOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

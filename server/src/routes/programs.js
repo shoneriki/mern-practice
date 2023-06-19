@@ -51,4 +51,25 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  try {
+    const pieceName = req.query.pieceName;
+    const programs = await ProgramsModel.find({
+      "pieces.name": { $regex: new RegExp(pieceName, "i") },
+    });
+    const pieces = [];
+    programs.forEach((program) => {
+      program.pieces.forEach((piece) => {
+        if (piece.name.toLowerCase().includes(pieceName.toLowerCase())) {
+          pieces.push(piece);
+        }
+      });
+    });
+    res.json(pieces);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 export { router as programsRouter };

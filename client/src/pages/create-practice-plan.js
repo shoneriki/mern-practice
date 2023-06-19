@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,19 @@ export const CreatePracticePlan = () => {
     notes: "",
     userOwner: userID,
   });
+
+  const [pieceName, setPieceName] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    if(pieceName.length >= 2) {
+      axios.get(`http://localhost:3001/programs/search?pieceName=${pieceName}`)
+        .then(res => {
+          setSuggestions(res.data);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [pieceName])
 
   const navigate = useNavigate();
 
@@ -68,14 +81,44 @@ export const CreatePracticePlan = () => {
           value={practicePlan.composer}
           onChange={handleChange}
         />
-        <label htmlFor="Piece Name">Piece Name:</label>
-        <input
-          type="text"
-          id="pieceName"
-          name="pieceName"
-          value={practicePlan.pieceName}
-          onChange={handleChange}
-        />
+        <div>
+          <label htmlFor="pieceName">Piece Name:</label>
+          <input
+            type="text"
+            id="pieceName"
+            name="pieceName"
+            value={pieceName}
+            onChange={(e) => setPieceName(e.target.value)}
+          />
+          {suggestions.length > 0 && (
+            <div
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                marginTop: "2px",
+                maxHeight: "150px",
+                overflowY: "auto",
+              }}
+            >
+              {suggestions.map((suggestion) => (
+                <div
+                  key={suggestion._id}
+                  style={{ padding: "5px", cursor: "pointer" }}
+                  onClick={() => {
+                    setPieceName(suggestion.name);
+                    setPracticePlan((prevPlan) => ({
+                      ...prevPlan,
+                      programId: suggestion.programId,
+                    }));
+                  }}
+                >
+                  {suggestion.name} by {suggestion.composer}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         <label htmlFor="Practice Start Date">Date of Practice Start:</label>
         <input
           type="date"
