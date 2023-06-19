@@ -76,7 +76,7 @@ export const Home = () => {
               <section>
                 <h2>{program.name}</h2>
                 <h2>
-                  Date: {format(new Date(program.date), "MMMM do, yyyy H:mm")}
+                  Date: {format(new Date(program.date), "MMMM do, yyyy 'at' H:mm")}
                 </h2>
                 <div>
                   {program.pieces.map((piece, index) => {
