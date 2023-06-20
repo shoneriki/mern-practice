@@ -13,7 +13,7 @@ const pieceSchema = new mongoose.Schema(
       hours: {type: Number, default: 0},
       minutes: {type: Number, min: 0, max: 59, default:0},
       seconds: {type: Number, min: 0, max: 59, default: 0},
-    }
+    },
   },
   {timestamps: true},
 )

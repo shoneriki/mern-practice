@@ -49,7 +49,7 @@ export const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="fixed" sx={{marginBottom: "5rem"}}>
+    <AppBar position="fixed" sx={{ marginBottom: "5rem" }}>
       <Toolbar>
         <Typography variant="h4" sx={{ flexGrow: "1", cursor: "pointer" }}>
           Practice Plan

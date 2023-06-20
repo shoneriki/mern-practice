@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
-import { format } from "date-fns";
+
+import { useNavigate } from "react-router-dom";
+
 import { ScheduledCalendar } from "../components/Calendar";
 import {
   Button,
@@ -29,13 +31,26 @@ export const Home = () => {
       fetchPrograms()
   }, []);
 
+  const navigate = useNavigate();
 
   return (
     <section className="container">
       <section id="calendar">
         <ScheduledCalendar />
       </section>
-      <ProgramList/>
+      <ProgramList />
+      <Button
+        onClick={() => navigate("/programs")}
+        sx={{
+          color: "white",
+          backgroundColor: "green",
+          "&:hover": {
+            backgroundColor: "red",
+          },
+        }}
+      >
+        All Programs?
+      </Button>
     </section>
   );
 };
