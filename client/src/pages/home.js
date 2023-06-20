@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
+import { ScheduledCalendar } from "../components/Calendar";
 
 export const Home = () => {
   // const [recipes, setRecipes] = useState([]);
@@ -67,7 +68,7 @@ export const Home = () => {
 
 
   return (
-    <div>
+    <section className="container">
       <h1>Impending Programs</h1>
       <ul>
         {programs.map((program) => {
@@ -111,6 +112,9 @@ export const Home = () => {
           );
         })}
       </ul>
-    </div>
+      <section id="calendar">
+        <ScheduledCalendar/>
+      </section>
+    </section>
   );
 };
