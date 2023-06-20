@@ -1,6 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { styled } from "@mui/system";
+
+import DrawerComponent from "./Drawer";
+
+const LinkStyled = styled(Link)({
+  textDecoration: "none",
+  color: "white",
+  fontSize: "20px",
+  display: "flex",
+  alignItems: "center",
+  "&:hover": {
+    color: "yellow",
+    borderBottom: "1px solid white",
+  },
+});
+
+const CssContainer = styled("div")(({ theme }) => ({
+  marginLeft: theme.spacing(10),
+  display: "flex",
+}));
 
 export const Navbar = () => {
   const [cookies, setCookies] = useCookies(["access_token"]);
@@ -11,21 +39,36 @@ export const Navbar = () => {
     window.localStorage.clear();
     navigate("/");
   };
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
-    <div className="navbar">
-      <Link to="/">Home</Link>
-      {/* <Link to="/create-recipe">Create Recipe</Link>
-      <Link to="/saved-recipes">Saved Recipes</Link> */}
-      <Link to="/create-practice-plan">Create Practice Plan</Link>
-      <Link to="/create-program">Create Program</Link>
-      {!cookies.access_token ? (
-        <>
-          <Link to="/auth/login">Login</Link>
-          <Link to="/auth/register">Register</Link>
-        </>
-      ) : (
-        <button onClick={logout}> Logout </button>
-      )}
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h4" sx={{ flexGrow: "1", cursor: "pointer" }}>
+          Practice Plan
+        </Typography>
+        {isMobile ? (
+          <DrawerComponent />
+        ) : (
+          <CssContainer>
+            <LinkStyled to="/">Home</LinkStyled>
+            <LinkStyled to="/create-program">Create Program</LinkStyled>
+            <LinkStyled to="/create-practice-plan">
+              Create Practice Plan
+            </LinkStyled>
+            {!cookies.access_token ? (
+              <>
+                <Link to="/auth/login">Login</Link>
+                <Link to="/auth/register">Register</Link>
+              </>
+            ) : (
+              <button onClick={logout}> Logout </button>
+            )}
+          </CssContainer>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 };
