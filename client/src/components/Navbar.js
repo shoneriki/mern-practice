@@ -49,7 +49,7 @@ export const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" sx={{marginBottom: "5rem"}}>
       <Toolbar>
         <Typography variant="h4" sx={{ flexGrow: "1", cursor: "pointer" }}>
           Practice Plan
@@ -72,6 +72,7 @@ export const Navbar = () => {
         ) : (
           <CssContainer>
             <LinkStyled to="/">Home</LinkStyled>
+            <LinkStyled to="/programs">Programs</LinkStyled>
             <LinkStyled to="/program/create">Create Program</LinkStyled>
             <LinkStyled to="/practice-plan/create">
               Create Practice Plan
