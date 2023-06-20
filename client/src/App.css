@@ -1,3 +1,13 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --navbar-space: 5rem;
+}
+
 .App {
   display: flex;
   flex-direction: column;
@@ -8,7 +18,7 @@
 }
 
 body {
-  margin: 0;
+  margin-top: var(--navbar-space);
   padding: 0;
 }
 
@@ -203,6 +213,5 @@ p {
 
 
 .container {
-  margin-top: 5rem;
   width: 80%;
 }
