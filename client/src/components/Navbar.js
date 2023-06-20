@@ -72,8 +72,8 @@ export const Navbar = () => {
         ) : (
           <CssContainer>
             <LinkStyled to="/">Home</LinkStyled>
-            <LinkStyled to="/create-program">Create Program</LinkStyled>
-            <LinkStyled to="/create-practice-plan">
+            <LinkStyled to="/program/create">Create Program</LinkStyled>
+            <LinkStyled to="/practice-plan/create">
               Create Practice Plan
             </LinkStyled>
             {!cookies.access_token ? (
