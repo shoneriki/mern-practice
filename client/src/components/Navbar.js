@@ -8,6 +8,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/system";
 
@@ -50,7 +51,7 @@ export const Navbar = () => {
           Practice Plan
         </Typography>
         {isMobile ? (
-          <DrawerComponent />
+          <DrawerComponent logout={logout} cookies={cookies}/>
         ) : (
           <CssContainer>
             <LinkStyled to="/">Home</LinkStyled>
@@ -64,7 +65,20 @@ export const Navbar = () => {
                 <Link to="/auth/register">Register</Link>
               </>
             ) : (
-              <button onClick={logout}> Logout </button>
+              <Button
+                id="logout-btn"
+                onClick={logout}
+                variant="contained"
+                sx={{
+                  color: "white",
+                  backgroundColor: "orange",
+                  '&:hover': {
+                    backgroundColor: 'red',
+                  }
+                }}
+              >
+                Logout
+              </Button>
             )}
           </CssContainer>
         )}
