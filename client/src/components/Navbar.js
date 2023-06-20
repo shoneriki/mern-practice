@@ -9,8 +9,10 @@ import {
   useTheme,
   useMediaQuery,
   Button,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import DrawerComponent from "./Drawer";
 
@@ -35,6 +37,8 @@ export const Navbar = () => {
   const [cookies, setCookies] = useCookies(["access_token"]);
   const navigate = useNavigate();
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+
   const logout = () => {
     setCookies("access_token", "");
     window.localStorage.clear();
@@ -51,7 +55,20 @@ export const Navbar = () => {
           Practice Plan
         </Typography>
         {isMobile ? (
-          <DrawerComponent logout={logout} cookies={cookies}/>
+          <>
+            <IconButton
+              sx={{ color: "white" }}
+              onClick={() => setOpenDrawer(!openDrawer)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <DrawerComponent
+              open={openDrawer}
+              onClose={() => setOpenDrawer(false)}
+              logout={logout}
+              cookies={cookies}
+            />
+          </>
         ) : (
           <CssContainer>
             <LinkStyled to="/">Home</LinkStyled>
@@ -72,9 +89,9 @@ export const Navbar = () => {
                 sx={{
                   color: "white",
                   backgroundColor: "orange",
-                  '&:hover': {
-                    backgroundColor: 'red',
-                  }
+                  "&:hover": {
+                    backgroundColor: "red",
+                  },
                 }}
               >
                 Logout

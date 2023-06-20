@@ -69,6 +69,9 @@ export const Home = () => {
 
   return (
     <section className="container">
+      <section id="calendar">
+        <ScheduledCalendar/>
+      </section>
       <h1>Impending Programs</h1>
       <ul>
         {programs.map((program) => {
@@ -112,9 +115,6 @@ export const Home = () => {
           );
         })}
       </ul>
-      <section id="calendar">
-        <ScheduledCalendar/>
-      </section>
     </section>
   );
 };

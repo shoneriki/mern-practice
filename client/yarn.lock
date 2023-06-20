@@ -1916,6 +1916,13 @@
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.13.4.tgz#7e4b491d8081b6d45ae51556d82cb16b31315a19"
   integrity sha512-yFrMWcrlI0TqRN5jpb6Ma9iI7sGTHpytdzzL33oskFHNQ8UgrtPas33Y1K7sWAMwCrr1qbWDrOHLAQG4tAzuSw==
 
+"@mui/icons-material@^5.11.16":
+  version "5.11.16"
+  resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.11.16.tgz#417fa773c56672e39d6ccfed9ac55591985f0d38"
+  integrity sha512-oKkx9z9Kwg40NtcIajF9uOXhxiyTZrrm9nmIJ4UjkU2IdHpd4QVLbCc/5hZN/y0C6qzi2Zlxyr9TGddQx2vx2A==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+
 "@mui/material@^5.13.5":
   version "5.13.5"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.13.5.tgz#c14f14824f3a37ae0c5ebddbc0034956bc6fec30"
@@ -1941,6 +1948,14 @@
   dependencies:
     "@babel/runtime" "^7.21.0"
     "@mui/utils" "^5.13.1"
+    prop-types "^15.8.1"
+
+"@mui/styled-engine-sc@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-5.12.0.tgz#41040fb27667efab46e9200cec9657e62b544c48"
+  integrity sha512-3MgYoY2YG5tx0E5oKqvCv94oL0ABVBr+qpcyvciXW/v0wzPG6bXvuZV80GHYlJfasgnnRa1AbRWf5a9FcX8v6g==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
     prop-types "^15.8.1"
 
 "@mui/styled-engine@^5.13.2":
