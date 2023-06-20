@@ -21,7 +21,7 @@ const MyListItem = styled("article")({
   border: "none",
   backgroundColor: "transparent",
 });
-const MyLink = styled("a")({
+const MyLink = styled(Link)({
   textDecoration: "none",
   color: "blue",
   fontSize: "20px",
@@ -33,6 +33,8 @@ const LogoutBtn = styled("btn")({
   border: "none",
   borderRadius: ".25rem",
   padding: ".35rem .5rem",
+  width: "60%",
+  margin: "0 auto",
   textAlign: "center",
   "&:hover": {
     backgroundColor: "red",
@@ -91,4 +93,3 @@ function DrawerComponent({ open, onClose, logout, cookies }) {
   );
 }
 export default DrawerComponent;
-

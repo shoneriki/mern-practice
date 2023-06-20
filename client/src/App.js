@@ -23,8 +23,8 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/login" element={<Login />} />
-          <Route path="create-practice-plan" element={<CreatePracticePlan/>}/>
-          <Route path="create-program" element={<CreateProgram/>}/>
+          <Route path="/create-practice-plan" element={<CreatePracticePlan/>}/>
+          <Route path="/create-program" element={<CreateProgram/>}/>
         </Routes>
       </Router>
     </div>
