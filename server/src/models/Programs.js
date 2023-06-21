@@ -4,19 +4,33 @@ const pieceSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     composer: {
       type: String,
     },
     length: {
-      hours: {type: Number, default: 0},
-      minutes: {type: Number, min: 0, max: 59, default:0},
-      seconds: {type: Number, min: 0, max: 59, default: 0},
+      hours: { type: Number, default: 0 },
+      minutes: { type: Number, min: 0, max: 59, default: 0 },
+      seconds: { type: Number, min: 0, max: 59, default: 0 },
     },
+    movements: [
+      {
+        number: {
+          type: Number,
+        },
+        tempi: [
+          {
+            tempo: {
+              type: Number,
+            },
+          },
+        ],
+      },
+    ],
   },
-  {timestamps: true},
-)
+  { timestamps: true }
+);
 
 const programSchema = new mongoose.Schema(
   {

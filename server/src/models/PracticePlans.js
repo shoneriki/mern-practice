@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ProgramsModel } from "./Programs";
 
 
 const practicePlanSchema = new mongoose.Schema(
@@ -9,6 +10,20 @@ const practicePlanSchema = new mongoose.Schema(
     pieceName: {
       type: String,
     },
+    pieceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Programs.pieces",
+    },
+    movementNumber: {
+      type: Number,
+    },
+    tempi: [
+      {
+        tempo: {
+          type: Number,
+        }
+      }
+    ],
     excerpts: [
       {
         type: String,
