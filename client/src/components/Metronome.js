@@ -85,7 +85,7 @@ export class Metronome extends Component {
       <Box sx={{ width: "80%" }} className="metronome">
         <Box className="bpm-slider">
           <p>{bpm} BPM</p>
-          <p>{subdivision} subdivision</p>
+          <p>{subdivision} clicks per beat</p>
           <Slider
             type="range"
             min={10}
