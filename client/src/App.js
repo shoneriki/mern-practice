@@ -11,6 +11,7 @@ import {CreatePracticePlan} from "./pages/create-practice-plan"
 import {CreateProgram} from "./pages/create-program"
 import { Programs } from "./pages/programs";
 import {Workspace} from "./pages/workspace"
+import {Settings} from "./pages/settings"
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/programs" element={<Programs/>}/>
           <Route path="/program/create" element={<CreateProgram/>}/>
           <Route path="/workspace" element={<Workspace />}/>
+          <Route path="/settings" element={<Settings/>}/>
         </Routes>
       </Router>
     </div>

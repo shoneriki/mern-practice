@@ -81,6 +81,13 @@ function DrawerComponent({ open, onClose, logout, cookies }) {
           </MyLink>
         </ListItemText>
       </MyListItem>
+      <MyListItem className={classes.listItem} onClick={onClose}>
+        <ListItemText>
+          <MyLink className={classes.link} to="/settings">
+            Settings
+          </MyLink>
+        </ListItemText>
+      </MyListItem>
       {!cookies.access_token ? (
         <>
           <MyListItem className={classes.listItem} onClick={onClose}>

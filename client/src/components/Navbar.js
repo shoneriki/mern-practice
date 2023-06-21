@@ -77,9 +77,8 @@ export const Navbar = () => {
             <LinkStyled to="/practice-plan/create">
               Create Practice Plan
             </LinkStyled>
-            <LinkStyled to="/workspace">
-              Workspace
-            </LinkStyled>
+            <LinkStyled to="/workspace">Workspace</LinkStyled>
+            <LinkStyled to="/settings">Settings</LinkStyled>
             {!cookies.access_token ? (
               <>
                 <Link to="/auth/login">Login</Link>
