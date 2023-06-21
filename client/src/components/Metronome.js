@@ -14,6 +14,7 @@ export class Metronome extends Component {
       count: 0,
       bpm: 60,
       beatsPerMeasure: 4,
+      subdivision: 1,
     };
 
     this.click1 = new Audio(click);
@@ -78,12 +79,13 @@ export class Metronome extends Component {
   };
 
   render() {
-    const { isPlaying, bpm } = this.state;
+    const { isPlaying, bpm, subdivision } = this.state;
 
     return (
       <Box sx={{ width: "80%" }} className="metronome">
         <Box className="bpm-slider">
           <p>{bpm} BPM</p>
+          <p>{subdivision} subdivision</p>
           <Slider
             type="range"
             min={10}
@@ -92,7 +94,19 @@ export class Metronome extends Component {
             onChange={this.handleInputChange}
           />
         </Box>
-        <Button onClick={this.startStop}>{isPlaying ? "Stop" : "Start"}</Button>
+        <Button
+          sx={{
+            backgroundColor: "blue",
+            color: "white",
+            boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.5),",
+            "&:hover": {
+              backgroundColor: "orange",
+            },
+          }}
+          onClick={this.startStop}
+        >
+          {isPlaying ? "Stop" : "Start"}
+        </Button>
       </Box>
     );
   }
