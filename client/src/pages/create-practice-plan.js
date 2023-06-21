@@ -155,6 +155,8 @@ export const CreatePracticePlan = () => {
               type="number"
               id="timesPerWeek"
               name="timesPerWeek"
+              min="1"
+              max="7"
               value={practicePlan.timesPerWeek}
               onChange={handleChange}
             />
