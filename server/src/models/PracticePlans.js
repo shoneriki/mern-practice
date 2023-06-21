@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ProgramsModel } from "./Programs";
+import { ProgramsModel } from "./Programs.js";
 
 
 const practicePlanSchema = new mongoose.Schema(
