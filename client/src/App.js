@@ -10,6 +10,7 @@ import { SavedRecipes } from "./pages/saved-recipes";
 import {CreatePracticePlan} from "./pages/create-practice-plan"
 import {CreateProgram} from "./pages/create-program"
 import { Programs } from "./pages/programs";
+import {Workspace} from "./pages/workspace"
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/practice-plan/create" element={<CreatePracticePlan/>}/>
           <Route path="/programs" element={<Programs/>}/>
           <Route path="/program/create" element={<CreateProgram/>}/>
+          <Route path="/workspace" element={<Workspace />}/>
         </Routes>
       </Router>
     </div>
