@@ -6,6 +6,34 @@ import {SettingsModel} from "../models/Settings.js"
 
 const router = express.Router();
 
+router.post("/", async (req, res) => {
+  const settings = new SettingsModel({
+    _id: new mongoose.Types.ObjectId(),
+    minTime: req.body.minTime,
+    mediumTime: req.body.mediumTime,
+    longTime: req.body.longTime,
+    totalPracticeTime: req.body.totalPracticeTime
+  });
+  console.log(settings);
+
+  try {
+    const result = await settings.save();
+    res.status(201).json({
+      createdSettings: {
+        _id: result._id,
+        minTime: result.minTime,
+        mediumTime: result.mediumTime,
+        longTime: result.body.longTime,
+        totalPracticeTime: result.body.totalPracticeTime,
+        _id: result._id,
+      },
+    });
+  } catch (err) {
+    // console.log(err);
+    res.json(err);
+  }
+});
+
 //get all practice plans
 // router.get("/", async (req, res) => {
 //   try {

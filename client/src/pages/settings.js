@@ -8,6 +8,10 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
+import axios from "axios";
+import { useGetUserID } from "../hooks/useGetUserID";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const CustomFormControl = ({ label, id, name, value, onChange }) => (
   <FormControl>
@@ -24,6 +28,11 @@ const CustomFormControl = ({ label, id, name, value, onChange }) => (
 );
 
 export const Settings = () => {
+  const userID = useGetUserID();
+  const [cookies, _] = useCookies(["access_token"]);
+
+  const navigate = useNavigate();
+
   const [defaultSettings, setDefaultSettings] = useState({
     minTime: 5,
     mediumTime: 15,
@@ -38,10 +47,40 @@ export const Settings = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(defaultSettings); // Example: Log the defaultSettings on form submit
+    try {
+      await axios.post("http://localhost:3001/settings" ,{...defaultSettings}, {
+        headers: {authorization: cookies.access_token},
+      });
+      alert("Settings updated");
+      navigate("/")
+    } catch (error)  {
+      console.error(error);
+    }
   };
+
+
+
+  /*
+       const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post(
+        "http://localhost:3001/practicePlans",
+        { ...practicePlan },
+        {
+          headers: { authorization: cookies.access_token },
+        }
+      );
+
+      alert("Practice Plan Created");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  */
 
   return (
     <Box
