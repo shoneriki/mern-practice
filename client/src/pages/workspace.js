@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import {Metronome} from "../components/Metronome"
-import {MetronomeE6} from "../components/MetronomeE6"
-import { Button, Slider, Box, Typography, Input } from "@mui/material";
+// import {MetronomeE6} from "../components/MetronomeE6"
+
 
 
 export const Workspace = () => {
@@ -9,7 +9,7 @@ export const Workspace = () => {
 
   return (
     <>
-    <Metronome />
+      <Metronome />
     </>
   );
 };

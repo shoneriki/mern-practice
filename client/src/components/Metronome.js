@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import click from "../assets/sounds/click.mp3"
 import woodblock from "../assets/sounds/woodblock.mp3"
 
-import { Button, Slider, Box, Typography, Input } from "@mui/material";
+import { Button, Slider, Box} from "@mui/material";
 
 
 export class Metronome extends Component {
