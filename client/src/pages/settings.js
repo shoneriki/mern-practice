@@ -60,28 +60,6 @@ export const Settings = () => {
     }
   };
 
-
-
-  /*
-       const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await axios.post(
-        "http://localhost:3001/practicePlans",
-        { ...practicePlan },
-        {
-          headers: { authorization: cookies.access_token },
-        }
-      );
-
-      alert("Practice Plan Created");
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  */
-
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
