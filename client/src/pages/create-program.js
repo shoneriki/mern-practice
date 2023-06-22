@@ -51,20 +51,31 @@ const navigate = useNavigate();
     setProgram({ ...program, [name]: value });
   };
 
-  const addPiece = () => {
-    setProgram({
-      ...program,
-      numOfPieces: program.numOfPieces + 1,
-      pieces: [
-        ...program.pieces,
-        {
-          name: "",
-          composer: "",
-          length: { hours: 0, minutes: 0, seconds: 0 },
-        },
-      ],
-    });
-  };
+const addPiece = () => {
+  setProgram({
+    ...program,
+    numOfPieces: program.numOfPieces + 1,
+    pieces: [
+      ...program.pieces,
+      {
+        name: "",
+        composer: "",
+        length: { hours: 0, minutes: 0, seconds: 0 },
+        movements: [
+          {
+            name: "",
+            tempi: [
+              {
+                tempo: 0,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+};
+
 
   const handleChangePiece = (event, index, subfield) => {
     const { name, value } = event.target;
