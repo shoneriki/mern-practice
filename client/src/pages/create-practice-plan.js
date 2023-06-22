@@ -4,6 +4,8 @@ import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
+import {PracticePlanForm} from "../components/PracticePlanForm.js"
+
 export const CreatePracticePlan = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
@@ -72,7 +74,16 @@ export const CreatePracticePlan = () => {
   return (
     <div className="create-practice-plan">
       <h2>Create Practice Plan</h2>
-      <form onSubmit={handleSubmit}>
+      <PracticePlanForm
+        practicePlan={practicePlan}
+        setPracticePlan={setPracticePlan}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        pieceName={pieceName}
+        setPieceName={setPieceName}
+        suggestions={suggestions}
+      />
+      {/* <form onSubmit={handleSubmit}>
         <label htmlFor="Composer">Composer:</label>
         <input
           type="text"
@@ -189,7 +200,7 @@ export const CreatePracticePlan = () => {
           onChange={handleChange}
         />
         <button type="submit">Create Plan</button>
-      </form>
+      </form> */}
     </div>
   );
 };
