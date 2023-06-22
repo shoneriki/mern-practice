@@ -43,14 +43,14 @@ export const ProgramList = () => {
                     } = piece.length;
                     return (
                       <div className="piece-display" key={piece._id}>
-                        <p>
+                        <h3>
                           Piece {index + 1}: {piece.name}
+                        </h3>
+                        <p>
+                          Composer: {piece.composer}
                         </p>
                         <p>
-                          Piece {index + 1} Composer: {piece.composer}
-                        </p>
-                        <p>
-                          Piece {index + 1} Length: {pieceHours}hr:{" "}
+                          Length: {pieceHours}hr:{" "}
                           {pieceMinutes}min: {pieceSeconds}sec
                         </p>
                       </div>
