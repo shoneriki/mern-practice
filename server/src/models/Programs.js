@@ -19,11 +19,12 @@ const pieceSchema = new mongoose.Schema(
         number: {
           type: Number,
         },
+        name: {
+          type: String,
+        },
         tempi: [
           {
-            tempo: {
-              type: Number,
-            },
+            type: Number
           },
         ],
       },

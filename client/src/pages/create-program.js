@@ -9,45 +9,99 @@ export const CreateProgram = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
 
-  const [piece, setPiece] = useState({
-    name: "",
-    composer: "",
-    length: {
-      hours: 0,
-      minutes: 0,
-      seconds: 0
-    }
-  })
 
-  const [program, setProgram] = useState({
-    name: "",
-    numOfPieces: 1,
-    pieces: [
-      { name: "", composer: "", length: { hours: 0, minutes: 0, seconds: 0 } },
-    ],
-    length: "",
-    date: "",
-    time: "",
-    userOwner: userID,
-  });
+const initialTempo = {
+  tempo: 0,
+};
+
+const initialMovement = {
+  number: 1,
+  name: "",
+  tempi: [initialTempo]
+};
+
+const initialPiece = {
+  name: "",
+  composer: "",
+  length: {
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  },
+  movements: [initialMovement]
+}
+
+const initialProgram = {
+  name: "",
+  numOfPieces: 1,
+  pieces: [initialPiece],
+  length: "",
+  date: "",
+  time: "",
+  userOwner: userID,
+}
+
+const [program, setProgram] = useState(initialProgram);
 
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
   const handleChangeProgram = (event) => {
-    const {name, value} = event.target;
-    setProgram({...program, [name]: value})
+    const { name, value } = event.target;
+    setProgram({ ...program, [name]: value });
   };
 
-const handleChangePiece = (event, index, subfield) => {
-  const { name, value } = event.target;
+  const addPiece = () => {
+    setProgram({
+      ...program,
+      numOfPieces: program.numOfPieces + 1,
+      pieces: [
+        ...program.pieces,
+        {
+          name: "",
+          composer: "",
+          length: { hours: 0, minutes: 0, seconds: 0 },
+        },
+      ],
+    });
+  };
+
+  const handleChangePiece = (event, index, subfield) => {
+    const { name, value } = event.target;
+    setProgram((prevState) => {
+      const newPieces = [...prevState.pieces];
+      if (subfield) {
+        newPieces[index][name][subfield] = Number(value);
+      } else {
+        newPieces[index][name] = value;
+      }
+      return {
+        ...prevState,
+        pieces: newPieces,
+      };
+    });
+  };
+
+
+const addTempo = (pieceIndex, movementIndex) => {
   setProgram((prevState) => {
     const newPieces = [...prevState.pieces];
-    if (subfield) {
-      newPieces[index][name][subfield] = Number(value);
-    } else {
-      newPieces[index][name] = value;
-    }
+    const newMovements = [...newPieces[pieceIndex].movements];
+    const newTempi = [...newMovements[movementIndex].tempi];
+
+    newTempi.push({ tempo: 0 });
+
+    const newMovement = {
+      ...newMovements[movementIndex],
+      tempi: newTempi,
+    };
+
+    newMovements[movementIndex] = newMovement;
+    newPieces[pieceIndex] = {
+      ...newPieces[pieceIndex],
+      movements: newMovements,
+    };
+
     return {
       ...prevState,
       pieces: newPieces,
@@ -56,30 +110,62 @@ const handleChangePiece = (event, index, subfield) => {
 };
 
 
-const addPiece = () => {
-  setProgram({
-    ...program,
-    numOfPieces: program.numOfPieces + 1,
-    pieces: [
-      ...program.pieces,
-      { name: "", composer: "", length: { hours: 0, minutes: 0, seconds: 0 } },
-    ],
-  });
-};
 
-  const handleSubmit = async(event) => {
+
+  const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
+    const {value} = event.target;
+    setProgram((prevState) => {
+      const newPieces = [...prevState.pieces];
+      newPieces[pieceIndex].movements[movementIndex].tempi[tempoIndex].tempo = value;
+      return {
+        ...prevState,
+        pieces: newPieces,
+      }
+    })
+  }
+
+  const addMovement = (pieceIndex) => {
+    setProgram((prevState) => {
+      const newPieces = [...prevState.pieces];
+      newPieces[pieceIndex].movements.push({
+        number: 1,
+        name: "",
+        tempi: [initialTempo],
+      })
+      return {
+        ...prevState,
+        pieces: newPieces,
+      }
+    })
+  }
+
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const dateTime = new Date(`${program.date}T${program.time}`).toISOString();
+
+    const processedProgram = {...program};
+    for(const piece of processedProgram.pieces) {
+      for(const movement of piece.movements) {
+        for (const tempo of movement.tempi) {
+          tempo.tempo = tempo.tempo.split(",").map(Number);
+        }
+      }
+    }
     try {
-      await axios.post("http://localhost:3001/programs", {...program, date: dateTime}, {
-        headers: { authorization: cookies.access_token },
-      });
+      await axios.post(
+        "http://localhost:3001/programs",
+        { ...program, date: dateTime },
+        {
+          headers: { authorization: cookies.access_token },
+        }
+      );
       alert("New Program Added");
       navigate("/");
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <div className="create-program">
@@ -109,61 +195,104 @@ const addPiece = () => {
           value={program.time}
           onChange={handleChangeProgram}
         />
-        {program.pieces.map((piece, index) => {
+        {program.pieces.map((piece, pieceIndex) => {
           return (
-            <div key={index} class="piece">
-              <h3>Piece #{index + 1}</h3>
-              <label htmlFor={`piece-${index}-name`}>Piece Name:</label>
+            <div key={pieceIndex} class="piece">
+              <h3>Piece #{pieceIndex + 1}</h3>
+              <label htmlFor={`piece-${pieceIndex}-name`}>Piece Name:</label>
               <input
-                id={`piece-${index}-name`}
+                id={`piece-${pieceIndex}-name`}
                 name="name"
                 value={piece.name}
-                onChange={(event) => handleChangePiece(event, index)}
+                onChange={(event) => handleChangePiece(event, pieceIndex)}
               />
-              <label htmlFor={`piece-${index}-composer`}>Composer:</label>
+              <label htmlFor={`piece-${pieceIndex}-composer`}>Composer:</label>
               <input
-                id={`piece-${index}-composer`}
+                id={`piece-${pieceIndex}-composer`}
                 name="composer"
                 value={piece.composer}
-                onChange={(event) => handleChangePiece(event, index)}
+                onChange={(event) => handleChangePiece(event, pieceIndex)}
               />
-              <label htmlFor={`piece-${index}-lengthInSeconds`}>Length:</label>
+              <label htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
+                Length:
+              </label>
               <div className="time-input">
                 <article>
                   <input
                     type="number"
-                    id={`piece-${index}-hours`}
+                    id={`piece-${pieceIndex}-hours`}
                     name="length"
                     value={piece.length.hours}
-                    onChange={(event) => handleChangePiece(event, index, "hours")}
+                    onChange={(event) =>
+                      handleChangePiece(event, pieceIndex, "hours")
+                    }
                   />
-                  <label htmlFor={`piece-${index}-hours`}>hr</label>
+                  <label htmlFor={`piece-${pieceIndex}-hours`}>hr</label>
                 </article>
                 <article>
                   <input
                     type="number"
-                    id={`piece-${index}-minutes`}
+                    id={`piece-${pieceIndex}-minutes`}
                     name="length"
                     value={piece.length.minutes}
                     onChange={(event) =>
-                      handleChangePiece(event, index, "minutes")
+                      handleChangePiece(event, pieceIndex, "minutes")
                     }
                   />
-                  <label htmlFor={`piece-${index}-minutes`}>min</label>
+                  <label htmlFor={`piece-${pieceIndex}-minutes`}>min</label>
                 </article>
                 <article>
                   <input
                     type="number"
-                    id={`piece-${index}-seconds`}
+                    id={`piece-${pieceIndex}-seconds`}
                     name="length"
                     value={piece.length.seconds}
                     onChange={(event) =>
-                      handleChangePiece(event, index, "seconds")
+                      handleChangePiece(event, pieceIndex, "seconds")
                     }
                   />
-                  <label htmlFor={`piece-${index}-seconds`}>sec</label>
+                  <label htmlFor={`piece-${pieceIndex}-seconds`}>sec</label>
                 </article>
               </div>
+              {piece.movements.map((movement, movementIndex) => {
+                return (
+                  <div key={movementIndex} className="movement">
+                    {/* ...movement input fields... */}
+                    {movement.tempi.map((tempo, tempoIndex) => {
+                      return (
+                        <div key={tempoIndex} className="tempo">
+                          <label
+                            htmlFor={`piece-${pieceIndex}-movement-${movementIndex}-tempo-${tempoIndex}`}
+                          >
+                            Tempo:
+                          </label>
+                          <input
+                            id={`piece-${pieceIndex}-movement-${movementIndex}-tempo-${tempoIndex}`}
+                            name="tempo"
+                            type="number"
+                            value={tempo.tempo}
+                            onChange={(event) =>
+                              handleChangeTempo(
+                                event,
+                                pieceIndex,
+                                movementIndex,
+                                tempoIndex
+                              )
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+
+                    <button
+                      type="button"
+                      onClick={() => addTempo(pieceIndex, movementIndex)}
+                    >
+                      Add New Tempo?
+                    </button>
+                  </div>
+                );
+              })}
 
               <div className="btn-div">
                 <button type="button" onClick={addPiece}>
