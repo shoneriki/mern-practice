@@ -2,31 +2,21 @@ import React from "react";
 
 export const PracticePlanForm = ({
   practicePlan,
-  setPracticePlan,
+  handleValueChange,
   handleChange,
   handleSubmit,
-  pieceName,
-  setPieceName,
   suggestions,
 }) => {
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="Composer">Composer:</label>
-      <input
-        type="text"
-        id="composer"
-        name="composer"
-        value={practicePlan.composer}
-        onChange={handleChange}
-      />
       <div>
         <label htmlFor="pieceName">Piece Name:</label>
         <input
           type="text"
           id="pieceName"
           name="pieceName"
-          value={pieceName}
-          onChange={(e) => setPieceName(e.target.value)}
+          value={practicePlan.pieceName}
+          onChange={handleChange}
         />
         {suggestions.length > 0 && (
           <div
@@ -41,21 +31,23 @@ export const PracticePlanForm = ({
             {suggestions.map((suggestion) => (
               <div
                 key={suggestion._id}
-                style={{ padding: "5px", cursor: "pointer" }}
-                onClick={() => {
-                  setPieceName(suggestion.name);
-                  setPracticePlan((prevPlan) => ({
-                    ...prevPlan,
-                    programId: suggestion.programId,
-                  }));
-                }}
+                style={{ padding: "4px", cursor: "pointer" }}
+                onClick={() => handleValueChange(suggestion)}
               >
-                {suggestion.name} by {suggestion.composer}
+                {suggestion.name} by {suggestion.composer},
               </div>
             ))}
           </div>
         )}
       </div>
+      <label htmlFor="Composer">Composer:</label>
+      <input
+        type="text"
+        id="composer"
+        name="composer"
+        value={practicePlan.composer}
+        onChange={handleChange}
+      />
 
       <label htmlFor="Practice Start Date">Date of Practice Start:</label>
       <input
