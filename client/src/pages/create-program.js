@@ -109,35 +109,83 @@ const addTempo = (pieceIndex, movementIndex) => {
   });
 };
 
-
-
-
   const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
     const {value} = event.target;
     setProgram((prevState) => {
       const newPieces = [...prevState.pieces];
-      newPieces[pieceIndex].movements[movementIndex].tempi[tempoIndex].tempo = value;
+      const newMovements = [...newPieces[pieceIndex].movements];
+      const newTempi = [...newMovements[movementIndex].tempi];
+
+      const newTempo = { ...newTempi[tempoIndex], tempo: value };
+
+      newTempi[tempoIndex] = newTempo;
+
+      const newMovement = {
+        ...newMovements[movementIndex],
+        tempi: newTempi
+      };
+
+      newMovements[movementIndex] = newMovement;
+      newPieces[pieceIndex] = {
+        ...newPieces[pieceIndex],
+        movements: newMovements
+      };
+
       return {
         ...prevState,
         pieces: newPieces,
-      }
-    })
-  }
+      };
+    });
+  };
+
+
 
   const addMovement = (pieceIndex) => {
     setProgram((prevState) => {
       const newPieces = [...prevState.pieces];
-      newPieces[pieceIndex].movements.push({
-        number: 1,
+      const newMovements = [...newPieces[pieceIndex].movements];
+
+      newMovements.push({
+        number: newMovements.length + 1,
         name: "",
         tempi: [initialTempo],
-      })
+      });
+
+      newPieces[pieceIndex] = {
+        ...newPieces[pieceIndex],
+        movements: newMovements,
+      };
+
       return {
         ...prevState,
         pieces: newPieces,
-      }
-    })
-  }
+      };
+    });
+  };
+
+  const handleChangeMovement = (event, pieceIndex, movementIndex) => {
+    const { name, value } = event.target;
+    setProgram((prevState) => {
+      const newPieces = [...prevState.pieces];
+      const newMovements = [...newPieces[pieceIndex].movements];
+
+      newMovements[movementIndex] = {
+        ...newMovements[movementIndex],
+        [name]: value,
+      };
+
+      newPieces[pieceIndex] = {
+        ...newPieces[pieceIndex],
+        movements: newMovements,
+      };
+
+      return {
+        ...prevState,
+        pieces: newPieces,
+      };
+    });
+  };
+
 
 
   const handleSubmit = async (event) => {
@@ -257,7 +305,21 @@ const addTempo = (pieceIndex, movementIndex) => {
               {piece.movements.map((movement, movementIndex) => {
                 return (
                   <div key={movementIndex} className="movement">
-                    {/* ...movement input fields... */}
+                    <h4>Movement #{movementIndex + 1}</h4>
+                    <label
+                      htmlFor={`piece-${pieceIndex}-movement-${movementIndex}-name`}
+                    >
+                      Movement Name:
+                    </label>
+                    <input
+                      id={`piece-${pieceIndex}-movement-${movementIndex}-name`}
+                      name="name"
+                      value={movement.name}
+                      onChange={(event) =>
+                        handleChangeMovement(event, pieceIndex, movementIndex)
+                      }
+                    />
+
                     {movement.tempi.map((tempo, tempoIndex) => {
                       return (
                         <div key={tempoIndex} className="tempo">
@@ -293,6 +355,10 @@ const addTempo = (pieceIndex, movementIndex) => {
                   </div>
                 );
               })}
+
+              <button type="button" onClick={() => addMovement(pieceIndex)}>
+                Add New Movement?
+              </button>
 
               <div className="btn-div">
                 <button type="button" onClick={addPiece}>
