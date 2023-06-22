@@ -16,20 +16,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Create a new practice plan , add verifyToken when usable
+
 router.post("/", async (req, res) => {
-  const pieces = req.body.pieces.map(piece => ({
-    ...piece,
-    lengthInSeconds: piece.length.hours * 3600 + piece.length.minutes*60 + piece.length.seconds,
-  }))
   const programPlan = new ProgramsModel({
     _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    numOfPieces: req.body.numOfPieces,
-    pieces: req.body.pieces,
-    intermission: req.body.intermission,
-    date: req.body.date
+    ...req.body,
   });
+
   console.log(programPlan);
 
   try {
@@ -42,14 +35,15 @@ router.post("/", async (req, res) => {
         pieces: result.pieces,
         intermission: result.intermission,
         length: result.length,
-        date: req.body.date
+        date: result.date,
       },
     });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     res.json(err);
   }
 });
+
 
 router.get("/search", async (req, res) => {
   try {

@@ -69,6 +69,7 @@ programSchema.pre("save", function (next) {
       piece.length.minutes * 60 +
       piece.length.seconds;
   }
+  totalLengthInSeconds += this.intermission * 60;
 
   this.length.hours = Math.floor(totalLengthInSeconds / 3600);
   totalLengthInSeconds %= 3600;

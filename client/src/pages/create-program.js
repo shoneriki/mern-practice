@@ -10,9 +10,7 @@ export const CreateProgram = () => {
   const [cookies, _] = useCookies(["access_token"]);
 
 
-const initialTempo = {
-  tempo: 0,
-};
+const initialTempo = 0;
 
 const initialMovement = {
   number: 1,
@@ -100,7 +98,7 @@ const addTempo = (pieceIndex, movementIndex) => {
     const newMovements = [...newPieces[pieceIndex].movements];
     const newTempi = [...newMovements[movementIndex].tempi];
 
-    newTempi.push({ tempo: 0 });
+    newTempi.push(initialTempo);
 
     const newMovement = {
       ...newMovements[movementIndex],
@@ -120,34 +118,37 @@ const addTempo = (pieceIndex, movementIndex) => {
   });
 };
 
-  const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
-    const {value} = event.target;
-    setProgram((prevState) => {
-      const newPieces = [...prevState.pieces];
-      const newMovements = [...newPieces[pieceIndex].movements];
-      const newTempi = [...newMovements[movementIndex].tempi];
 
-      const newTempo = { ...newTempi[tempoIndex], tempo: value };
+const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
+  const { value } = event.target;
+  const tempoValue = Number(value); // Convert the value to a number
+  setProgram((prevState) => {
+    const newPieces = [...prevState.pieces];
+    const newMovements = [...newPieces[pieceIndex].movements];
+    const newTempi = [...newMovements[movementIndex].tempi];
 
-      newTempi[tempoIndex] = newTempo;
+    const newTempo = { ...newTempi[tempoIndex], tempo: tempoValue };
 
-      const newMovement = {
-        ...newMovements[movementIndex],
-        tempi: newTempi
-      };
+    newTempi[tempoIndex] = newTempo;
 
-      newMovements[movementIndex] = newMovement;
-      newPieces[pieceIndex] = {
-        ...newPieces[pieceIndex],
-        movements: newMovements
-      };
+    const newMovement = {
+      ...newMovements[movementIndex],
+      tempi: newTempi,
+    };
 
-      return {
-        ...prevState,
-        pieces: newPieces,
-      };
-    });
-  };
+    newMovements[movementIndex] = newMovement;
+    newPieces[pieceIndex] = {
+      ...newPieces[pieceIndex],
+      movements: newMovements,
+    };
+
+    return {
+      ...prevState,
+      pieces: newPieces,
+    };
+  });
+};
+
 
 
 
@@ -202,15 +203,6 @@ const addTempo = (pieceIndex, movementIndex) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dateTime = new Date(`${program.date}T${program.time}`).toISOString();
-
-    const processedProgram = {...program};
-    for(const piece of processedProgram.pieces) {
-      for(const movement of piece.movements) {
-        for (const tempo of movement.tempi) {
-          tempo.tempo = tempo.tempo.split(",").map(Number);
-        }
-      }
-    }
     try {
       await axios.post(
         "http://localhost:3001/programs",
@@ -343,7 +335,6 @@ const addTempo = (pieceIndex, movementIndex) => {
                             id={`piece-${pieceIndex}-movement-${movementIndex}-tempo-${tempoIndex}`}
                             name="tempo"
                             type="number"
-                            value={tempo.tempo}
                             onChange={(event) =>
                               handleChangeTempo(
                                 event,
