@@ -5,10 +5,10 @@ export async function fetchPrograms() {
   const res = await axios.get("http://localhost:3001/programs");
   const programs = res.data;
 
-  const events = [];
-  for (const program of programs) {
+  return programs.map((program) => {
     let currentStartTime = new Date(program.date);
     let currentEndTime = new Date(program.date);
+    const events = [];
 
     for (let i = 0; i < program.pieces.length; i++) {
       const pieceLengthInSeconds =
@@ -37,8 +37,9 @@ export async function fetchPrograms() {
       end: new Date(currentEndTime),
       title: "Intermission",
     });
-  }
 
-  return events;
+    // Add events array to program object
+    return { ...program, events };
+  });
 }
 
