@@ -52,7 +52,7 @@ export const Navbar = () => {
     <AppBar position="fixed" sx={{ marginBottom: "5rem" }}>
       <Toolbar>
         <Typography variant="h4" sx={{ flexGrow: "1", cursor: "pointer" }}>
-          Practice Plan
+          Planner
         </Typography>
         {isMobile ? (
           <>
