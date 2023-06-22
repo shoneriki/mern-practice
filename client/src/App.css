@@ -144,7 +144,7 @@ a {
 .time-input article {
   display: flex;
   align-items: center;
-  width: 10%;
+  width: 40%;
 }
 
 .time-input article input {
@@ -152,11 +152,11 @@ a {
   padding: 0;
   margin: 0;
   border: 1px solid black;
-  width: 50%;
+  width: 70%;
 }
 
 .time-input article label {
-  width: 10%;
+  width: 30%;
 }
 
 .piece-display {
