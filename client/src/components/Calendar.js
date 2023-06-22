@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "../css/calendar.scss";
-import { fetchPrograms } from "../services/programs.js";
+import { fetchProgramsForCalendar } from "../services/fetchProgramsForCalendar.js";
 
 const localizer = momentLocalizer(moment);
 
@@ -11,7 +11,7 @@ export const ScheduledCalendar = (props) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetchPrograms().then((programs) => {
+    fetchProgramsForCalendar().then((programs) => {
       setPrograms(programs);
       const programEvents = programs.map((program) => {
         const programDate = new Date(program.date);

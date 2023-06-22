@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Programs } from '../pages/programs';
 
-export async function fetchPrograms() {
+export async function fetchProgramsForCalendar() {
   const res = await axios.get("http://localhost:3001/programs");
   const programs = res.data;
 
@@ -42,4 +42,3 @@ export async function fetchPrograms() {
     return { ...program, events };
   });
 }
-
