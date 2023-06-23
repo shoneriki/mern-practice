@@ -8,8 +8,6 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import MenuIcon from "@mui/icons-material/Menu";
 
 
 export const CreateProgram = () => {
@@ -297,6 +295,20 @@ const addPiece = () => {
                     <Button
                       sx={{
                         color: "white",
+                        backgroundColor: "green",
+                        margin: "1rem 0",
+                        width: "100%",
+                        "&:hover": {
+                          backgroundColor: "purple",
+                        },
+                      }}
+                      onClick={() => addMovement(pieceIndex)}
+                    >
+                      Add Another Movement?
+                    </Button>
+                    <Button
+                      sx={{
+                        color: "white",
                         backgroundColor: "red",
                         width: "100%",
                         margin: "1rem 0",
@@ -308,40 +320,35 @@ const addPiece = () => {
                   </div>
                 );
               })}
-
               <Button
                 sx={{
+                  backgroundColor: "red",
                   color: "white",
-                  backgroundColor: "green",
-                  margin: "1rem 0",
                   "&:hover": {
-                    backgroundColor: "purple",
+                    backgroundColor: "darkred",
                   },
                 }}
-                onClick={() => addMovement(pieceIndex)}
+                onClick={() => removePiece(pieceIndex)}
               >
-                Add New Movement?
+                Remove this piece
               </Button>
-
-              <Box sx={{ width: "100%" }} >
-                <Button
-                  sx={{
-                    color: "white",
-                    backgroundColor: "green",
-                    margin: "1rem 0",
-                    width: "100%",
-                    "&:hover": {
-                      backgroundColor: "purple",
-                    },
-                  }}
-                  onClick={addPiece}
-                >
-                  Add New Piece?
-                </Button>
-              </Box>
             </Box>
           );
         })}
+        <Button
+          sx={{
+            color: "white",
+            backgroundColor: "green",
+            margin: "1rem 0",
+            width: "100%",
+            "&:hover": {
+              backgroundColor: "purple",
+            },
+          }}
+          onClick={addPiece}
+        >
+          Add Another Piece?
+        </Button>
         <label htmlFor="numOfPieces">Number of Pieces:</label>
         <input
           type="number"
