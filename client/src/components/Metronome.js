@@ -15,7 +15,7 @@ export class Metronome extends Component {
       count: 0,
       bpm: 60,
       beatsPerMeasure: 4,
-      subdivision: 1,
+      subdivision: 3,
     };
 
     this.click1 = new Audio(click);
@@ -27,18 +27,20 @@ export class Metronome extends Component {
     const bpm = newValue;
 
     if (this.state.isPlaying) {
-      // stop old timer and start a new one
+      // Stop old timer and start a new one
       clearInterval(this.timer);
-      this.timer = setInterval(this.playClick, (60 / bpm) * 1000);
+      this.timer = setInterval(
+        this.playClick,
+        (60 / (bpm * this.state.subdivision)) * 1000
+      );
 
-      // set the new bpm
-      // and reset the beat counter
+      // Set the new bpm and reset the beat counter
       this.setState({
         count: 0,
         bpm,
       });
     } else {
-      // otherwise, just update the bpm
+      // Otherwise, just update the bpm
       this.setState({ bpm });
     }
   };
@@ -52,18 +54,19 @@ export class Metronome extends Component {
   };
 
   playClick = () => {
-    const { count, beatsPerMeasure } = this.state;
+    const { count, beatsPerMeasure, subdivision } = this.state;
 
-    // alternate click sounds
-    if (count % beatsPerMeasure === 0) {
+    // If we've just played the beat, play the drumstick sound
+    if (count % subdivision === 0) {
       this.drumstick1.play();
     } else {
-      this.click1.play();
+      // Otherwise, play the woodblock sound
+      this.woodblock1.play();
     }
 
-    // keep track of which beat we're on
+    // Keep track of which beat we're on
     this.setState((state) => ({
-      count: (state.count + 1) % state.beatsPerMeasure,
+      count: (state.count + 1) % (state.beatsPerMeasure * subdivision),
     }));
   };
 
@@ -75,8 +78,11 @@ export class Metronome extends Component {
         isPlaying: false,
       });
     } else {
-      // start a timer with current bpm
-      this.timer = setInterval(this.playClick, (60 / this.state.bpm) * 1000);
+      // start a timer with current bpm and subdivision
+      this.timer = setInterval(
+        this.playClick,
+        (60 / (this.state.bpm * this.state.subdivision)) * 1000
+      );
       this.setState(
         {
           count: 0,
@@ -100,7 +106,7 @@ export class Metronome extends Component {
             max={300}
             value={bpm}
             sx={{
-              width: "30%"
+              width: "30%",
             }}
             onChange={this.handleBpmInputChange}
             endAdornment={<InputAdornment position="end">BPM</InputAdornment>}
