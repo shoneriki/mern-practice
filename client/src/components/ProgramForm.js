@@ -7,6 +7,7 @@ import {
   Input,
   Typography,
   TextField,
+  Grid,
 } from "@mui/material";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -40,207 +41,258 @@ const handleTimeChange = (time) => {
 };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl sx={{ margin: "1rem 0 " }}>
-        <InputLabel htmlFor="name">Program Name:</InputLabel>
-        <Input
-          type="text"
-          id="name"
-          name="name"
-          value={program.name}
-          onChange={handleChangeProgram}
-        />
-      </FormControl>
-      <FormControl sx={{ margin: "1rem 0 " }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Performance Date"
-            name="date"
-            value={program.date}
-            onChange={handleDateChange}
-            renderInput={(props) => <TextField {...props} />}
-          />
-        </LocalizationProvider>
-      </FormControl>
-      <FormControl sx={{ margin: "1rem 0 " }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimePicker
-            type="time"
-            id="time"
-            name="time"
-            value={program.time}
-            onChange={handleTimeChange}
-            renderInput={(props) => <TextField {...props} />}
-          />
-        </LocalizationProvider>
-      </FormControl>
-      {program.pieces.map((piece, pieceIndex) => {
-        return (
-          <Box key={pieceIndex} class="piece">
-            <Typography variant={"h6"}>Piece #{pieceIndex + 1}</Typography>
-            <FormControl>
+    <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={1}>
+          <Grid item xs={12} md={4}>
+            <FormControl fullWidth>
               <TextField
-                id={`piece-${pieceIndex}-name`}
-                label="Piece Name"
+                type="text"
+                id="name"
                 name="name"
-                value={piece.name}
-                onChange={(event) => handleChangePiece(event, pieceIndex)}
+                label="Title:"
+                value={program.name}
+                onChange={handleChangeProgram}
+                fullWidth
               />
             </FormControl>
-            <FormControl>
-              <TextField
-                id={`piece-${pieceIndex}-composer`}
-                label="Composer"
-                name="composer"
-                value={piece.composer}
-                onChange={(event) => handleChangePiece(event, pieceIndex)}
-              />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <FormControl fullWidth>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Performance Date"
+                  name="date"
+                  value={program.date}
+                  onChange={handleDateChange}
+                  renderInput={(props) => <TextField {...props} fullWidth />}
+                />
+              </LocalizationProvider>
             </FormControl>
-            <FormControl></FormControl>
-            <InputLabel htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
-              Length:
-            </InputLabel>
-            <Box className="time-input">
-              <TextField
-                type="number"
-                id={`piece-${pieceIndex}-hours`}
-                label="Hours"
-                name="length"
-                min="1"
-                max
-                value={piece.length.hours}
-                onChange={(event) =>
-                  handleChangePiece(event, pieceIndex, "hours")
-                }
-              />
-              <TextField
-                type="number"
-                id={`piece-${pieceIndex}-minutes`}
-                name="length"
-                label="Minutes"
-                value={piece.length.minutes}
-                onChange={(event) =>
-                  handleChangePiece(event, pieceIndex, "minutes")
-                }
-              />
-              <TextField
-                type="number"
-                id={`piece-${pieceIndex}-seconds`}
-                name="length"
-                label="Seconds"
-                value={piece.length.seconds}
-                onChange={(event) =>
-                  handleChangePiece(event, pieceIndex, "seconds")
-                }
-              />
-            </Box>
-            {piece.movements.map((movement, movementIndex) => {
-              return (
-                <Box key={movementIndex} className="movement">
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <FormControl fullWidth>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  type="time"
+                  id="time"
+                  name="time"
+                  label="Start Time"
+                  value={program.time}
+                  onChange={handleTimeChange}
+                  renderInput={(props) => <TextField {...props} fullWidth />}
+                />
+              </LocalizationProvider>
+            </FormControl>
+          </Grid>
+          {program.pieces.map((piece, pieceIndex) => {
+            return (
+              <Grid sx={{textAlign: "center"}} container spacing={1} key={pieceIndex}>
+                <Grid item xs={12} sm={12}>
                   <Typography variant={"h6"}>
-                    Movement #{movementIndex + 1}
+                    Piece #{pieceIndex + 1}
                   </Typography>
-                  <FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
                     <TextField
-                      id={`piece-${pieceIndex}-movement-${movementIndex}-name`}
+                      id={`piece-${pieceIndex}-name`}
+                      label="Piece Name"
                       name="name"
-                      label="Movement Name"
-                      value={movement.name}
-                      onChange={(event) =>
-                        handleChangeMovement(event, pieceIndex, movementIndex)
-                      }
+                      value={piece.name}
+                      onChange={(event) => handleChangePiece(event, pieceIndex)}
                     />
                   </FormControl>
-                  <Button
-                    sx={{
-                      color: "white",
-                      backgroundColor: "green",
-                      margin: "1rem 0",
-                      width: "100%",
-                      "&:hover": {
-                        backgroundColor: "purple",
-                      },
-                    }}
-                    onClick={() => addMovement(pieceIndex)}
-                  >
-                    Add Another Movement?
-                  </Button>
-                  <Button
-                    sx={{
-                      color: "white",
-                      backgroundColor: "red",
-                      width: "100%",
-                      margin: "1rem 0",
-                    }}
-                    onClick={() => removeMovement(pieceIndex, movementIndex)}
-                  >
-                    Remove this movement
-                  </Button>
-                </Box>
-              );
-            })}
-            <Button
-              sx={{
-                backgroundColor: "red",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "darkred",
-                },
-              }}
-              onClick={() => removePiece(pieceIndex)}
-            >
-              Remove this piece
-            </Button>
-          </Box>
-        );
-      })}
-      <Button
-        sx={{
-          color: "white",
-          backgroundColor: "green",
-          margin: "1rem 0",
-          width: "100%",
-          "&:hover": {
-            backgroundColor: "purple",
-          },
-        }}
-        onClick={addPiece}
-      >
-        Add Another Piece?
-      </Button>
-      <FormControl>
-        <TextField
-          type="number"
-          id="numOfPieces"
-          label="Number of Pieces"
-          name="numOfPieces"
-          value={program.numOfPieces}
-          onChange={handleChangeProgram}
-        />
-      </FormControl>
-      <FormControl>
-        <TextField
-          type="number"
-          id="intermission"
-          label="intermission?"
-          name="intermission"
-          value={program.intermission}
-          onChange={handleChangeProgram}
-        />
-      </FormControl>
-      <Button
-        sx={{
-          backgroundColor: "blue",
-          color: "white",
-          margin: "1rem 0",
-          "&:hover": {
-            backgroundColor: "lightblue",
-          },
-        }}
-        type="submit"
-      >
-        Create Program
-      </Button>
-    </form>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <TextField
+                      id={`piece-${pieceIndex}-composer`}
+                      label="Composer"
+                      name="composer"
+                      value={piece.composer}
+                      onChange={(event) => handleChangePiece(event, pieceIndex)}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <InputLabel  htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
+                    Length:
+                  </InputLabel>
+                  <Grid container spacing={1}>
+                    <Grid item xs={4} sm={4}>
+                      <TextField
+                        type="number"
+                        id={`piece-${pieceIndex}-hours`}
+                        label="Hours"
+                        name="length"
+                        min="1"
+                        max="10"
+                        value={piece.length.hours}
+                        onChange={(event) =>
+                          handleChangePiece(event, pieceIndex, "hours")
+                        }
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <TextField
+                        type="number"
+                        id={`piece-${pieceIndex}-minutes`}
+                        name="length"
+                        label="Minutes"
+                        value={piece.length.minutes}
+                        onChange={(event) =>
+                          handleChangePiece(event, pieceIndex, "minutes")
+                        }
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <TextField
+                        type="number"
+                        id={`piece-${pieceIndex}-seconds`}
+                        name="length"
+                        label="Seconds"
+                        value={piece.length.seconds}
+                        onChange={(event) =>
+                          handleChangePiece(event, pieceIndex, "seconds")
+                        }
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {piece.movements.map((movement, movementIndex) => {
+                  return (
+                    <Grid container spacing={6}>
+                      <Grid item xs={12} sm={12} key={movementIndex}>
+                        <Typography sx={{ textAlign: "center" }} variant={"h6"}>
+                          Movement #{movementIndex + 1}
+                        </Typography>
+                        <FormControl fullWidth>
+                          <TextField
+                            id={`piece-${pieceIndex}-movement-${movementIndex}-name`}
+                            name="name"
+                            label="Movement Name"
+                            value={movement.name}
+                            onChange={(event) =>
+                              handleChangeMovement(
+                                event,
+                                pieceIndex,
+                                movementIndex
+                              )
+                            }
+                            fullWidth
+                          />
+                        </FormControl>
+                        <Button
+                          sx={{
+                            color: "white",
+                            backgroundColor: "#6ECF8B",
+                            margin: "1rem 0",
+                            "&:hover": {
+                              backgroundColor: "#66DB8E",
+                            },
+                          }}
+                          onClick={() => addMovement(pieceIndex)}
+                          fullWidth
+                        >
+                          Add Another Movement?
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          sx={{
+                            color: "white",
+                            width: "100%",
+                            backgroundColor: "#FF6659",
+                            margin: "1rem 0",
+                            "&:hover": {
+                              backgroundColor: "#FF3D2E",
+                            },
+                          }}
+                          onClick={() =>
+                            removeMovement(pieceIndex, movementIndex)
+                          }
+                          fullWidth
+                        >
+                          Remove this movement
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  );
+                })}
+                <Button
+                  sx={{
+                    backgroundColor: "#E53935",
+                    color: "white",
+                    margin: "1rem 0",
+                    "&:hover": {
+                      backgroundColor: "#C62828 ",
+                    },
+                  }}
+                  onClick={() => removePiece(pieceIndex)}
+                  fullWidth
+                >
+                  Remove this piece
+                </Button>
+              </Grid>
+            );
+          })}
+          <Button
+            sx={{
+              color: "white",
+              backgroundColor: "#34B96F",
+              margin: "1rem auto",
+              "&:hover": {
+                backgroundColor: "#2D944F",
+              },
+            }}
+            onClick={addPiece}
+          >
+            Add Another Piece?
+          </Button>
+          <Grid item xs={12} md={12}>
+            <FormControl fullWidth>
+              <TextField
+                type="number"
+                id="numOfPieces"
+                label="Number of Pieces"
+                name="numOfPieces"
+                value={program.numOfPieces}
+                onChange={handleChangeProgram}
+                fullWidth
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <FormControl fullWidth>
+              <TextField
+                type="number"
+                id="intermission"
+                label="intermission?"
+                name="intermission"
+                value={program.intermission}
+                onChange={handleChangeProgram}
+              />
+            </FormControl>
+          </Grid>
+          <Button
+            sx={{
+              backgroundColor: "#0074D9",
+              color: "white",
+              margin: "1rem auto",
+              "&:hover": {
+                backgroundColor: "#005CBF",
+              },
+            }}
+            type="submit"
+          >
+            Create Program
+          </Button>
+        </Grid>
+      </form>
+    </Box>
   );
-}
+  }
