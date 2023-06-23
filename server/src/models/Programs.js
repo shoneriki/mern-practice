@@ -22,11 +22,6 @@ const pieceSchema = new mongoose.Schema(
         name: {
           type: String,
         },
-        tempi: [
-          {
-            type: Number
-          },
-        ],
       },
     ],
   },

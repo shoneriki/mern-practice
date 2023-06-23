@@ -10,12 +10,9 @@ export const CreateProgram = () => {
   const [cookies, _] = useCookies(["access_token"]);
 
 
-const initialTempo = 0;
-
 const initialMovement = {
   number: 1,
   name: "",
-  tempi: [initialTempo]
 };
 
 const initialPiece = {
@@ -41,7 +38,6 @@ const initialProgram = {
 
 const [program, setProgram] = useState(initialProgram);
 
-
 const navigate = useNavigate();
 
   const handleChangeProgram = (event) => {
@@ -62,11 +58,6 @@ const addPiece = () => {
         movements: [
           {
             name: "",
-            tempi: [
-              {
-                tempo: 0,
-              },
-            ],
           },
         ],
       },
@@ -91,67 +82,6 @@ const addPiece = () => {
     });
   };
 
-
-const addTempo = (pieceIndex, movementIndex) => {
-  setProgram((prevState) => {
-    const newPieces = [...prevState.pieces];
-    const newMovements = [...newPieces[pieceIndex].movements];
-    const newTempi = [...newMovements[movementIndex].tempi];
-
-    newTempi.push(initialTempo);
-
-    const newMovement = {
-      ...newMovements[movementIndex],
-      tempi: newTempi,
-    };
-
-    newMovements[movementIndex] = newMovement;
-    newPieces[pieceIndex] = {
-      ...newPieces[pieceIndex],
-      movements: newMovements,
-    };
-
-    return {
-      ...prevState,
-      pieces: newPieces,
-    };
-  });
-};
-
-
-const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
-  const { value } = event.target;
-  const tempoValue = Number(value); // Convert the value to a number
-  setProgram((prevState) => {
-    const newPieces = [...prevState.pieces];
-    const newMovements = [...newPieces[pieceIndex].movements];
-    const newTempi = [...newMovements[movementIndex].tempi];
-
-    const newTempo = { ...newTempi[tempoIndex], tempo: tempoValue };
-
-    newTempi[tempoIndex] = newTempo;
-
-    const newMovement = {
-      ...newMovements[movementIndex],
-      tempi: newTempi,
-    };
-
-    newMovements[movementIndex] = newMovement;
-    newPieces[pieceIndex] = {
-      ...newPieces[pieceIndex],
-      movements: newMovements,
-    };
-
-    return {
-      ...prevState,
-      pieces: newPieces,
-    };
-  });
-};
-
-
-
-
   const addMovement = (pieceIndex) => {
     setProgram((prevState) => {
       const newPieces = [...prevState.pieces];
@@ -160,7 +90,6 @@ const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
       newMovements.push({
         number: newMovements.length + 1,
         name: "",
-        tempi: [initialTempo],
       });
 
       newPieces[pieceIndex] = {
@@ -322,38 +251,6 @@ const handleChangeTempo = (event, pieceIndex, movementIndex, tempoIndex) => {
                         handleChangeMovement(event, pieceIndex, movementIndex)
                       }
                     />
-
-                    {movement.tempi.map((tempo, tempoIndex) => {
-                      return (
-                        <div key={tempoIndex} className="tempo">
-                          <label
-                            htmlFor={`piece-${pieceIndex}-movement-${movementIndex}-tempo-${tempoIndex}`}
-                          >
-                            Tempo:
-                          </label>
-                          <input
-                            id={`piece-${pieceIndex}-movement-${movementIndex}-tempo-${tempoIndex}`}
-                            name="tempo"
-                            type="number"
-                            onChange={(event) =>
-                              handleChangeTempo(
-                                event,
-                                pieceIndex,
-                                movementIndex,
-                                tempoIndex
-                              )
-                            }
-                          />
-                        </div>
-                      );
-                    })}
-
-                    <button
-                      type="button"
-                      onClick={() => addTempo(pieceIndex, movementIndex)}
-                    >
-                      Add New Tempo?
-                    </button>
                   </div>
                 );
               })}
