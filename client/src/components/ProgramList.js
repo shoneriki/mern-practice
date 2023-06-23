@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useGetUserID } from "../hooks/useGetUserID";
+// import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
 
 export const ProgramList = () => {
 
-  const userID = useGetUserID();
+  // const userID = useGetUserID();
 
   const [programs, setPrograms] = useState([]);
 

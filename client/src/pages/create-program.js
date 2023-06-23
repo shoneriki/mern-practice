@@ -6,15 +6,6 @@ import {useCookies} from "react-cookie";
 
 import {ProgramForm} from "../components/ProgramForm"
 
-import {
-  Button,
-  Box,
-  Typography,
-  FormControl,
-  InputLabel,
-  Input,
-} from "@mui/material";
-
 
 export const CreateProgram = () => {
   const userID = useGetUserID();
