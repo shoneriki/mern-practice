@@ -136,7 +136,7 @@ export class Metronome extends Component {
     const { isPlaying, bpm, subdivision, beatsPerMeasure } = this.state;
 
     return (
-      <Box sx={{ width: "80%" }} className="metronome">
+      <Box sx={{ width: "80%", margin: "0 auto" }} className="metronome">
         <Box className="bpm-slider">
           <Input
             type="number"
