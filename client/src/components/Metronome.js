@@ -13,36 +13,101 @@ export class Metronome extends Component {
     this.state = {
       isPlaying: false,
       count: 0,
-      bpm: 60,
-      beatsPerMeasure: 4,
+      bpm: 90,
+      beatsPerMeasure: 1,
       subdivision: 3,
     };
 
-    this.click1 = new Audio(click);
-    this.woodblock1 = new Audio(woodblock);
-    this.drumstick1 = new Audio(drumstick);
+    // Create an AudioContext
+    this.audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
+    this.offlineAudioContext = new OfflineAudioContext(2, 44100 * 40, 44100);
+
+    // Now load the sounds
+    this.loadSound(click).then((buffer) => {
+      this.clickBuffer = buffer;
+    });
+
+    this.loadSound(woodblock).then((buffer) => {
+      this.woodblockBuffer = buffer;
+    });
+
+    this.loadSound(drumstick).then((buffer) => {
+      this.drumstickBuffer = buffer;
+    });
   }
+
+  loadSound = async (url) => {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await this.offlineAudioContext.decodeAudioData(
+      arrayBuffer
+    );
+
+    return audioBuffer;
+  };
+
+  playSound = (buffer) => {
+    const source = this.audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(this.audioContext.destination);
+    source.start(this.audioContext.currentTime);
+  };
+
+  scheduleNote = () => {
+    const { count, subdivision } = this.state;
+
+    if (count % subdivision === 0) {
+      this.playSound(this.drumstickBuffer);
+    } else {
+      this.playSound(this.woodblockBuffer);
+    }
+  };
+
+  scheduler = () => {
+    while (this.nextNoteTime < this.audioContext.currentTime + 0.1) {
+      this.scheduleNote();
+      this.nextNote();
+    }
+
+    this.timer = window.setTimeout(this.scheduler, 25.0);
+  };
+
+  nextNote = () => {
+    const secondsPerBeat = 60.0 / this.state.bpm;
+    const secondsPerSubdivision = secondsPerBeat / this.state.subdivision;
+
+    this.nextNoteTime += secondsPerSubdivision;
+
+    this.setState((state) => ({
+      count: (state.count + 1) % (state.beatsPerMeasure * state.subdivision),
+    }));
+  };
+
+  startStop = () => {
+    if (this.state.isPlaying) {
+      window.clearTimeout(this.timer);
+      this.setState({
+        isPlaying: false,
+      });
+    } else {
+      this.nextNoteTime = this.audioContext.currentTime + 0.05;
+      this.scheduler();
+
+      this.setState(
+        {
+          count: 0,
+          isPlaying: true,
+          // play a click immediately (after setState finishes)
+        },
+        this.playClick
+      );
+    }
+  };
 
   handleBpmChange = (event, newValue) => {
     const bpm = newValue;
-
-    if (this.state.isPlaying) {
-      // Stop old timer and start a new one
-      clearInterval(this.timer);
-      this.timer = setInterval(
-        this.playClick,
-        (60 / (bpm * this.state.subdivision)) * 1000
-      );
-
-      // Set the new bpm and reset the beat counter
-      this.setState({
-        count: 0,
-        bpm,
-      });
-    } else {
-      // Otherwise, just update the bpm
-      this.setState({ bpm });
-    }
+    this.setState({ bpm });
   };
 
   handleBpmInputChange = (event) => {
@@ -53,44 +118,17 @@ export class Metronome extends Component {
     this.handleBpmChange(null, bpm);
   };
 
-  playClick = () => {
-    const { count, beatsPerMeasure, subdivision } = this.state;
-
-    // If we've just played the beat, play the drumstick sound
-    if (count % subdivision === 0) {
-      this.drumstick1.play();
-    } else {
-      // Otherwise, play the woodblock sound
-      this.woodblock1.play();
+  handleSubdivisionChange = (event) => {
+    const subdivision = parseInt(event.target.value);
+    if (!isNaN(subdivision)) {
+      this.setState({ subdivision });
     }
-
-    // Keep track of which beat we're on
-    this.setState((state) => ({
-      count: (state.count + 1) % (state.beatsPerMeasure * subdivision),
-    }));
   };
 
-  startStop = () => {
-    if (this.state.isPlaying) {
-      // stop the timer
-      clearInterval(this.timer);
-      this.setState({
-        isPlaying: false,
-      });
-    } else {
-      // start a timer with current bpm and subdivision
-      this.timer = setInterval(
-        this.playClick,
-        (60 / (this.state.bpm * this.state.subdivision)) * 1000
-      );
-      this.setState(
-        {
-          count: 0,
-          isPlaying: true,
-          // play a click immediately (after setState finishes)
-        },
-        this.playClick
-      );
+  handleBeatsPerMeasureChange = (event) => {
+    const beatsPerMeasure = parseInt(event.target.value);
+    if (!isNaN(beatsPerMeasure)) {
+      this.setState({ beatsPerMeasure });
     }
   };
 
@@ -106,21 +144,37 @@ export class Metronome extends Component {
             max={300}
             value={bpm}
             sx={{
-              width: "30%",
+              width: "100%",
             }}
             onChange={this.handleBpmInputChange}
             endAdornment={<InputAdornment position="end">BPM</InputAdornment>}
           />
-          <Typography>
-            {subdivision === 1
-              ? `${subdivision} subdivision per beat`
-              : `${subdivision} subdivisions per beat`}
-          </Typography>
-          <Typography>
-            {beatsPerMeasure === 1
-              ? `${beatsPerMeasure} beats per bar`
-              : `${beatsPerMeasure} beats per bar`}
-          </Typography>
+          <Input
+            type="number"
+            min={1}
+            max={10}
+            value={subdivision}
+            sx={{
+              width: "100%",
+            }}
+            onChange={this.handleSubdivisionChange}
+            endAdornment={
+              <InputAdornment position="end">subdivision</InputAdornment>
+            }
+          />
+          <Input
+            type="number"
+            min={1}
+            max={10}
+            value={beatsPerMeasure}
+            sx={{
+              width: "100%",
+            }}
+            onChange={this.handleBeatsPerMeasureChange}
+            endAdornment={
+              <InputAdornment position="end">Beats Per Bar</InputAdornment>
+            }
+          />
           <Slider
             type="range"
             min={10}
