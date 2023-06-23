@@ -101,39 +101,38 @@ const handleTimeChange = (time) => {
               Length:
             </InputLabel>
             <Box className="time-input">
-
-                <TextField
-                  type="number"
-                  id={`piece-${pieceIndex}-hours`}
-                  label="Hours"
-                  name="length"
-                  min="1"
-                  max
-                  value={piece.length.hours}
-                  onChange={(event) =>
-                    handleChangePiece(event, pieceIndex, "hours")
-                  }
-                />
-                <TextField
-                  type="number"
-                  id={`piece-${pieceIndex}-minutes`}
-                  name="length"
-                  label="Minutes"
-                  value={piece.length.minutes}
-                  onChange={(event) =>
-                    handleChangePiece(event, pieceIndex, "minutes")
-                  }
-                />
-                <TextField
-                  type="number"
-                  id={`piece-${pieceIndex}-seconds`}
-                  name="length"
-                  label="Seconds"
-                  value={piece.length.seconds}
-                  onChange={(event) =>
-                    handleChangePiece(event, pieceIndex, "seconds")
-                  }
-                />
+              <TextField
+                type="number"
+                id={`piece-${pieceIndex}-hours`}
+                label="Hours"
+                name="length"
+                min="1"
+                max
+                value={piece.length.hours}
+                onChange={(event) =>
+                  handleChangePiece(event, pieceIndex, "hours")
+                }
+              />
+              <TextField
+                type="number"
+                id={`piece-${pieceIndex}-minutes`}
+                name="length"
+                label="Minutes"
+                value={piece.length.minutes}
+                onChange={(event) =>
+                  handleChangePiece(event, pieceIndex, "minutes")
+                }
+              />
+              <TextField
+                type="number"
+                id={`piece-${pieceIndex}-seconds`}
+                name="length"
+                label="Seconds"
+                value={piece.length.seconds}
+                onChange={(event) =>
+                  handleChangePiece(event, pieceIndex, "seconds")
+                }
+              />
             </Box>
             {piece.movements.map((movement, movementIndex) => {
               return (
