@@ -124,16 +124,6 @@ a {
   padding: 0 1rem;
 }
 
-.piece .btn-div {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 1rem;
-}
-
-.btn-div button {
-  width: 50%;
-}
 
 .piece .time-input {
   display: flex;

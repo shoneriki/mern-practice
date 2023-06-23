@@ -4,6 +4,13 @@ import { useGetUserID } from "../hooks/useGetUserID";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
+import {
+  Button,
+  Box,
+} from "@mui/material";
+import { styled } from "@mui/system";
+import MenuIcon from "@mui/icons-material/Menu";
+
 
 export const CreateProgram = () => {
   const userID = useGetUserID();
@@ -127,6 +134,42 @@ const addPiece = () => {
     });
   };
 
+  const removePiece = (pieceIndex) => {
+    setProgram((prevState) => {
+      if (prevState.pieces.length <= 1) {
+        alert("At least one piece must remain.");
+        return prevState;
+      }
+      const newPieces = [...prevState.pieces];
+      newPieces.splice(pieceIndex, 1);
+      return {
+        ...prevState,
+        numOfPieces: prevState.numOfPieces - 1,
+        pieces: newPieces,
+      };
+    });
+  };
+
+  const removeMovement = (pieceIndex, movementIndex) => {
+    setProgram((prevState) => {
+      const newPieces = [...prevState.pieces];
+      if (newPieces[pieceIndex].movements.length <= 1) {
+        alert("At least one movement must remain in each piece.");
+        return prevState;
+      }
+      const newMovements = [...newPieces[pieceIndex].movements];
+      newMovements.splice(movementIndex, 1);
+      newPieces[pieceIndex] = {
+        ...newPieces[pieceIndex],
+        movements: newMovements,
+      };
+      return {
+        ...prevState,
+        pieces: newPieces,
+      };
+    });
+  };
+
 
 
   const handleSubmit = async (event) => {
@@ -177,7 +220,7 @@ const addPiece = () => {
         />
         {program.pieces.map((piece, pieceIndex) => {
           return (
-            <div key={pieceIndex} class="piece">
+            <Box key={pieceIndex} class="piece">
               <h3>Piece #{pieceIndex + 1}</h3>
               <label htmlFor={`piece-${pieceIndex}-name`}>Piece Name:</label>
               <input
@@ -251,20 +294,52 @@ const addPiece = () => {
                         handleChangeMovement(event, pieceIndex, movementIndex)
                       }
                     />
+                    <Button
+                      sx={{
+                        color: "white",
+                        backgroundColor: "red",
+                        width: "100%",
+                        margin: "1rem 0",
+                      }}
+                      onClick={() => removeMovement(pieceIndex, movementIndex)}
+                    >
+                      Remove this movement
+                    </Button>
                   </div>
                 );
               })}
 
-              <button type="button" onClick={() => addMovement(pieceIndex)}>
+              <Button
+                sx={{
+                  color: "white",
+                  backgroundColor: "green",
+                  margin: "1rem 0",
+                  "&:hover": {
+                    backgroundColor: "purple",
+                  },
+                }}
+                onClick={() => addMovement(pieceIndex)}
+              >
                 Add New Movement?
-              </button>
+              </Button>
 
-              <div className="btn-div">
-                <button type="button" onClick={addPiece}>
+              <Box sx={{ width: "100%" }} >
+                <Button
+                  sx={{
+                    color: "white",
+                    backgroundColor: "green",
+                    margin: "1rem 0",
+                    width: "100%",
+                    "&:hover": {
+                      backgroundColor: "purple",
+                    },
+                  }}
+                  onClick={addPiece}
+                >
                   Add New Piece?
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Box>
+            </Box>
           );
         })}
         <label htmlFor="numOfPieces">Number of Pieces:</label>
