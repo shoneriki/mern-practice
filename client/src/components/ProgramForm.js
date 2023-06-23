@@ -25,13 +25,19 @@ export const ProgramForm = ({
   addPiece,
   handleSubmit,
 }) => {
-  const handleDateChange = (date) => {
-    handleChangeProgram({ target: { name: "date", value: date } });
-  };
 
-  const handleTimeChange = (time) => {
-    handleChangeProgram({ target: { name: "time", value: time } });
-  };
+
+const handleDateChange = (date) => {
+  handleChangeProgram({
+    target: { name: "date", value: date.toISOString().split("T")[0] },
+  });
+};
+
+const handleTimeChange = (time) => {
+  handleChangeProgram({
+    target: { name: "time", value: time.toTimeString().split(" ")[0] },
+  });
+};
 
   return (
     <form onSubmit={handleSubmit}>
@@ -71,79 +77,81 @@ export const ProgramForm = ({
       {program.pieces.map((piece, pieceIndex) => {
         return (
           <Box key={pieceIndex} class="piece">
-            <Typography variant={'h6'}>Piece #{pieceIndex + 1}</Typography>
-            <label htmlFor={`piece-${pieceIndex}-name`}>Piece Name:</label>
-            <input
-              id={`piece-${pieceIndex}-name`}
-              name="name"
-              value={piece.name}
-              onChange={(event) => handleChangePiece(event, pieceIndex)}
-            />
-            <label htmlFor={`piece-${pieceIndex}-composer`}>Composer:</label>
-            <input
-              id={`piece-${pieceIndex}-composer`}
-              name="composer"
-              value={piece.composer}
-              onChange={(event) => handleChangePiece(event, pieceIndex)}
-            />
-            <label htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
+            <Typography variant={"h6"}>Piece #{pieceIndex + 1}</Typography>
+            <FormControl>
+              <TextField
+                id={`piece-${pieceIndex}-name`}
+                label="Piece Name"
+                name="name"
+                value={piece.name}
+                onChange={(event) => handleChangePiece(event, pieceIndex)}
+              />
+            </FormControl>
+            <FormControl>
+              <TextField
+                id={`piece-${pieceIndex}-composer`}
+                label="Composer"
+                name="composer"
+                value={piece.composer}
+                onChange={(event) => handleChangePiece(event, pieceIndex)}
+              />
+            </FormControl>
+            <FormControl></FormControl>
+            <InputLabel htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
               Length:
-            </label>
-            <section className="time-input">
-              <article>
-                <input
+            </InputLabel>
+            <Box className="time-input">
+
+                <TextField
                   type="number"
                   id={`piece-${pieceIndex}-hours`}
+                  label="Hours"
                   name="length"
+                  min="1"
+                  max
                   value={piece.length.hours}
                   onChange={(event) =>
                     handleChangePiece(event, pieceIndex, "hours")
                   }
                 />
-                <label htmlFor={`piece-${pieceIndex}-hours`}>hr</label>
-              </article>
-              <article>
-                <input
+                <TextField
                   type="number"
                   id={`piece-${pieceIndex}-minutes`}
                   name="length"
+                  label="Minutes"
                   value={piece.length.minutes}
                   onChange={(event) =>
                     handleChangePiece(event, pieceIndex, "minutes")
                   }
                 />
-                <label htmlFor={`piece-${pieceIndex}-minutes`}>min</label>
-              </article>
-              <article>
-                <input
+                <TextField
                   type="number"
                   id={`piece-${pieceIndex}-seconds`}
                   name="length"
+                  label="Seconds"
                   value={piece.length.seconds}
                   onChange={(event) =>
                     handleChangePiece(event, pieceIndex, "seconds")
                   }
                 />
-                <label htmlFor={`piece-${pieceIndex}-seconds`}>sec</label>
-              </article>
-            </section>
+            </Box>
             {piece.movements.map((movement, movementIndex) => {
               return (
                 <Box key={movementIndex} className="movement">
-                  <Typography variant={'h6'}>Movement #{movementIndex + 1}</Typography>
-                  <label
-                    htmlFor={`piece-${pieceIndex}-movement-${movementIndex}-name`}
-                  >
-                    Movement Name:
-                  </label>
-                  <input
-                    id={`piece-${pieceIndex}-movement-${movementIndex}-name`}
-                    name="name"
-                    value={movement.name}
-                    onChange={(event) =>
-                      handleChangeMovement(event, pieceIndex, movementIndex)
-                    }
-                  />
+                  <Typography variant={"h6"}>
+                    Movement #{movementIndex + 1}
+                  </Typography>
+                  <FormControl>
+                    <TextField
+                      id={`piece-${pieceIndex}-movement-${movementIndex}-name`}
+                      name="name"
+                      label="Movement Name"
+                      value={movement.name}
+                      onChange={(event) =>
+                        handleChangeMovement(event, pieceIndex, movementIndex)
+                      }
+                    />
+                  </FormControl>
                   <Button
                     sx={{
                       color: "white",
@@ -202,20 +210,20 @@ export const ProgramForm = ({
         Add Another Piece?
       </Button>
       <FormControl>
-        <InputLabel htmlFor="numOfPieces">Number of Pieces:</InputLabel>
-        <Input
+        <TextField
           type="number"
           id="numOfPieces"
+          label="Number of Pieces"
           name="numOfPieces"
           value={program.numOfPieces}
           onChange={handleChangeProgram}
         />
       </FormControl>
       <FormControl>
-        <InputLabel htmlFor="intermission">Intermission?</InputLabel>
-        <Input
+        <TextField
           type="number"
           id="intermission"
+          label="intermission?"
           name="intermission"
           value={program.intermission}
           onChange={handleChangeProgram}

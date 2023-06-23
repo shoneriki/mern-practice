@@ -6,6 +6,7 @@ import {useCookies} from "react-cookie";
 
 import {ProgramForm} from "../components/ProgramForm"
 
+import dayjs from "dayjs"
 
 export const CreateProgram = () => {
   const userID = useGetUserID();
@@ -38,7 +39,54 @@ const initialProgram = {
   userOwner: userID,
 }
 
-const [program, setProgram] = useState(initialProgram);
+const dataObject = dayjs('2024-01-01')
+const timeObject = dayjs("2024-01-01T12:00:00");
+
+const seedData = {
+  name: "Test Program",
+  date: dataObject,
+  time: timeObject,
+  pieces: [
+    {
+      name: "Test Piece 1",
+      composer: "Test Composer 1",
+      length: {
+        hours: 1,
+        minutes: 30,
+        seconds: 0,
+      },
+      movements: [
+        {
+          name: "Test Movement 1",
+        },
+        {
+          name: "Test Movement 2",
+        },
+      ],
+    },
+    {
+      name: "Test Piece 2",
+      composer: "Test Composer 2",
+      length: {
+        hours: 0,
+        minutes: 45,
+        seconds: 0,
+      },
+      movements: [
+        {
+          name: "Test Movement 1",
+        },
+        {
+          name: "Test Movement 2",
+        },
+      ],
+    },
+  ],
+  numOfPieces: 2,
+  intermission: 15,
+};
+
+const [program, setProgram] = useState(seedData);
 
 const navigate = useNavigate();
 
@@ -167,23 +215,27 @@ const addPiece = () => {
 
 
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const dateTime = new Date(`${program.date}T${program.time}`).toISOString();
-    try {
-      await axios.post(
-        "http://localhost:3001/programs",
-        { ...program, date: dateTime },
-        {
-          headers: { authorization: cookies.access_token },
-        }
-      );
-      alert("New Program Added");
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const dateString = program.date.format("YYYY-MM-DD");
+  const timeString = program.time.format("HH:mm:ss");
+  const dateTime = new Date(`${dateString}T${timeString}`).toISOString();
+
+  try {
+    await axios.post(
+      "http://localhost:3001/programs",
+      { ...program, date: dateTime },
+      {
+        headers: { authorization: cookies.access_token },
+      }
+    );
+    alert("New Program Added");
+    navigate("/");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <div className="create-program">
