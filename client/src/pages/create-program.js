@@ -4,6 +4,8 @@ import { useGetUserID } from "../hooks/useGetUserID";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
+import {Box, Typography} from "@mui/material"
+
 import {ProgramForm} from "../components/ProgramForm"
 
 import dayjs from "dayjs"
@@ -238,8 +240,8 @@ const handleSubmit = async (event) => {
 
 
   return (
-    <div className="create-program">
-      <h2>Create Program</h2>
+    <Box className="create-program">
+      <Typography variant={'h6'}>Create Program</Typography>
       <ProgramForm
         program={program}
         handleChangeProgram={handleChangeProgram}
@@ -251,6 +253,6 @@ const handleSubmit = async (event) => {
         addPiece={addPiece}
         handleSubmit={handleSubmit}
       />
-    </div>
+    </Box>
   );
 }
