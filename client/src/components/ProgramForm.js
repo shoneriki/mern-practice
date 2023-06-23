@@ -2,11 +2,17 @@ import React from "react";
 import {
   Button,
   Box,
-  Typography,
   FormControl,
   InputLabel,
   Input,
+  Typography,
+  TextField,
 } from "@mui/material";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 export const ProgramForm = ({
   program,
@@ -19,36 +25,53 @@ export const ProgramForm = ({
   addPiece,
   handleSubmit,
 }) => {
+  const handleDateChange = (date) => {
+    handleChangeProgram({ target: { name: "date", value: date } });
+  };
+
+  const handleTimeChange = (time) => {
+    handleChangeProgram({ target: { name: "time", value: time } });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="name">Program Name:</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        value={program.name}
-        onChange={handleChangeProgram}
-      />
-      <label htmlFor="date">Performance Date:</label>
-      <input
-        type="date"
-        id="date"
-        name="date"
-        value={program.date}
-        onChange={handleChangeProgram}
-      />
-      <label htmlFor="time">Performance Time:</label>
-      <input
-        type="time"
-        id="time"
-        name="time"
-        value={program.time}
-        onChange={handleChangeProgram}
-      />
+      <FormControl sx={{ margin: "1rem 0 " }}>
+        <InputLabel htmlFor="name">Program Name:</InputLabel>
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          value={program.name}
+          onChange={handleChangeProgram}
+        />
+      </FormControl>
+      <FormControl sx={{ margin: "1rem 0 " }}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Performance Date"
+            name="date"
+            value={program.date}
+            onChange={handleDateChange}
+            renderInput={(props) => <TextField {...props} />}
+          />
+        </LocalizationProvider>
+      </FormControl>
+      <FormControl sx={{ margin: "1rem 0 " }}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            type="time"
+            id="time"
+            name="time"
+            value={program.time}
+            onChange={handleTimeChange}
+            renderInput={(props) => <TextField {...props} />}
+          />
+        </LocalizationProvider>
+      </FormControl>
       {program.pieces.map((piece, pieceIndex) => {
         return (
           <Box key={pieceIndex} class="piece">
-            <h3>Piece #{pieceIndex + 1}</h3>
+            <Typography variant={'h6'}>Piece #{pieceIndex + 1}</Typography>
             <label htmlFor={`piece-${pieceIndex}-name`}>Piece Name:</label>
             <input
               id={`piece-${pieceIndex}-name`}
@@ -66,7 +89,7 @@ export const ProgramForm = ({
             <label htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
               Length:
             </label>
-            <div className="time-input">
+            <section className="time-input">
               <article>
                 <input
                   type="number"
@@ -103,11 +126,11 @@ export const ProgramForm = ({
                 />
                 <label htmlFor={`piece-${pieceIndex}-seconds`}>sec</label>
               </article>
-            </div>
+            </section>
             {piece.movements.map((movement, movementIndex) => {
               return (
-                <div key={movementIndex} className="movement">
-                  <h4>Movement #{movementIndex + 1}</h4>
+                <Box key={movementIndex} className="movement">
+                  <Typography variant={'h6'}>Movement #{movementIndex + 1}</Typography>
                   <label
                     htmlFor={`piece-${pieceIndex}-movement-${movementIndex}-name`}
                   >
@@ -146,7 +169,7 @@ export const ProgramForm = ({
                   >
                     Remove this movement
                   </Button>
-                </div>
+                </Box>
               );
             })}
             <Button
@@ -178,22 +201,26 @@ export const ProgramForm = ({
       >
         Add Another Piece?
       </Button>
-      <label htmlFor="numOfPieces">Number of Pieces:</label>
-      <input
-        type="number"
-        id="numOfPieces"
-        name="numOfPieces"
-        value={program.numOfPieces}
-        onChange={handleChangeProgram}
-      />
-      <label htmlFor="intermission">Intermission?</label>
-      <input
-        type="number"
-        id="intermission"
-        name="intermission"
-        value={program.intermission}
-        onChange={handleChangeProgram}
-      />
+      <FormControl>
+        <InputLabel htmlFor="numOfPieces">Number of Pieces:</InputLabel>
+        <Input
+          type="number"
+          id="numOfPieces"
+          name="numOfPieces"
+          value={program.numOfPieces}
+          onChange={handleChangeProgram}
+        />
+      </FormControl>
+      <FormControl>
+        <InputLabel htmlFor="intermission">Intermission?</InputLabel>
+        <Input
+          type="number"
+          id="intermission"
+          name="intermission"
+          value={program.intermission}
+          onChange={handleChangeProgram}
+        />
+      </FormControl>
       <Button
         sx={{
           backgroundColor: "blue",
