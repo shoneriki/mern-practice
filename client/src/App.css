@@ -6,6 +6,7 @@
 
 :root {
   --navbar-space: 5rem;
+  --darkmode-bg: black
 }
 
 .App {
@@ -18,7 +19,6 @@
 }
 
 body {
-  margin-top: var(--navbar-space);
   padding: 0;
 }
 

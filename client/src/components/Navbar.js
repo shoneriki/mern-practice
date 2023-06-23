@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { NAVBAR_HEIGHT } from "./constants";
 
 import {
   AppBar,
@@ -49,7 +50,7 @@ export const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="fixed" sx={{ marginBottom: "5rem" }}>
+    <AppBar position="fixed" sx={{ marginBottom: NAVBAR_HEIGHT }}>
       <Toolbar>
         <Typography variant="h4" sx={{ flexGrow: "1", cursor: "pointer" }}>
           Planner
@@ -92,6 +93,8 @@ export const Navbar = () => {
                 sx={{
                   color: "white",
                   backgroundColor: "orange",
+                  margin: "auto 0",
+                  height: "50%",
                   "&:hover": {
                     backgroundColor: "red",
                   },
