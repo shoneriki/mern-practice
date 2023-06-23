@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import click from "../assets/sounds/click.mp3"
 import woodblock from "../assets/sounds/woodblock.mp3"
+import drumstick from "../assets/sounds/drumstick.mp3"
 
-import { Button, Slider, Box} from "@mui/material";
+import { Button, Slider, Box, Typography, Input, InputAdornment} from "@mui/material";
 
 
 export class Metronome extends Component {
@@ -18,10 +19,11 @@ export class Metronome extends Component {
     };
 
     this.click1 = new Audio(click);
-    this.click2 = new Audio(woodblock);
+    this.woodblock1 = new Audio(woodblock);
+    this.drumstick1 = new Audio(drumstick);
   }
 
-  handleInputChange = (event, newValue) => {
+  handleBpmChange = (event, newValue) => {
     const bpm = newValue;
 
     if (this.state.isPlaying) {
@@ -41,12 +43,20 @@ export class Metronome extends Component {
     }
   };
 
+  handleBpmInputChange = (event) => {
+    const bpm = parseInt(event.target.value);
+    if (isNaN(bpm)) {
+      return; // Ignore non-numeric input
+    }
+    this.handleBpmChange(null, bpm);
+  };
+
   playClick = () => {
     const { count, beatsPerMeasure } = this.state;
 
     // alternate click sounds
     if (count % beatsPerMeasure === 0) {
-      this.click2.play();
+      this.drumstick1.play();
     } else {
       this.click1.play();
     }
@@ -79,23 +89,38 @@ export class Metronome extends Component {
   };
 
   render() {
-    const { isPlaying, bpm, subdivision } = this.state;
+    const { isPlaying, bpm, subdivision, beatsPerMeasure } = this.state;
 
     return (
       <Box sx={{ width: "80%" }} className="metronome">
         <Box className="bpm-slider">
-          <p>{bpm} BPM</p>
-          <p>
-            {
-              subdivision === 1 ? `${subdivision} click per beat`: `${subdivision} clicks per beat`
-            }
-          </p>
+          <Input
+            type="number"
+            min={10}
+            max={300}
+            value={bpm}
+            sx={{
+              width: "30%"
+            }}
+            onChange={this.handleBpmInputChange}
+            endAdornment={<InputAdornment position="end">BPM</InputAdornment>}
+          />
+          <Typography>
+            {subdivision === 1
+              ? `${subdivision} subdivision per beat`
+              : `${subdivision} subdivisions per beat`}
+          </Typography>
+          <Typography>
+            {beatsPerMeasure === 1
+              ? `${beatsPerMeasure} beats per bar`
+              : `${beatsPerMeasure} beats per bar`}
+          </Typography>
           <Slider
             type="range"
             min={10}
             max={300}
             value={bpm}
-            onChange={this.handleInputChange}
+            onChange={this.handleBpmChange}
           />
         </Box>
         <Button
