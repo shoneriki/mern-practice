@@ -3,7 +3,7 @@ import click from "../assets/sounds/click.mp3"
 import woodblock from "../assets/sounds/woodblock.mp3"
 import drumstick from "../assets/sounds/drumstick.mp3"
 
-import { Button, Slider, Box, Typography, Input, InputAdornment} from "@mui/material";
+import { Button, Slider, Box, TextField, Grid, InputAdornment, Typography} from "@mui/material";
 
 
 export class Metronome extends Component {
@@ -137,44 +137,81 @@ export class Metronome extends Component {
 
     return (
       <Box sx={{ width: "80%", margin: "0 auto" }} className="metronome">
-        <Box className="bpm-slider">
-          <Input
-            type="number"
-            min={10}
-            max={300}
-            value={bpm}
-            sx={{
-              width: "100%",
-            }}
-            onChange={this.handleBpmInputChange}
-            endAdornment={<InputAdornment position="end">BPM</InputAdornment>}
-          />
-          <Input
-            type="number"
-            min={1}
-            max={10}
-            value={subdivision}
-            sx={{
-              width: "100%",
-            }}
-            onChange={this.handleSubdivisionChange}
-            endAdornment={
-              <InputAdornment position="end">subdivision</InputAdornment>
-            }
-          />
-          <Input
-            type="number"
-            min={1}
-            max={10}
-            value={beatsPerMeasure}
-            sx={{
-              width: "100%",
-            }}
-            onChange={this.handleBeatsPerMeasureChange}
-            endAdornment={
-              <InputAdornment position="end">Beats Per Bar</InputAdornment>
-            }
-          />
+        <Typography
+          variant={'h4'}
+          align={'center'}
+          sx={{
+            margin: "1rem"
+          }}
+        >
+          Metronome
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} >
+            <TextField
+              label="BPM"
+              type="number"
+              min={10}
+              max={300}
+              value={bpm}
+              inputProps={{
+                style: {
+                  textAlign: "center",
+                  fontSize: "2rem",
+                },
+              }}
+              sx={{
+                width: "100%",
+                textAlign: "center",
+              }}
+              onChange={this.handleBpmInputChange}
+              endAdornment={<InputAdornment position="end">BPM</InputAdornment>}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="sub"
+              type="number"
+              min={1}
+              max={10}
+              value={subdivision}
+              inputProps={{
+                style: {
+                  textAlign: "center",
+                  fontSize: "2rem",
+                },
+              }}
+              sx={{
+                width: "100%",
+              }}
+              onChange={this.handleSubdivisionChange}
+              endAdornment={
+                <InputAdornment position="end">subdivision</InputAdornment>
+              }
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="per bar"
+              type="number"
+              min={1}
+              max={10}
+              value={beatsPerMeasure}
+              inputProps={{
+                style: {
+                  textAlign: "center",
+                  fontSize: "2rem",
+                },
+              }}
+              sx={{
+                width: "100%",
+              }}
+              onChange={this.handleBeatsPerMeasureChange}
+              endAdornment={
+                <InputAdornment position="end">Beats Per Bar</InputAdornment>
+              }
+            />
+          </Grid>
           <Slider
             type="range"
             min={10}
@@ -182,29 +219,28 @@ export class Metronome extends Component {
             value={bpm}
             onChange={this.handleBpmChange}
           />
-        </Box>
+        </Grid>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center"
+            justifyContent: "center",
           }}
         >
-
-        <Button
-          sx={{
-            backgroundColor: "blue",
-            color: "white",
-            boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.5),",
-            margin: "1rem auto",
-            width: "50%",
-            "&:hover": {
-              backgroundColor: "orange",
-            },
-          }}
-          onClick={this.startStop}
-        >
-          {isPlaying ? "Stop" : "Start"}
-        </Button>
+          <Button
+            sx={{
+              backgroundColor: "blue",
+              color: "white",
+              boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.5),",
+              margin: "1rem auto",
+              width: "50%",
+              "&:hover": {
+                backgroundColor: "orange",
+              },
+            }}
+            onClick={this.startStop}
+          >
+            {isPlaying ? "Stop" : "Start"}
+          </Button>
         </Box>
       </Box>
     );
