@@ -183,11 +183,20 @@ export class Metronome extends Component {
             onChange={this.handleBpmChange}
           />
         </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+
         <Button
           sx={{
             backgroundColor: "blue",
             color: "white",
             boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.5),",
+            margin: "1rem auto",
+            width: "50%",
             "&:hover": {
               backgroundColor: "orange",
             },
@@ -196,6 +205,7 @@ export class Metronome extends Component {
         >
           {isPlaying ? "Stop" : "Start"}
         </Button>
+        </Box>
       </Box>
     );
   }

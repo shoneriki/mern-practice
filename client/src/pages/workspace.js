@@ -1,6 +1,7 @@
 import React from "react";
 import {Metronome} from "../components/Metronome"
 // import {MetronomeE6} from "../components/MetronomeE6"
+import {Counter} from "../components/Counter"
 import { Box } from "@mui/material";
 
 
@@ -16,6 +17,7 @@ export const Workspace = () => {
       }}
     >
       <Metronome />
+      <Counter/>
     </Box>
   );
 };
