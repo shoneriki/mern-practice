@@ -111,25 +111,49 @@ export class Metronome extends Component {
   };
 
   handleBpmInputChange = (event) => {
-    const bpm = parseInt(event.target.value);
+    let bpm = parseInt(event.target.value);
     if (isNaN(bpm)) {
       return; // Ignore non-numeric input
     }
+
+      if (bpm < 10) {
+        bpm = 10;
+      } else if (bpm > 300) {
+        bpm = 300;
+      }
+
     this.handleBpmChange(null, bpm);
   };
 
   handleSubdivisionChange = (event) => {
-    const subdivision = parseInt(event.target.value);
+    let subdivision = parseInt(event.target.value);
     if (!isNaN(subdivision)) {
       this.setState({ subdivision });
     }
+
+      if (subdivision < 1) {
+        subdivision = 1;
+      } else if (subdivision > 10) {
+        subdivision = 10;
+      }
+
+      this.setState({ subdivision });
   };
 
   handleBeatsPerMeasureChange = (event) => {
-    const beatsPerMeasure = parseInt(event.target.value);
+    let beatsPerMeasure = parseInt(event.target.value);
     if (!isNaN(beatsPerMeasure)) {
       this.setState({ beatsPerMeasure });
     }
+
+    if (beatsPerMeasure < 1) {
+      beatsPerMeasure = 1;
+    } else if (beatsPerMeasure > 10) {
+      beatsPerMeasure = 10;
+    }
+
+    this.setState({ beatsPerMeasure });
+
   };
 
   render() {
@@ -151,14 +175,14 @@ export class Metronome extends Component {
             <TextField
               label="BPM"
               type="number"
-              min={10}
-              max={300}
               value={bpm}
               inputProps={{
                 style: {
                   textAlign: "center",
                   fontSize: "2rem",
                 },
+                min: 10,
+                max: 300,
               }}
               sx={{
                 width: "100%",
@@ -180,6 +204,8 @@ export class Metronome extends Component {
                   textAlign: "center",
                   fontSize: "2rem",
                 },
+                min: 1,
+                max: 10,
               }}
               sx={{
                 width: "100%",
@@ -194,14 +220,14 @@ export class Metronome extends Component {
             <TextField
               label="per bar"
               type="number"
-              min={1}
-              max={10}
               value={beatsPerMeasure}
               inputProps={{
                 style: {
                   textAlign: "center",
                   fontSize: "2rem",
                 },
+                min: 1,
+                max: 10,
               }}
               sx={{
                 width: "100%",
