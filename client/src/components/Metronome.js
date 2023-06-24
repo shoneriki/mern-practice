@@ -13,9 +13,9 @@ export class Metronome extends Component {
     this.state = {
       isPlaying: false,
       count: 0,
-      bpm: 90,
+      bpm: 60,
       beatsPerMeasure: 1,
-      subdivision: 3,
+      subdivision: 1,
     };
 
     // Create an AudioContext
