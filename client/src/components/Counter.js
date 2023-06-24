@@ -13,7 +13,7 @@ export const Counter = () => {
   }
 
   const decrement = () => {
-    setCount(count => count -1)
+    setCount((count) => (count > 0 ? count - 1 : 0));
   }
 
   return (
@@ -27,12 +27,11 @@ export const Counter = () => {
       }}
     >
       <TextField
+        type="number"
         value={count}
         inputProps={{
-          style: {
-            textAlign: "center",
-            fontSize: "2rem",
-          },
+          style: { textAlign: "center", fontSize: "2rem" },
+          min: 0,
         }}
         sx={{
           margin: "1rem auto",
