@@ -116,34 +116,33 @@ export class Metronome extends Component {
       return; // Ignore non-numeric input
     }
 
-      if (bpm < 10) {
-        bpm = 10;
-      } else if (bpm > 300) {
-        bpm = 300;
-      }
+    if (bpm < 10) {
+      bpm = 10;
+    } else if (bpm > 300) {
+      bpm = 300;
+    }
 
     this.handleBpmChange(null, bpm);
   };
-
   handleSubdivisionChange = (event) => {
     let subdivision = parseInt(event.target.value);
-    if (!isNaN(subdivision)) {
-      this.setState({ subdivision });
+    if (isNaN(subdivision)) {
+      return;
     }
 
-      if (subdivision < 1) {
-        subdivision = 1;
-      } else if (subdivision > 10) {
-        subdivision = 10;
-      }
+    if (subdivision < 1) {
+      subdivision = 1;
+    } else if (subdivision > 10) {
+      subdivision = 10;
+    }
 
-      this.setState({ subdivision });
+    this.setState({ subdivision });
   };
 
   handleBeatsPerMeasureChange = (event) => {
     let beatsPerMeasure = parseInt(event.target.value);
-    if (!isNaN(beatsPerMeasure)) {
-      this.setState({ beatsPerMeasure });
+    if (isNaN(beatsPerMeasure)) {
+      return;
     }
 
     if (beatsPerMeasure < 1) {
@@ -153,26 +152,52 @@ export class Metronome extends Component {
     }
 
     this.setState({ beatsPerMeasure });
-
   };
 
   render() {
     const { isPlaying, bpm, subdivision, beatsPerMeasure } = this.state;
 
+    function IncrementInput(props) {
+      const { value, onIncrement, onDecrement, min, max, ...otherProps } =
+        props;
+
+      return (
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <TextField value={value} {...otherProps} />
+          <Box sx={{ margin: "auto 1rem" }}>
+            <Button
+              sx={{ backgroundColor: "green", color: "white" }}
+              onClick={onIncrement}
+              disabled={value >= max}
+            >
+              +
+            </Button>
+            <Button
+              sx={{ backgroundColor: "orange", color: "white" }}
+              onClick={onDecrement}
+              disabled={value <= min}
+            >
+              -
+            </Button>
+          </Box>
+        </Box>
+      );
+    }
+
     return (
       <Box sx={{ width: "80%", margin: "0 auto" }} className="metronome">
         <Typography
-          variant={'h4'}
-          align={'center'}
+          variant={"h4"}
+          align={"center"}
           sx={{
-            margin: "1rem"
+            margin: "1rem",
           }}
         >
           Metronome
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} >
-            <TextField
+          <Grid item xs={12}>
+            <IncrementInput
               label="BPM"
               type="number"
               value={bpm}
@@ -181,19 +206,20 @@ export class Metronome extends Component {
                   textAlign: "center",
                   fontSize: "2rem",
                 },
-                min: 10,
-                max: 300,
               }}
               sx={{
                 width: "100%",
                 textAlign: "center",
               }}
+              min={10}
+              max={300}
               onChange={this.handleBpmInputChange}
-              endAdornment={<InputAdornment position="end">BPM</InputAdornment>}
+              onIncrement={() => this.handleBpmChange(null, bpm + 1)}
+              onDecrement={() => this.handleBpmChange(null, bpm - 1)}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
+            <IncrementInput
               label="sub"
               type="number"
               min={1}
@@ -211,13 +237,20 @@ export class Metronome extends Component {
                 width: "100%",
               }}
               onChange={this.handleSubdivisionChange}
-              endAdornment={
-                <InputAdornment position="end">subdivision</InputAdornment>
+              onIncrement={() =>
+                this.handleSubdivisionChange({
+                  target: { value: subdivision + 1 },
+                })
+              }
+              onDecrement={() =>
+                this.handleSubdivisionChange({
+                  target: { value: subdivision - 1 },
+                })
               }
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
+            <IncrementInput
               label="per bar"
               type="number"
               value={beatsPerMeasure}
@@ -233,8 +266,15 @@ export class Metronome extends Component {
                 width: "100%",
               }}
               onChange={this.handleBeatsPerMeasureChange}
-              endAdornment={
-                <InputAdornment position="end">Beats Per Bar</InputAdornment>
+              onIncrement={() =>
+                this.handleBeatsPerMeasureChange({
+                  target: { value: beatsPerMeasure + 1 },
+                })
+              }
+              onDecrement={() =>
+                this.handleBeatsPerMeasureChange({
+                  target: { value: beatsPerMeasure - 1 },
+                })
               }
             />
           </Grid>
