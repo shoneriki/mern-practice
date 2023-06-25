@@ -51,6 +51,11 @@ const programSchema = new mongoose.Schema(
       minutes: { type: Number, min: 0, max: 59, default: 0 },
       seconds: { type: Number, min: 0, max: 59, default: 0 },
     },
+    userOwner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );

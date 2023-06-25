@@ -86,6 +86,7 @@ const seedData = {
   ],
   numOfPieces: 2,
   intermission: 15,
+  userOwner: userID,
 };
 
 const [program, setProgram] = useState(seedData);
@@ -222,6 +223,7 @@ const handleSubmit = async (event) => {
   const dateString = program.date.format("YYYY-MM-DD");
   const timeString = program.time.format("HH:mm:ss");
   const dateTime = new Date(`${dateString}T${timeString}`).toISOString();
+
 
   try {
     await axios.post(

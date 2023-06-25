@@ -1,21 +1,35 @@
 import React, { useEffect, useState } from "react";
-// import { useGetUserID } from "../hooks/useGetUserID";
+import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
 
 export const ProgramList = () => {
 
-  // const userID = useGetUserID();
+  const userID = useGetUserID();
 
   const [programs, setPrograms] = useState([]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/programs");
-        setPrograms(response.data);
-      } catch (err) {
-        console.log(err);
+        const response = await axios.get(`http://localhost:3001/programs/${userID}`);
+        console.log("",response)
+        response.data && response.data.length > 0
+          ? setPrograms(response.data)
+          : setPrograms([]);
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          console.log("Data:", error.response.data);
+          console.log("Status:", error.response.status);
+          console.log("Headers:", error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log("Request:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error:", error.message);
+        }
       }
     };
     fetchPrograms();

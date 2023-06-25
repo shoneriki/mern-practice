@@ -7,9 +7,10 @@ import { UserModel } from "../models/Users.js";
 const router = express.Router();
 
 //get all practice plans
-router.get("/", async (req, res) => {
+router.get("/:userID", async (req, res) => {
   try {
-    const result = await ProgramsModel.find({});
+    const userID = req.params.userID;
+    const result = await ProgramsModel.find({userOwner: userID});
     res.json(result);
   } catch (err) {
     res.json(err);
@@ -36,6 +37,7 @@ router.post("/", async (req, res) => {
         intermission: result.intermission,
         length: result.length,
         date: result.date,
+        userOwner: result.userOwner,
       },
     });
   } catch (err) {

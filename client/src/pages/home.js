@@ -22,8 +22,9 @@ export const Home = () => {
     useEffect(() => {
       const fetchPrograms = async () => {
         try {
-          const response = await axios.get("http://localhost:3001/programs");
-          setPrograms(response.data);
+          const response = await axios.get(`http://localhost:3001/programs/${userID}`);
+
+          response.data && response.data.length > 0 ? setPrograms(response.data) : setPrograms([])
         } catch (err) {
           console.log(err);
         }
