@@ -99,9 +99,8 @@ export class Metronome extends Component {
         {
           count: 0,
           isPlaying: true,
-          // play a click immediately (after setState finishes)
         },
-        this.playClick
+        () => this.playSound(this.clickBuffer)
       );
     }
   };
@@ -165,8 +164,14 @@ export class Metronome extends Component {
       this.setState({
         bpm: bpm,
         lastTap: now,
-        isPlaying: false,
       });
+
+      if (this.state.isPlaying) {
+        window.clearTimeout(this.timer);
+        this.setState({
+          isPlaying: false,
+        });
+      }
     } else {
       this.setState({ lastTap: now });
     }
