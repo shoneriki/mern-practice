@@ -16,6 +16,7 @@ export class Metronome extends Component {
       bpm: 60,
       beatsPerMeasure: 1,
       subdivision: 1,
+      lastTap: null,
     };
 
     // Create an AudioContext
@@ -154,6 +155,22 @@ export class Metronome extends Component {
     this.setState({ beatsPerMeasure });
   };
 
+  handleTap = () => {
+    const now = Date.now();
+
+    if(this.state.lastTap) {
+      const diff = now - this.state.lastTap;
+
+      const bpm = Math.floor(60000/diff);
+
+      this.setState({bpm})
+    }
+
+    this.setState({lastTap: now})
+  }
+
+
+
   render() {
     const { isPlaying, bpm, subdivision, beatsPerMeasure } = this.state;
 
@@ -196,7 +213,7 @@ export class Metronome extends Component {
           Metronome
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
             <IncrementInput
               label="BPM"
               type="number"
@@ -217,6 +234,26 @@ export class Metronome extends Component {
               onIncrement={() => this.handleBpmChange(null, bpm + 1)}
               onDecrement={() => this.handleBpmChange(null, bpm - 1)}
             />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "50%",
+              }}
+            >
+              <Button
+                onClick={this.handleTap}
+                sx={{
+                  backgroundColor: "gray",
+                  width: "100%",
+                  margin: "1rem auto",
+                  textAlign: "center",
+                  justifyContent: "center",
+                }}
+              >
+                Tap Tempo
+              </Button>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
             <IncrementInput
