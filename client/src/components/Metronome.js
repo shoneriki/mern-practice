@@ -158,18 +158,19 @@ export class Metronome extends Component {
   handleTap = () => {
     const now = Date.now();
 
-    if(this.state.lastTap) {
+    if (this.state.lastTap) {
       const diff = now - this.state.lastTap;
+      const bpm = Math.floor(60000 / diff);
 
-      const bpm = Math.floor(60000/diff);
-
-      this.setState({bpm})
+      this.setState({
+        bpm: bpm,
+        lastTap: now,
+        isPlaying: false,
+      });
+    } else {
+      this.setState({ lastTap: now });
     }
-
-    this.setState({lastTap: now})
-  }
-
-
+  };
 
   render() {
     const { isPlaying, bpm, subdivision, beatsPerMeasure } = this.state;
@@ -181,7 +182,14 @@ export class Metronome extends Component {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <TextField value={value} {...otherProps} />
-          <Box sx={{ margin: "auto 1rem", width: "50%", display: "flex", flexDirection: "column"}}>
+          <Box
+            sx={{
+              margin: "auto 1rem",
+              width: "50%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <Button
               sx={{ backgroundColor: "green", color: "white" }}
               onClick={onIncrement}
