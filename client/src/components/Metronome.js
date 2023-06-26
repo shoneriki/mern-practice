@@ -244,11 +244,12 @@ export class Metronome extends Component {
               <Button
                 onClick={this.handleTap}
                 sx={{
-                  backgroundColor: "gray",
+                  backgroundColor: "blue",
                   width: "100%",
                   margin: "1rem auto",
                   textAlign: "center",
                   justifyContent: "center",
+                  color: "white",
                 }}
               >
                 Tap Tempo
