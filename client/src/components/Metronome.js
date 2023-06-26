@@ -181,7 +181,7 @@ export class Metronome extends Component {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <TextField value={value} {...otherProps} />
-          <Box sx={{ margin: "auto 1rem" }}>
+          <Box sx={{ margin: "auto 1rem", width: "50%", display: "flex", flexDirection: "column"}}>
             <Button
               sx={{ backgroundColor: "green", color: "white" }}
               onClick={onIncrement}
@@ -213,7 +213,16 @@ export class Metronome extends Component {
           Metronome
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} sx={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <IncrementInput
               label="BPM"
               type="number"
@@ -250,6 +259,12 @@ export class Metronome extends Component {
                   textAlign: "center",
                   justifyContent: "center",
                   color: "white",
+                  "&:hover": {
+                    backgroundColor: "darkblue",
+                  },
+                  "&:active": {
+                    backgroundColor: "lightblue",
+                  },
                 }}
               >
                 Tap Tempo
