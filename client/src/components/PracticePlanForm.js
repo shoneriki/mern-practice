@@ -1,5 +1,7 @@
 import React from "react";
 
+import {Box} from "@mui/material"
+
 export const PracticePlanForm = ({
   practicePlan,
   handleValueChange,
@@ -8,8 +10,14 @@ export const PracticePlanForm = ({
   suggestions,
 }) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form className="practice-plan-form" onSubmit={handleSubmit}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+
+      >
         <label htmlFor="pieceTitle">Piece Title:</label>
         <input
           type="text"
@@ -19,7 +27,7 @@ export const PracticePlanForm = ({
           onChange={handleChange}
         />
         {suggestions.length > 0 && (
-          <div
+          <section
             style={{
               border: "1px solid #ccc",
               borderRadius: "4px",
@@ -29,17 +37,17 @@ export const PracticePlanForm = ({
             }}
           >
             {suggestions.map((suggestion) => (
-              <div
+              <section
                 key={suggestion._id}
                 style={{ padding: "4px", cursor: "pointer" }}
                 onClick={() => handleValueChange(suggestion)}
               >
-                {suggestion.pieceTitle} by {suggestion.composer},
-              </div>
+                {suggestion.name} by {suggestion.composer},
+              </section>
             ))}
-          </div>
+          </section>
         )}
-      </div>
+      </Box>
       <label htmlFor="Composer">Composer:</label>
       <input
         type="text"
@@ -57,7 +65,7 @@ export const PracticePlanForm = ({
         value={practicePlan.practiceStartDate}
         onChange={handleChange}
       />
-      <div>
+      <section>
         <label htmlFor="daily">Daily?</label>
         <input
           type="radio"
@@ -77,7 +85,7 @@ export const PracticePlanForm = ({
           onChange={handleChange}
         />
         No
-      </div>
+      </section>
       {!practicePlan.daily ? (
         <>
           <label htmlFor="timesPerWeek">Times Per Week</label>

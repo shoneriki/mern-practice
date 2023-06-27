@@ -149,7 +149,7 @@ a {
   width: 30%;
 }
 
-
+/*
 .create-practice-plan {
   display: flex;
   flex-direction: column;
@@ -161,8 +161,13 @@ a {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   margin: 20px;
   width: 400px;
-}
-.create-practice-plan form {
+} */
+/* .create-practice-plan form {
+  display: flex;
+  flex-direction: column;
+} */
+
+.practice-plan-form {
   display: flex;
   flex-direction: column;
 }
