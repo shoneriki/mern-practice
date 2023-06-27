@@ -28,7 +28,6 @@ router.get("/search", async (req, res) => {
 
 //get all practice plans
 router.get("/:userID", async (req, res) => {
-  console.log("req.params", req.params)
   try {
     const userID = req.params.userID;
     const result = await ProgramsModel.find({userOwner: userID});
