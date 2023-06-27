@@ -23,6 +23,7 @@
     "react-big-calendar": "^1.8.1",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.0",
     "react-router-dom": "^6.12.1",
     "react-scripts": "5.0.1",
     "sass": "^1.63.4",
