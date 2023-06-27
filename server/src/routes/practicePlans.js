@@ -7,9 +7,11 @@ import { UserModel } from "../models/Users.js";
 const router = express.Router();
 
 //get all practice plans
-router.get("/", async (req, res) => {
+router.get("/user/:userID", async (req, res) => {
+  console.log("req.params from practicePlans router")
   try {
-    const result = await PracticePlansModel.find({});
+    const userID = req.params.userID;
+    const result = await PracticePlansModel.find({userOwner: userID});
     res.json(result);
   } catch (err) {
     res.json(err);
@@ -59,7 +61,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get('/:id', async (req,res) => {
+router.get('/single/:id', async (req,res) => {
   try {
     const practicePlan = await PracticePlansModel.findById(req.params.id).populate('programId').populate('pieceId');
     res.json(practicePlan);
