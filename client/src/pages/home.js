@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ScheduledCalendar } from "../components/Calendar";
 import {
   Button,
+  Box,
 } from "@mui/material";
 
 import {ProgramList} from "../components/ProgramList"
@@ -35,23 +36,27 @@ export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="container">
-      <section id="calendar">
-        <ScheduledCalendar />
-      </section>
+    <Box className="container">
       <ProgramList />
-      <Button
-        onClick={() => navigate("/programs")}
-        sx={{
-          color: "white",
-          backgroundColor: "green",
-          "&:hover": {
-            backgroundColor: "red",
-          },
-        }}
-      >
-        All Programs?
-      </Button>
-    </section>
+      <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <Button
+          onClick={() => navigate("/programs")}
+          sx={{
+            color: "white",
+            backgroundColor: "green",
+            textAlign: "center",
+            margin: "1rem auto",
+            "&:hover": {
+              backgroundColor: "yellow",
+            },
+          }}
+        >
+          All Programs?
+        </Button>
+      </Box>
+      <Box id="calendar">
+        <ScheduledCalendar />
+      </Box>
+    </Box>
   );
 };

@@ -3,6 +3,8 @@ import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
 
+import {Box, Typography, Grid} from "@mui/material"
+
 export const ProgramList = () => {
 
   const userID = useGetUserID();
@@ -13,7 +15,8 @@ export const ProgramList = () => {
     const fetchPrograms = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/programs/${userID}`);
-        console.log("",response)
+
+        console.log("response.data ", response.data)
         response.data && response.data.length > 0
           ? setPrograms(response.data)
           : setPrograms([]);
@@ -36,19 +39,20 @@ export const ProgramList = () => {
   }, []);
 
   return (
-    <section className="programList">
-      <h1>Impending Programs</h1>
-      <ul>
+    <Box className="programList">
+      <Typography variant={'h4'} sx={{textAlign: "center", margin: "1rem auto"}}>Impending Programs</Typography>
+      <Grid container spacing={3}>
         {programs.map((program) => {
           return (
-            <li key={program._id}>
-              <section>
-                <h2>{program.name}</h2>
-                <h2>
-                  Date:{" "}
+            <Grid item sx={12} sm={4} spacing={3} key={program._id}>
+              <Box sx={{border: "1px solid black", padding: "1rem"}}>
+                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                  {program.name}
+                </Typography>
+                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   {format(new Date(program.date), "MMMM do, yyyy 'at' H:mm")}
-                </h2>
-                <div>
+                </Typography>
+                <Box>
                   {program.pieces.map((piece, index) => {
                     const {
                       hours: pieceHours,
@@ -56,31 +60,29 @@ export const ProgramList = () => {
                       seconds: pieceSeconds,
                     } = piece.length;
                     return (
-                      <div className="piece-display" key={piece._id}>
-                        <h3>
+                      <Box className="piece-display" key={piece._id}>
+                        <Typography sx={{fontWeight: "bold"}}>
                           Piece {index + 1}: {piece.name}
-                        </h3>
-                        <p>
-                          Composer: {piece.composer}
-                        </p>
-                        <p>
-                          Length: {pieceHours}hr:{" "}
-                          {pieceMinutes}min: {pieceSeconds}sec
-                        </p>
-                      </div>
+                        </Typography>
+                        <Typography sx={{fontWeight: "bold"}}>Composer: {piece.composer}</Typography>
+                        <Typography>
+                          Length: {pieceHours}hr: {pieceMinutes}min:{" "}
+                          {pieceSeconds}sec
+                        </Typography>
+                      </Box>
                     );
                   })}
-                </div>
-                <p>Intermission: {program.intermission} minutes</p>
-                <p>
+                </Box>
+                <Typography>Intermission: {program.intermission} minutes</Typography>
+                <Typography>
                   Length: {program.length.hours}hr: {program.length.minutes}min:{" "}
                   {program.length.seconds}sec
-                </p>
-              </section>
-            </li>
+                </Typography>
+              </Box>
+            </Grid>
           );
         })}
-      </ul>
-    </section>
+      </Grid>
+    </Box>
   );
 };
