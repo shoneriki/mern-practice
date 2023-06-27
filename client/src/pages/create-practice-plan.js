@@ -47,9 +47,7 @@ export const CreatePracticePlan = () => {
       axios
         .get(`http://localhost:3001/programs/search?pieceTitle=${practicePlan.pieceTitle}`)
         .then((res) => {
-          console.log("res.data ?", res.data);
           if (Array.isArray(res.data)) {
-            console.log("inside the isArray", res.data)
             setSuggestions(res.data);
           } else {
             console.log("Unexpected response data:", res.data);

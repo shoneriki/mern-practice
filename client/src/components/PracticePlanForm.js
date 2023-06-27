@@ -16,7 +16,6 @@ export const PracticePlanForm = ({
           display: "flex",
           flexDirection: "column",
         }}
-
       >
         <label htmlFor="pieceTitle">Piece Title:</label>
         <input
