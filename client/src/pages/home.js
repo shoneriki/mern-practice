@@ -18,7 +18,7 @@ export const Home = () => {
 
   const userID = useGetUserID();
 
-  const [programs, setPrograms] = useState([]);
+  const [_, setPrograms] = useState([]);
 
     useEffect(() => {
       const fetchPrograms = async () => {
@@ -31,7 +31,7 @@ export const Home = () => {
         }
       }
       fetchPrograms()
-  }, []);
+  }, [userID]);
 
   const navigate = useNavigate();
 

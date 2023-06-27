@@ -36,7 +36,7 @@ export const ProgramList = () => {
       }
     };
     fetchPrograms();
-  }, []);
+  }, [userID]);
 
   return (
     <Box className="programList">
