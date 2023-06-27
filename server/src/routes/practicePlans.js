@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
 
 router.get('/:id', async (req,res) => {
   try {
-    const practicePlan = await PracticePlansModel.findById(req.params.id).populate('programId');
+    const practicePlan = await PracticePlansModel.findById(req.params.id).populate('programId').populate('pieceId');
     res.json(practicePlan);
   } catch (err) {
     res.status(500).json(err)

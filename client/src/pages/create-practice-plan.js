@@ -6,6 +6,8 @@ import {useForm} from "../hooks/useForm"
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
+import {Box, Grid, Typography} from "@mui/material"
+
 import {PracticePlanForm} from "../components/PracticePlanForm.js"
 
 export const CreatePracticePlan = () => {
@@ -32,7 +34,7 @@ export const CreatePracticePlan = () => {
       userOwner: userID,
     },
     onValueChange: (suggestion) => ({
-      pieceTitle: suggestion.pieceTitle,
+      pieceTitle: suggestion.name,
       composer: suggestion.composer,
     }),
   });
@@ -41,7 +43,7 @@ export const CreatePracticePlan = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    if (practicePlan.pieceTitle && practicePlan.pieceTitle.length >= 2) {
+    if (practicePlan.pieceTitle) {
       axios
         .get(`http://localhost:3001/programs/search?pieceTitle=${practicePlan.pieceTitle}`)
         .then((res) => {
@@ -54,6 +56,8 @@ export const CreatePracticePlan = () => {
           }
         })
         .catch((err) => console.error(err));
+    } else {
+      setSuggestions([])
     }
   }, [practicePlan.pieceTitle]);
 
@@ -78,8 +82,16 @@ export const CreatePracticePlan = () => {
   }
 
   return (
-    <div className="create-practice-plan">
-      <h2>Create Practice Plan</h2>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "80%",
+      }}
+    >
+      <Typography variant={"h6"}>Create Practice Plan</Typography>
       <PracticePlanForm
         practicePlan={practicePlan}
         handleChange={handleChange}
@@ -87,6 +99,6 @@ export const CreatePracticePlan = () => {
         handleSubmit={handleSubmit(submitForm)}
         suggestions={suggestions}
       />
-    </div>
+    </Box>
   );
 };
