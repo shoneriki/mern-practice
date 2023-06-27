@@ -10,12 +10,12 @@ export const PracticePlanForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="pieceName">Piece Name:</label>
+        <label htmlFor="pieceTitle">Piece Title:</label>
         <input
           type="text"
-          id="pieceName"
-          name="pieceName"
-          value={practicePlan.pieceName}
+          id="pieceTitle"
+          name="pieceTitle"
+          value={practicePlan.pieceTitle}
           onChange={handleChange}
         />
         {suggestions.length > 0 && (
@@ -34,7 +34,7 @@ export const PracticePlanForm = ({
                 style={{ padding: "4px", cursor: "pointer" }}
                 onClick={() => handleValueChange(suggestion)}
               >
-                {suggestion.name} by {suggestion.composer},
+                {suggestion.pieceTitle} by {suggestion.composer},
               </div>
             ))}
           </div>

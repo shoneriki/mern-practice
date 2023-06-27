@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 
@@ -13,7 +13,6 @@ export function useFetchProgramsForCalendar() {
         const programs = res.data;
 
         console.log("HTTP status: ", res.status);
-        console.log("Programs data: ", programs);
 
         if (programs && programs.length > 0) {
           const updatedPrograms = programs.map((program) => {
@@ -22,6 +21,7 @@ export function useFetchProgramsForCalendar() {
             const events = [];
 
             if (program.pieces) {
+              console.log("Program.pieces: ", program.pieces);
               for (let i = 0; i < program.pieces.length; i++) {
                 if (program.pieces[i].length) {
                   const pieceLengthInSeconds =
@@ -36,7 +36,7 @@ export function useFetchProgramsForCalendar() {
                   events.push({
                     start: new Date(currentStartTime),
                     end: new Date(currentEndTime),
-                    title: `${program.pieces[i].name} by ${program.pieces[i].composer}`,
+                    title: `${program.pieces[i].pieceTitle} by ${program.pieces[i].composer}`,
                   });
 
                   currentStartTime = new Date(currentEndTime.getTime());

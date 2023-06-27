@@ -7,7 +7,7 @@ const practicePlanSchema = new mongoose.Schema(
     composer: {
       type: String,
     },
-    pieceName: {
+    pieceTitle: {
       type: String,
     },
     pieceId: {
@@ -26,7 +26,9 @@ const practicePlanSchema = new mongoose.Schema(
     ],
     excerpts: [
       {
-        type: String,
+        text: {type: String},
+        repetitions: {type: Number},
+        targetTempo: {type:Number},
       },
     ],
     movements: {

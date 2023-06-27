@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
   const practicePlan = new PracticePlansModel({
     _id: new mongoose.Types.ObjectId(),
     composer: req.body.composer,
-    pieceName: req.body.pieceName,
+    pieceTitle: req.body.pieceTitle,
     excerpts: req.body.excerpts,
     movements: req.body.movements,
     endMetronomeGoal: req.body.endMetronomeGoal,
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
       createdPracticePlan: {
         _id: result._id,
         composer: result.composer,
-        pieceName: result.pieceName,
+        pieceTitle: result.pieceTitle,
         excerpts: result.excerpts,
         movements: result.movements,
         endMetronomeGoal: result.endMetronomeGoal,

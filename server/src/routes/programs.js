@@ -6,8 +6,29 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
+router.get("/search", async (req, res) => {
+  try {
+    const pieceTitle = req.query.pieceTitle;
+    const programs = await ProgramsModel.find({
+      "pieces.name": { $regex: new RegExp(pieceTitle, "i") },
+    });
+    const pieces = [];
+    programs.forEach((program) => {
+      program.pieces.forEach((piece) => {
+        if (piece.name.toLowerCase().includes(pieceTitle.toLowerCase())) {
+          pieces.push(piece);
+        }
+      });
+    });
+    res.json(pieces);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 //get all practice plans
 router.get("/:userID", async (req, res) => {
+  console.log("req.params", req.params)
   try {
     const userID = req.params.userID;
     const result = await ProgramsModel.find({userOwner: userID});
@@ -19,6 +40,7 @@ router.get("/:userID", async (req, res) => {
 
 
 router.post("/", async (req, res) => {
+  console.log("req.body from post",req.body)
   const programPlan = new ProgramsModel({
     _id: new mongoose.Types.ObjectId(),
     ...req.body,
@@ -47,25 +69,7 @@ router.post("/", async (req, res) => {
 });
 
 
-router.get("/search", async (req, res) => {
-  try {
-    const pieceName = req.query.pieceName;
-    const programs = await ProgramsModel.find({
-      "pieces.name": { $regex: new RegExp(pieceName, "i") },
-    });
-    const pieces = [];
-    programs.forEach((program) => {
-      program.pieces.forEach((piece) => {
-        if (piece.name.toLowerCase().includes(pieceName.toLowerCase())) {
-          pieces.push(piece);
-        }
-      });
-    });
-    res.json(pieces);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+
 
 
 export { router as programsRouter };

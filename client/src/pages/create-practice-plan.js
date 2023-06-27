@@ -18,7 +18,7 @@ export const CreatePracticePlan = () => {
     handleValueChange,
   } = useForm({
     initialValues: {
-      pieceName: "",
+      pieceTitle: "",
       composer: "",
       excerpts: [],
       movements: "",
@@ -32,31 +32,32 @@ export const CreatePracticePlan = () => {
       userOwner: userID,
     },
     onValueChange: (suggestion) => ({
-      pieceName: suggestion.name,
+      pieceTitle: suggestion.pieceTitle,
       composer: suggestion.composer,
     }),
   });
 
 
-  const [pieceName, setPieceName] = useState('');
+  const [pieceTitle, setPieceTitle] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    if(practicePlan.pieceName.length >= 2) {
-      axios.get(`http://localhost:3001/programs/search?pieceName=${pieceName}`)
+    if(practicePlan.pieceTitle.length >= 2) {
+      axios.get(`http://localhost:3001/programs/search?pieceTitle=${pieceTitle}`)
         .then(res => {
+          console.log("res.data ?", res.data)
           setSuggestions(res.data);
         })
         .catch(err => console.error(err));
     }
-  }, [practicePlan.pieceName])
+  }, [practicePlan.pieceTitle])
 
   const navigate = useNavigate();
 
   const submitForm = async (practicePlan) => {
     try {
       await axios.post(
-        "http://localhost:3001/practicePlans",
+        `http://localhost:3001/practicePlans`,
         { ...practicePlan },
         {
           headers: { authorization: cookies.access_token },
