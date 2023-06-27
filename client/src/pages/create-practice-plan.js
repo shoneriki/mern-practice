@@ -38,19 +38,25 @@ export const CreatePracticePlan = () => {
   });
 
 
-  const [pieceTitle, setPieceTitle] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    if(practicePlan.pieceTitle.length >= 2) {
-      axios.get(`http://localhost:3001/programs/search?pieceTitle=${pieceTitle}`)
-        .then(res => {
-          console.log("res.data ?", res.data)
-          setSuggestions(res.data);
+    if (practicePlan.pieceTitle && practicePlan.pieceTitle.length >= 2) {
+      axios
+        .get(`http://localhost:3001/programs/search?pieceTitle=${practicePlan.pieceTitle}`)
+        .then((res) => {
+          console.log("res.data ?", res.data);
+          if (Array.isArray(res.data)) {
+            console.log("inside the isArray", res.data)
+            setSuggestions(res.data);
+          } else {
+            console.log("Unexpected response data:", res.data);
+          }
         })
-        .catch(err => console.error(err));
+        .catch((err) => console.error(err));
     }
-  }, [practicePlan.pieceTitle])
+  }, [practicePlan.pieceTitle]);
+
 
   const navigate = useNavigate();
 
