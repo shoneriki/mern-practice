@@ -18,42 +18,43 @@ router.get("/", async (req, res) => {
 
 // Create a new practice plan , add verifyToken when usable
 router.post("/", async (req, res) => {
+  const {
+    composer,
+    pieceTitle,
+    pieceId,
+    movements,
+    practiceStartDate,
+    daily,
+    timesPerWeek,
+    untilDate,
+    practiceLengthInMinutes,
+    notes,
+    programId,
+    userOwner,
+  } = req.body
+
+
   const practicePlan = new PracticePlansModel({
     _id: new mongoose.Types.ObjectId(),
-    composer: req.body.composer,
-    pieceTitle: req.body.pieceTitle,
-    excerpts: req.body.excerpts,
-    movements: req.body.movements,
-    endMetronomeGoal: req.body.endMetronomeGoal,
-    practiceStartDate: req.body.practiceStartDate,
-    daily: req.body.daily,
-    timesPerWeek: req.body.timesPerWeek,
-    untilDate: req.body.untilDate,
-    practiceLengthInMinutes: req.body.practiceLengthInMinutes,
-    userOwner: req.body.userOwner,
+    composer,
+    pieceTitle,
+    pieceId,
+    movements,
+    practiceStartDate,
+    daily,
+    timesPerWeek,
+    untilDate,
+    practiceLengthInMinutes,
+    notes,
+    programId,
+    userOwner,
   });
   console.log(practicePlan);
 
   try {
     const result = await practicePlan.save();
-    res.status(201).json({
-      createdPracticePlan: {
-        _id: result._id,
-        composer: result.composer,
-        pieceTitle: result.pieceTitle,
-        excerpts: result.excerpts,
-        movements: result.movements,
-        endMetronomeGoal: result.endMetronomeGoal,
-        practiceStartDate: result.practiceStartDate,
-        daily: result.daily,
-        timesPerWeek: result.timesPerWeek,
-        untilDate: result.untilDate,
-        practiceLengthInMinutes: result.practiceLengthInMinutes,
-        userOwner: result.userOwner,
-      },
-    });
+    res.status(201).json({ createdPracticePlan: result});
   } catch (err) {
-    // console.log(err);
     res.json(err);
   }
 });

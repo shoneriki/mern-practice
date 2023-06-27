@@ -1,6 +1,36 @@
 import mongoose from "mongoose";
 import { ProgramsModel } from "./Programs.js";
 
+const movementSchema = new mongoose.Schema({
+  movementNumber: Number,
+  shouldPractice: {
+    type: Boolean,
+    default: false
+  },
+  tempi: [
+    {
+      tempo: {
+        type: Number,
+      },
+    },
+  ],
+  isExcerpted: {
+    type: Boolean,
+    default: false,
+  },
+  excerpts: [
+    {
+      text: { type: String },
+      repetitions: { type: Number },
+      targetTempo: { type: Number },
+      endMetronomeGoal: {type: Number},
+    },
+  ],
+  settings: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Settings",
+  },
+});
 
 const practicePlanSchema = new mongoose.Schema(
   {
@@ -14,29 +44,7 @@ const practicePlanSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Programs.pieces",
     },
-    movementNumber: {
-      type: Number,
-    },
-    tempi: [
-      {
-        tempo: {
-          type: Number,
-        }
-      }
-    ],
-    excerpts: [
-      {
-        text: {type: String},
-        repetitions: {type: Number},
-        targetTempo: {type:Number},
-      },
-    ],
-    movements: {
-      type: String,
-    },
-    endMetronomeGoal: {
-      type: Number,
-    },
+    movements: [movementSchema],
     practiceStartDate: [{ type: Date }],
     daily: { type: Boolean, default: false },
     timesPerWeek: { type: Number, min: 1, max: 7 },
