@@ -149,10 +149,6 @@ a {
   width: 30%;
 }
 
-.piece-display {
-  background-color: yellow;
-}
-
 
 .create-practice-plan {
   display: flex;
@@ -176,11 +172,6 @@ ul {
   margin: 0;
 }
 
-li {
-  border: 1px solid black;
-  padding: 10px;
-  margin-bottom: 10px;
-}
 
 h2 {
   margin-top: 0;
