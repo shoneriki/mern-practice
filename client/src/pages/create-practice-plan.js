@@ -13,6 +13,8 @@ import {PracticePlanForm} from "../components/PracticePlanForm.js"
 export const CreatePracticePlan = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
+
+  const [programId, setProgramId] = useState(null)
   const {
     values: practicePlan,
     handleChange,
@@ -31,12 +33,27 @@ export const CreatePracticePlan = () => {
       untilDate: new Date().toISOString().split("T")[0],
       practiceLengthInMinutes: 1,
       notes: "",
+
+      programName: "",
+      programId: null,
+
       userOwner: userID,
     },
-    onValueChange: (suggestion) => ({
-      pieceTitle: suggestion.name,
-      composer: suggestion.composer,
-    }),
+    onValueChange: (suggestion) => {
+      let formattedUntilDate = new Date().toISOString().split("T")[0]; // default date value
+      if (suggestion.programDate) {
+        const programDate = new Date(suggestion.programDate);
+        formattedUntilDate = programDate.toISOString().split("T")[0];
+      }
+
+      return {
+        pieceTitle: suggestion.name,
+        composer: suggestion.composer,
+        programName: suggestion.programName,
+        programId: suggestion.programId,
+        untilDate: formattedUntilDate,
+      };
+    },
   });
 
 
@@ -66,7 +83,7 @@ export const CreatePracticePlan = () => {
     try {
       await axios.post(
         `http://localhost:3001/practicePlans`,
-        { ...practicePlan },
+        { ...practicePlan, programId },
         {
           headers: { authorization: cookies.access_token },
         }

@@ -62,6 +62,17 @@ export const PracticePlanForm = ({
               fullWidth
             />
           </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="programName"
+              name="programName"
+              label="Program"
+              value={practicePlan.programName}
+              disabled
+              fullWidth
+            />
+          </Grid>
+
           <Grid name="practiceStartDate-grid" item xs={12}>
             <TextField
               id="practiceStartDate"
@@ -158,6 +169,13 @@ export const PracticePlanForm = ({
               fullWidth
             />
           </Grid>
+
+          {/* Add this inside your form, anywhere before the submit button */}
+          <input
+            type="hidden"
+            name="programId"
+            value={practicePlan.programId}
+          />
 
           <Grid name="create-plan-btn-grid" item xs={12}>
             <Button variant="contained" color="primary" type="submit">

@@ -16,7 +16,17 @@ router.get("/search", async (req, res) => {
     programs.forEach((program) => {
       program.pieces.forEach((piece) => {
         if (piece.name.toLowerCase().includes(pieceTitle.toLowerCase())) {
-          pieces.push(piece);
+          const pieceWithProgramId = program._id
+            ? {
+              ...piece._doc,
+              programId: program._id,
+              programName: program.name,
+              programDate: program.date,
+            }
+            : {
+              ...piece._doc
+            }
+          pieces.push(pieceWithProgramId);
         }
       });
     });
