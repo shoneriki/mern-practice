@@ -44,7 +44,7 @@ export const ProgramList = () => {
       <Grid container spacing={3}>
         {programs.map((program) => {
           return (
-            <Grid item sx={12} sm={4} spacing={3} key={program._id}>
+            <Grid item sx={12} sm={6} md={4} spacing={3} key={program._id}>
               <Box sx={{border: "1px solid black", padding: "1rem"}}>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   {program.name}
