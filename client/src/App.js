@@ -42,6 +42,7 @@ function App() {
           />
           <Route path="/programs" element={<Programs />} />
           <Route path="/program/create" element={<CreateProgram />} />
+          <Route path="/program/edit/:id" element={<CreateProgram  />} />
           <Route path="/workspace" element={<Workspace />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

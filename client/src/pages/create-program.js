@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
 import {Box, Typography} from "@mui/material"
@@ -13,6 +13,8 @@ import dayjs from "dayjs"
 export const CreateProgram = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
+
+  const {id} = useParams();
 
 
 const initialMovement = {
@@ -93,10 +95,37 @@ const [program, setProgram] = useState(seedData);
 
 const navigate = useNavigate();
 
-  const handleChangeProgram = (event) => {
-    const { name, value } = event.target;
-    setProgram({ ...program, [name]: value });
+useEffect(() => {
+  const fetchEditData = async () => {
+    if (id) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/programs/${id}`
+        );
+        let programData = response.data;
+        console.log("programData from fetchEditData", programData)
+
+        // Converting 'dayjs' instances to strings
+        programData.date = dayjs(programData.date).format("YYYY-MM-DD");
+        programData.time = dayjs(programData.time).format("HH:mm:ss");
+
+        console.log("Program Data from server: ", programData)
+
+        setProgram(programData);
+      } catch (error) {
+        console.error("an error occurred while fetching the program: ", error);
+      }
+    }
   };
+  fetchEditData();
+}, [id]);
+
+
+const handleChangeProgram = (event) => {
+  const { name, value } = event.target;
+  console.log("Program State from handleChangeProgram: " , program);
+  setProgram({ ...program, [name]: value });
+};
 
 const addPiece = () => {
   setProgram({
@@ -226,14 +255,25 @@ const handleSubmit = async (event) => {
 
 
   try {
-    await axios.post(
-      "http://localhost:3001/programs",
-      { ...program, date: dateTime },
-      {
-        headers: { authorization: cookies.access_token },
-      }
-    );
-    alert("New Program Added");
+    if (id) {
+      await axios.put(
+        `http://localhost:3001/programs/${id}`,
+        {...program, date: dateTime},
+        {
+          headers: {authorization: cookies.access_token },
+        }
+      );
+      alert("program updated")
+    } else {
+      await axios.post(
+        "http://localhost:3001/programs",
+        { ...program, date: dateTime },
+        {
+          headers: { authorization: cookies.access_token },
+        }
+      );
+      alert("New Program Added");
+    }
     navigate("/");
   } catch (error) {
     console.error(error);
@@ -243,7 +283,7 @@ const handleSubmit = async (event) => {
 
   return (
     <Box className="create-program">
-      <Typography variant={'h6'}>Create Program</Typography>
+      <Typography variant={'h6'}>Program</Typography>
       <ProgramForm
         program={program}
         handleChangeProgram={handleChangeProgram}
@@ -254,6 +294,7 @@ const handleSubmit = async (event) => {
         removeMovement={removeMovement}
         addPiece={addPiece}
         handleSubmit={handleSubmit}
+        id={id}
       />
     </Box>
   );

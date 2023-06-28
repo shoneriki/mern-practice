@@ -25,7 +25,9 @@ export const ProgramForm = ({
   removeMovement,
   addPiece,
   handleSubmit,
+  id,
 }) => {
+  console.log("program from ProgramForm", program)
 
 
 const handleDateChange = (date) => {

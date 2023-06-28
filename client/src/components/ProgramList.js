@@ -2,42 +2,52 @@ import React, { useEffect, useState } from "react";
 import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
+import {useNavigate} from "react-router-dom"
 
 import {Box, Typography, Grid, Button, Dialog, DialogTitle, DialogActions} from "@mui/material"
 
 export const ProgramList = () => {
-  const userID = useGetUserID();
+   const userID = useGetUserID();
 
-  const [programs, setPrograms] = useState([]);
+   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchPrograms = async (id) => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/programs/${userID}`
-        );
+   const [programs, setPrograms] = useState([]);
 
-        console.log("response.data ", response.data);
-        response.data && response.data.length > 0
-          ? setPrograms(response.data)
-          : setPrograms([]);
-      } catch (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code that falls out of the range of 2xx
-          console.log("Data:", error.response.data);
-          console.log("Status:", error.response.status);
-          console.log("Headers:", error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log("Request:", error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error:", error.message);
-        }
-      }
-    };
-    fetchPrograms();
-  }, [userID]);
+   useEffect(() => {
+     const fetchPrograms = async (id) => {
+       try {
+         const response = await axios.get(
+           `http://localhost:3001/programs/${userID}`
+         );
+          console.log("response.data from the program list component", response.data)
+         response.data && response.data.length > 0
+           ? setPrograms(response.data)
+           : setPrograms([]);
+       } catch (error) {
+         if (error.response) {
+           // The request was made and the server responded with a status code that falls out of the range of 2xx
+           console.log("Data:", error.response.data);
+           console.log("Status:", error.response.status);
+           console.log("Headers:", error.response.headers);
+         } else if (error.request) {
+           // The request was made but no response was received
+           console.log("Request:", error.request);
+         } else {
+           // Something happened in setting up the request that triggered an Error
+           console.log("Error:", error.message);
+         }
+       }
+     };
+     fetchPrograms();
+   }, [userID]);
+
+   // edit functionality
+
+   const handleEdit = (id) => {
+     navigate(`/program/edit/${id}`)
+   }
+
+  // end edit functionality
 
   // delete functionality
 
@@ -119,10 +129,27 @@ export const ProgramList = () => {
                   name="delete-edit-btn-box"
                   sx={{
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "space-between",
                     alignItems: "center",
                   }}
                 >
+                  <Button
+                    name="edit-btn"
+                    variant="outlined"
+                    sx={{
+                      backgroundColor: "yellow",
+                      color: "black",
+                      border: "none",
+                      "&:hover": {
+                        backgroundColor: "orange",
+                        border: "none",
+                        cursor: "pointer",
+                      },
+                    }}
+                    onClick={() => handleEdit(program._id)}
+                  >
+                    Edit?
+                  </Button>
                   <Button
                     name="delete-btn"
                     variant="outlined"

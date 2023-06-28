@@ -55,27 +55,31 @@ router.post("/", async (req, res) => {
     ...req.body,
   });
 
-  console.log(programPlan);
-
   try {
-    const result = await programPlan.save();
-    res.status(201).json({
-      createdProgram: {
-        _id: result._id,
-        name: result.name,
-        numOfPieces: result.numOfPieces,
-        pieces: result.pieces,
-        intermission: result.intermission,
-        length: result.length,
-        date: result.date,
-        userOwner: result.userOwner,
-      },
-    });
+    const savedProgram = await programPlan.save();
+    res.status(201).json(savedProgram)
   } catch (err) {
     console.log(err);
     res.json(err);
   }
 });
+
+router.put(`/:id`, async (req, res) => {
+  console.log("PUT /:id hit");
+  try {
+    const id = req.params.id;
+    const updates = req.body;
+    const updatedProgram = await ProgramsModel.findByIdAndUpdate(id, updates, {
+      new: true,
+    });
+    console.log("updatedProgram from server side put:", updatedProgram)
+    res.status(200).json(updatedProgram);
+  } catch (err) {
+    console.log("error: ", err);
+    res.status(500).json(err);
+  }
+});
+
 
 router.delete("/:id", async (req,res) => {
   try {
