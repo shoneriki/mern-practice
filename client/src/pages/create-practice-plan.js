@@ -35,12 +35,12 @@ export const CreatePracticePlan = () => {
       notes: "",
 
       programName: "",
-      programId: null,
+      programId: "",
 
       userOwner: userID,
     },
     onValueChange: (suggestion) => {
-      let formattedUntilDate = new Date().toISOString().split("T")[0]; // default date value
+      let formattedUntilDate = new Date().toISOString().split("T")[0];
       if (suggestion.programDate) {
         const programDate = new Date(suggestion.programDate);
         formattedUntilDate = programDate.toISOString().split("T")[0];

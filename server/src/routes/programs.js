@@ -77,4 +77,15 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req,res) => {
+  try {
+    const id = req.params.id;
+    await ProgramsModel.findByIdAndRemove(id);
+    res.status(200).json({message: "Program deleted successfully"})
+  } catch(err) {
+    console.log("error:", err)
+    res.status(500).json(err)
+  }
+})
+
 export { router as programsRouter };
