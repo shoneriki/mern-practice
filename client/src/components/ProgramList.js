@@ -42,9 +42,11 @@ export const ProgramList = () => {
   // delete functionality
 
   const [open, setOpen] = useState(false);
+  const [_, setToDelete] = useState(null);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id) => {
     setOpen(true);
+    setToDelete(id);
   };
 
   const handleClose = () => {
@@ -134,7 +136,7 @@ export const ProgramList = () => {
                         cursor: "pointer",
                       },
                     }}
-                    onClick={handleClickOpen}
+                    onClick={() => handleClickOpen(program._id)}
                   >
                     Delete
                   </Button>
