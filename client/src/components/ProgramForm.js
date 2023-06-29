@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Button,
   Box,
@@ -19,6 +19,7 @@ import dayjs from "dayjs";
 import {useLocation} from "react-router-dom";
 
 export const ProgramForm = ({
+  program,
   handleChangeProgram,
   handleChangePiece,
   removePiece,
@@ -29,14 +30,16 @@ export const ProgramForm = ({
   handleSubmit,
   id,
 }) => {
-  let { program } = useLocation().state;
   console.log("program from ProgramForm component", program);
 
+
   const handleDateTimeChange = (datetime) => {
+    console.log("dateTime?", datetime);
     handleChangeProgram({
-      target: { name: "date", value: dayjs(datetime) },
+      target: { name: "date", value: datetime.toDate() },
     });
   };
+
 
   return (
     <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
@@ -62,10 +65,10 @@ export const ProgramForm = ({
             <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
-                  label="Start Date and Time"
+                  label="Date and Time"
                   name="date"
                   value={dayjs(program.date)}
-                  onChange={handleDateTimeChange}
+                  onChange={(datetime) => handleDateTimeChange(datetime)}
                   renderInput={(props) => <TextField {...props} fullWidth />}
                 />
               </LocalizationProvider>

@@ -16,33 +16,6 @@ export const CreateProgram = () => {
 
   const {id} = useParams();
 
-
-  const initialMovement = {
-    number: 1,
-    name: "",
-  };
-
-  const initialPiece = {
-    name: "",
-    composer: "",
-    length: {
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-    },
-    movements: [initialMovement]
-  }
-
-  const initialProgram = {
-    name: "",
-    numOfPieces: 1,
-    pieces: [initialPiece],
-    length: "",
-    date: "",
-    time: "",
-    userOwner: userID,
-  }
-
   const dataObject = dayjs('2024-01-01')
   const timeObject = dayjs("2024-01-01T12:00:00");
 
@@ -99,6 +72,7 @@ export const CreateProgram = () => {
     const fetchEditData = async () => {
       if (id) {
         console.log("ID EXISTS!")
+        console.log("id in fetch", id)
         try {
           console.log("from inside try of fetchEditData from create-program page")
           const response = await axios.get(
@@ -129,7 +103,7 @@ export const CreateProgram = () => {
 
   const handleChangeProgram = (event) => {
     const { name, value } = event.target;
-    console.log("Program State from handleChangeProgram: " , program);
+    console.log("program time", program.date)
     setProgram({ ...program, [name]: value });
   };
 
@@ -255,14 +229,16 @@ export const CreateProgram = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const dateString = dayjs(program.date).format("YYYY-MM-DD");
-    const timeString = dayjs(program.time).format("HH:mm:ss");
-    const dateTime = new Date(`${dateString}T${timeString}`).toISOString();
+    console.log("program.date", program.date);
+
+    const dateTime = dayjs(program.date).format("YYYY-MM-DDTHH:mm:ss");
+
+
 
 
     try {
       if (id) {
-        console.log("inside the edit submit path in create-program page")
+        console.log("ID in the handleSubmit for edit", id)
         await axios.put(
           `http://localhost:3001/programs/program/${id}`,
           {...program, date: dateTime},
@@ -283,6 +259,7 @@ export const CreateProgram = () => {
       }
       navigate("/");
     } catch (error) {
+      console.log("program in catch?  ", program)
       console.error(error);
     }
   };

@@ -49,9 +49,8 @@ export const ProgramList = () => {
 
    // edit functionality
 
-   const handleEdit = (program) => {
-      console.log("there is an program here in handleEdit", program)
-      navigate(`/program/edit/${program._id}`, { state: {program}})
+   const handleEdit = (id) => {
+      navigate(`/program/edit/${id}`)
    }
 
   // end edit functionality
@@ -153,7 +152,7 @@ export const ProgramList = () => {
                         cursor: "pointer",
                       },
                     }}
-                    onClick={() => handleEdit(program)}
+                    onClick={() => handleEdit(program._id)}
                   >
                     Edit?
                   </Button>
