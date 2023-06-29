@@ -98,21 +98,25 @@ const navigate = useNavigate();
 useEffect(() => {
   const fetchEditData = async () => {
     if (id) {
+      console.log("id from fetchEditDate from create-program page", id)
+      console.log("program from the if inside fetchEditData", program)
       try {
+        console.log("from inside try of fetchEditData from create-program page")
         const response = await axios.get(
-          `http://localhost:3001/programs/${id}`
-        );
-        let programData = response.data;
-        console.log("programData from fetchEditData", programData)
+          `http://localhost:3001/programs/program/${id}`
+          );
+          let programData = response.data;
+          console.log("programData from fetchEditData", programData)
 
-        // Converting 'dayjs' instances to strings
-        programData.date = dayjs(programData.date).format("YYYY-MM-DD");
-        programData.time = dayjs(programData.time).format("HH:mm:ss");
+          // Converting 'dayjs' instances to strings
+          programData.date = dayjs(programData.date).format("YYYY-MM-DD");
+          programData.time = dayjs(programData.time).format("HH:mm:ss");
 
-        console.log("Program Data from server: ", programData)
+          console.log("Program Data from server: ", programData)
 
-        setProgram(programData);
-      } catch (error) {
+          setProgram(programData);
+        } catch (error) {
+        console.log("Inside the fetchEditData catch")
         console.error("an error occurred while fetching the program: ", error);
       }
     }
@@ -256,8 +260,9 @@ const handleSubmit = async (event) => {
 
   try {
     if (id) {
+      console.log("inside the edit submit path in create-program page")
       await axios.put(
-        `http://localhost:3001/programs/${id}`,
+        `http://localhost:3001/programs/program/${id}`,
         {...program, date: dateTime},
         {
           headers: {authorization: cookies.access_token },

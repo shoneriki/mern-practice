@@ -36,18 +36,34 @@ router.get("/search", async (req, res) => {
   }
 });
 
-//get all practice plans
-router.get("/:userID", async (req, res) => {
+//get specific program
+router.get(`program/:id`, async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("INSIDE THE NEW GET FOR THE PROGRAM", id)
+    const program = await ProgramsModel.findById(id);
+    if (program) {
+      res.json(program);
+    } else {
+      res.status(404).json({ message: "Program not found" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+//get all programs from user
+router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
     const result = await ProgramsModel.find({userOwner: userID});
     res.json(result);
+    console.log("result from get request for programs? ", result)
   } catch (err) {
     res.json(err);
   }
 });
 
-
+//save a program
 router.post("/", async (req, res) => {
   console.log("req.body from post",req.body)
   const programPlan = new ProgramsModel({
@@ -64,7 +80,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put(`/:id`, async (req, res) => {
+
+//edit a program
+router.put(`/program/:id`, async (req, res) => {
   console.log("PUT /:id hit");
   try {
     const id = req.params.id;
@@ -80,8 +98,8 @@ router.put(`/:id`, async (req, res) => {
   }
 });
 
-
-router.delete("/:id", async (req,res) => {
+//delete a program
+router.delete("/program/:id", async (req,res) => {
   try {
     const id = req.params.id;
     await ProgramsModel.findByIdAndRemove(id);

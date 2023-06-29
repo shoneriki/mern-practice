@@ -17,7 +17,7 @@ export const ProgramList = () => {
      const fetchPrograms = async (id) => {
        try {
          const response = await axios.get(
-           `http://localhost:3001/programs/${userID}`
+           `http://localhost:3001/programs/user/${userID}`
          );
           console.log("response.data from the program list component", response.data)
          response.data && response.data.length > 0
@@ -44,7 +44,8 @@ export const ProgramList = () => {
    // edit functionality
 
    const handleEdit = (id) => {
-     navigate(`/program/edit/${id}`)
+      console.log("there is an id here in handleEdit", id)
+      navigate(`/program/edit/${id}`)
    }
 
   // end edit functionality
@@ -65,7 +66,7 @@ export const ProgramList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/programs/${id}`);
+      await axios.delete(`http://localhost:3001/programs/program/${id}`);
       console.log("Deleted");
       setOpen(false);
       setPrograms(programs.filter(program => program._id !== id));
