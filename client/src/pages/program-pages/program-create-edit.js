@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useGetUserID } from "../hooks/useGetUserID";
-import {useNavigate, useParams} from "react-router-dom";
-import {useCookies} from "react-cookie";
+import { useGetUserID } from "../../hooks/useGetUserID";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
-import {Box, Typography} from "@mui/material"
+import { Box, Typography } from "@mui/material";
 
-import {ProgramForm} from "../components/ProgramForm"
+import { ProgramForm } from "../../components/ProgramForm";
 
-import dayjs from "dayjs"
+import dayjs from "dayjs";
 
 export const ProgramCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
 
-  const {id} = useParams();
+  const { id } = useParams();
 
-  const dataObject = dayjs('2024-01-01')
+  const dataObject = dayjs("2024-01-01");
   const timeObject = dayjs("2024-01-01T12:00:00");
 
   const seedData = {
@@ -71,39 +71,42 @@ export const ProgramCreateEdit = () => {
   useEffect(() => {
     const fetchEditData = async () => {
       if (id) {
-        console.log("ID EXISTS!")
-        console.log("id in fetch", id)
+        console.log("ID EXISTS!");
+        console.log("id in fetch", id);
         try {
-          console.log("from inside try of fetchEditData from create-program page")
+          console.log(
+            "from inside try of fetchEditData from create-program page"
+          );
           const response = await axios.get(
             `http://localhost:3001/programs/program/${id}`
-            );
-            let programData = response.data;
+          );
+          let programData = response.data;
 
-            console.log("PROGRAMDATA? From fetch", programData)
+          console.log("PROGRAMDATA? From fetch", programData);
 
-            // Converting 'dayjs' instances to strings
-            programData.date = dayjs(programData.date);
-            programData.time = dayjs(programData.time);
+          // Converting 'dayjs' instances to strings
+          programData.date = dayjs(programData.date);
+          programData.time = dayjs(programData.time);
 
-            console.log("date valid? ", dayjs(programData.date).isValid());
-            console.log("time valid? ", dayjs(programData.time).isValid());
+          console.log("date valid? ", dayjs(programData.date).isValid());
+          console.log("time valid? ", dayjs(programData.time).isValid());
 
-
-            setProgram(programData);
-          } catch (error) {
-          console.log("Inside the fetchEditData catch")
-          console.error("an error occurred while fetching the program: ", error);
+          setProgram(programData);
+        } catch (error) {
+          console.log("Inside the fetchEditData catch");
+          console.error(
+            "an error occurred while fetching the program: ",
+            error
+          );
         }
       }
     };
     fetchEditData();
   }, [id]);
 
-
   const handleChangeProgram = (event) => {
     const { name, value } = event.target;
-    console.log("program time", program.date)
+    console.log("program time", program.date);
     setProgram({ ...program, [name]: value });
   };
 
@@ -126,7 +129,6 @@ export const ProgramCreateEdit = () => {
       ],
     });
   };
-
 
   const handleChangePiece = (event, index, subfield) => {
     const { name, value } = event.target;
@@ -232,28 +234,23 @@ export const ProgramCreateEdit = () => {
     });
   };
 
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("program.date", program.date);
 
     const dateTime = dayjs(program.date).format("YYYY-MM-DDTHH:mm:ss");
 
-
-
-
     try {
       if (id) {
-        console.log("ID in the handleSubmit for edit", id)
+        console.log("ID in the handleSubmit for edit", id);
         await axios.put(
           `http://localhost:3001/programs/program/${id}`,
-          {...program, date: dateTime},
+          { ...program, date: dateTime },
           {
-            headers: {authorization: cookies.access_token },
+            headers: { authorization: cookies.access_token },
           }
         );
-        alert("program updated")
+        alert("program updated");
       } else {
         await axios.post(
           "http://localhost:3001/programs",
@@ -266,11 +263,10 @@ export const ProgramCreateEdit = () => {
       }
       navigate("/");
     } catch (error) {
-      console.log("program in catch?  ", program)
+      console.log("program in catch?  ", program);
       console.error(error);
     }
   };
-
 
   return (
     <Box className="create-program">
@@ -289,4 +285,4 @@ export const ProgramCreateEdit = () => {
       />
     </Box>
   );
-}
+};

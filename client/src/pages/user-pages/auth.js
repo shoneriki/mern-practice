@@ -1,18 +1,18 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import {useCookies} from "react-cookie";
-import {useNavigate} from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
-import {AuthForm} from "../components/AuthForm"
+import { AuthForm } from "../../components/AuthForm";
 
 export const Auth = () => {
   return (
     <div className="auth">
-      <Login/>
+      <Login />
       <Register />
     </div>
-  )
-}
+  );
+};
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -48,7 +48,6 @@ const Register = () => {
     />
   );
 };
-
 
 const Login = () => {
   const [_, setCookies] = useCookies(["access_token"]);

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useGetUserID } from "../hooks/useGetUserID";
-import {useForm} from "../hooks/useForm"
+import { useGetUserID } from "../../hooks/useGetUserID";
+import { useForm } from "../../hooks/useForm";
 
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import {Box, Grid, Typography} from "@mui/material"
+import { Box, Grid, Typography } from "@mui/material";
 
-import {PracticePlanForm} from "../components/PracticePlanForm.js"
+import { PracticePlanForm } from "../../components/PracticePlanForm.js";
 
-export const CreatePracticePlan = () => {
+export const PracticePlanCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
 
-  const [programId, setProgramId] = useState(null)
+  const [programId, setProgramId] = useState(null);
   const {
     values: practicePlan,
     handleChange,
@@ -56,13 +56,14 @@ export const CreatePracticePlan = () => {
     },
   });
 
-
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     if (practicePlan.pieceTitle) {
       axios
-        .get(`http://localhost:3001/programs/search?pieceTitle=${practicePlan.pieceTitle}`)
+        .get(
+          `http://localhost:3001/programs/search?pieceTitle=${practicePlan.pieceTitle}`
+        )
         .then((res) => {
           if (Array.isArray(res.data)) {
             setSuggestions(res.data);
@@ -72,10 +73,9 @@ export const CreatePracticePlan = () => {
         })
         .catch((err) => console.error(err));
     } else {
-      setSuggestions([])
+      setSuggestions([]);
     }
   }, [practicePlan.pieceTitle]);
-
 
   const navigate = useNavigate();
 
@@ -94,7 +94,7 @@ export const CreatePracticePlan = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <Box
