@@ -17,6 +17,8 @@ import {Settings} from "./pages/settings"
 import {NAVBAR_HEIGHT} from "./components/constants"
 import { GlobalStyles } from "@mui/system";
 
+import {ProgramList} from "./components/ProgramList"
+
 import { ThemeProvider, createTheme} from "@mui/material/styles";
 import { Button } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -40,7 +42,7 @@ function App() {
             path="/practice-plan/create"
             element={<CreatePracticePlan />}
           />
-          <Route path="/programs" element={<Programs />} />
+          <Route path="/programs" element={<ProgramList />} />
           <Route path="/program/create" element={<CreateProgram />} />
           <Route path="/program/edit/:id" element={<CreateProgram  />} />
           <Route path="/workspace" element={<Workspace />} />

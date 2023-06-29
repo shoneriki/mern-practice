@@ -17,139 +17,141 @@ export const CreateProgram = () => {
   const {id} = useParams();
 
 
-const initialMovement = {
-  number: 1,
-  name: "",
-};
-
-const initialPiece = {
-  name: "",
-  composer: "",
-  length: {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  },
-  movements: [initialMovement]
-}
-
-const initialProgram = {
-  name: "",
-  numOfPieces: 1,
-  pieces: [initialPiece],
-  length: "",
-  date: "",
-  time: "",
-  userOwner: userID,
-}
-
-const dataObject = dayjs('2024-01-01')
-const timeObject = dayjs("2024-01-01T12:00:00");
-
-const seedData = {
-  name: "Test Program",
-  date: dataObject,
-  time: timeObject,
-  pieces: [
-    {
-      name: "Test Piece 1",
-      composer: "Test Composer 1",
-      length: {
-        hours: 1,
-        minutes: 30,
-        seconds: 0,
-      },
-      movements: [
-        {
-          name: "Test Movement 1",
-        },
-        {
-          name: "Test Movement 2",
-        },
-      ],
-    },
-    {
-      name: "Test Piece 2",
-      composer: "Test Composer 2",
-      length: {
-        hours: 0,
-        minutes: 45,
-        seconds: 0,
-      },
-      movements: [
-        {
-          name: "Test Movement 1",
-        },
-        {
-          name: "Test Movement 2",
-        },
-      ],
-    },
-  ],
-  numOfPieces: 2,
-  intermission: 15,
-  userOwner: userID,
-};
-
-const [program, setProgram] = useState(seedData);
-
-const navigate = useNavigate();
-
-useEffect(() => {
-  const fetchEditData = async () => {
-    if (id) {
-      console.log("id from fetchEditDate from create-program page", id)
-      console.log("program from the if inside fetchEditData", program)
-      try {
-        console.log("from inside try of fetchEditData from create-program page")
-        const response = await axios.get(
-          `http://localhost:3001/program/${id}`
-          );
-          let programData = response.data;
-          console.log("programData from fetchEditData", programData)
-
-          // Converting 'dayjs' instances to strings
-          programData.date = dayjs(programData.date).format("YYYY-MM-DD");
-          programData.time = dayjs(programData.time).format("HH:mm:ss");
-
-          console.log("Program Data from server: ", programData)
-
-          setProgram(programData);
-        } catch (error) {
-        console.log("Inside the fetchEditData catch")
-        console.error("an error occurred while fetching the program: ", error);
-      }
-    }
+  const initialMovement = {
+    number: 1,
+    name: "",
   };
-  fetchEditData();
-}, [id]);
 
+  const initialPiece = {
+    name: "",
+    composer: "",
+    length: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    },
+    movements: [initialMovement]
+  }
 
-const handleChangeProgram = (event) => {
-  const { name, value } = event.target;
-  console.log("Program State from handleChangeProgram: " , program);
-  setProgram({ ...program, [name]: value });
-};
+  const initialProgram = {
+    name: "",
+    numOfPieces: 1,
+    pieces: [initialPiece],
+    length: "",
+    date: "",
+    time: "",
+    userOwner: userID,
+  }
 
-const addPiece = () => {
-  setProgram({
-    ...program,
-    numOfPieces: program.numOfPieces + 1,
+  const dataObject = dayjs('2024-01-01')
+  const timeObject = dayjs("2024-01-01T12:00:00");
+
+  const seedData = {
+    name: "Test Program",
+    date: dataObject,
+    time: timeObject,
     pieces: [
-      ...program.pieces,
       {
-        name: "",
-        composer: "",
-        length: { hours: 0, minutes: 0, seconds: 0 },
+        name: "Test Piece 1",
+        composer: "Test Composer 1",
+        length: {
+          hours: 1,
+          minutes: 30,
+          seconds: 0,
+        },
         movements: [
           {
-            name: "",
+            name: "Test Movement 1",
+          },
+          {
+            name: "Test Movement 2",
+          },
+        ],
+      },
+      {
+        name: "Test Piece 2",
+        composer: "Test Composer 2",
+        length: {
+          hours: 0,
+          minutes: 45,
+          seconds: 0,
+        },
+        movements: [
+          {
+            name: "Test Movement 1",
+          },
+          {
+            name: "Test Movement 2",
           },
         ],
       },
     ],
-  });
-};
+    numOfPieces: 2,
+    intermission: 15,
+    userOwner: userID,
+  };
+
+  const [program, setProgram] = useState(seedData);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchEditData = async () => {
+      if (id) {
+        console.log("ID EXISTS!")
+        try {
+          console.log("from inside try of fetchEditData from create-program page")
+          const response = await axios.get(
+            `http://localhost:3001/programs/program/${id}`
+            );
+            let programData = response.data;
+
+            console.log("PROGRAMDATA? From fetch", programData)
+
+            // Converting 'dayjs' instances to strings
+            programData.date = dayjs(programData.date);
+            programData.time = dayjs(programData.time);
+
+            console.log("date valid? ", dayjs(programData.date).isValid());
+            console.log("time valid? ", dayjs(programData.time).isValid());
+
+
+            setProgram(programData);
+          } catch (error) {
+          console.log("Inside the fetchEditData catch")
+          console.error("an error occurred while fetching the program: ", error);
+        }
+      }
+    };
+    fetchEditData();
+  }, [id]);
+
+
+  const handleChangeProgram = (event) => {
+    const { name, value } = event.target;
+    console.log("Program State from handleChangeProgram: " , program);
+    setProgram({ ...program, [name]: value });
+  };
+
+  const addPiece = () => {
+    setProgram({
+      ...program,
+      numOfPieces: program.numOfPieces + 1,
+      pieces: [
+        ...program.pieces,
+        {
+          name: "",
+          composer: "",
+          length: { hours: 0, minutes: 0, seconds: 0 },
+          movements: [
+            {
+              name: "",
+            },
+          ],
+        },
+      ],
+    });
+  };
 
 
   const handleChangePiece = (event, index, subfield) => {
@@ -251,44 +253,43 @@ const addPiece = () => {
 
 
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  const dateString = program.date.format("YYYY-MM-DD");
-  const timeString = program.time.format("HH:mm:ss");
-  const dateTime = new Date(`${dateString}T${timeString}`).toISOString();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const dateString = dayjs(program.date).format("YYYY-MM-DD");
+    const timeString = dayjs(program.time).format("HH:mm:ss");
+    const dateTime = new Date(`${dateString}T${timeString}`).toISOString();
 
 
-  try {
-    if (id) {
-      console.log("inside the edit submit path in create-program page")
-      await axios.put(
-        `http://localhost:3001/programs/program/${id}`,
-        {...program, date: dateTime},
-        {
-          headers: {authorization: cookies.access_token },
-        }
-      );
-      alert("program updated")
-    } else {
-      await axios.post(
-        "http://localhost:3001/programs",
-        { ...program, date: dateTime },
-        {
-          headers: { authorization: cookies.access_token },
-        }
-      );
-      alert("New Program Added");
+    try {
+      if (id) {
+        console.log("inside the edit submit path in create-program page")
+        await axios.put(
+          `http://localhost:3001/programs/program/${id}`,
+          {...program, date: dateTime},
+          {
+            headers: {authorization: cookies.access_token },
+          }
+        );
+        alert("program updated")
+      } else {
+        await axios.post(
+          "http://localhost:3001/programs",
+          { ...program, date: dateTime },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        alert("New Program Added");
+      }
+      navigate("/");
+    } catch (error) {
+      console.error(error);
     }
-    navigate("/");
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
 
   return (
     <Box className="create-program">
-      <Typography variant={'h6'}>Program</Typography>
       <ProgramForm
         program={program}
         handleChangeProgram={handleChangeProgram}

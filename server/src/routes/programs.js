@@ -40,9 +40,9 @@ router.get("/search", async (req, res) => {
 router.get(`/program/:id`, async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("INSIDE THE NEW GET FOR THE PROGRAM", id)
     const program = await ProgramsModel.findById(id);
     if (program) {
+      console.log("PROGRAM FROM GET FOR SPECIFIC PROGRAM", program)
       res.json(program);
     } else {
       res.status(404).json({ message: "Program not found" });
@@ -57,7 +57,6 @@ router.get("/user/:userID", async (req, res) => {
     const userID = req.params.userID;
     const result = await ProgramsModel.find({userOwner: userID});
     res.json(result);
-    console.log("result from get request for programs? ", result)
   } catch (err) {
     res.json(err);
   }
@@ -83,7 +82,6 @@ router.post("/", async (req, res) => {
 
 //edit a program
 router.put(`/program/:id`, async (req, res) => {
-  console.log("PUT /:id hit");
   try {
     const id = req.params.id;
     const updates = req.body;

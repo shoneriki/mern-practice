@@ -3,6 +3,7 @@ import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
 import {useNavigate} from "react-router-dom"
+import dayjs from "dayjs"
 
 import {Box, Typography, Grid, Button, Dialog, DialogTitle, DialogActions} from "@mui/material"
 
@@ -21,7 +22,13 @@ export const ProgramList = () => {
          );
           console.log("response.data from the program list component", response.data)
          response.data && response.data.length > 0
-           ? setPrograms(response.data)
+           ? setPrograms(
+               response.data.map((program) => ({
+                 ...program,
+                 date: dayjs(program.date),
+                 time: dayjs(program.time),
+               }))
+             )
            : setPrograms([]);
        } catch (error) {
          if (error.response) {
@@ -43,9 +50,9 @@ export const ProgramList = () => {
 
    // edit functionality
 
-   const handleEdit = (id) => {
-      console.log("there is an id here in handleEdit", id)
-      navigate(`/program/edit/${id}`)
+   const handleEdit = (program) => {
+      console.log("there is an program here in handleEdit", program)
+      navigate(`/program/edit/${program._id}`, { state: {program}})
    }
 
   // end edit functionality
@@ -147,7 +154,7 @@ export const ProgramList = () => {
                         cursor: "pointer",
                       },
                     }}
-                    onClick={() => handleEdit(program._id)}
+                    onClick={() => handleEdit(program)}
                   >
                     Edit?
                   </Button>

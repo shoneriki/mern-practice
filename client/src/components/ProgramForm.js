@@ -12,11 +12,13 @@ import {
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
+import {useLocation} from "react-router-dom";
 
 export const ProgramForm = ({
-  program,
   handleChangeProgram,
   handleChangePiece,
   removePiece,
@@ -27,23 +29,32 @@ export const ProgramForm = ({
   handleSubmit,
   id,
 }) => {
+  let { program } = useLocation().state;
   console.log("program from ProgramForm component", program)
 
+  const handleDateTimeChange = (datetime) => {
+    handleChangeProgram({
+      target: { name: "date", value: dayjs(datetime) },
+    });
+  };
 
-const handleDateChange = (date) => {
-  handleChangeProgram({
-    target: { name: "date", value: date.toISOString().split("T")[0] },
-  });
-};
+  // const handleDateChange = (date) => {
+  //   handleChangeProgram({
+  //     target: { name: "date", value: dayjs(date) },
+  //   });
+  // };
 
-const handleTimeChange = (time) => {
-  handleChangeProgram({
-    target: { name: "time", value: time.toTimeString().split(" ")[0] },
-  });
-};
+  // const handleTimeChange = (time) => {
+  //   handleChangeProgram({
+  //     target: { name: "time", value: dayjs(time) },
+  //   });
+  // };
 
   return (
     <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
+      <Typography sx={{ textAlign: "center" }} variant={"h6"}>
+        Program
+      </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={4}>
@@ -62,26 +73,11 @@ const handleTimeChange = (time) => {
           <Grid item xs={12} md={4}>
             <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Performance Date"
+                <DateTimePicker
+                  label="Start Date and Time"
                   name="date"
-                  value={program.date}
-                  onChange={handleDateChange}
-                  renderInput={(props) => <TextField {...props} fullWidth />}
-                />
-              </LocalizationProvider>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker
-                  type="time"
-                  id="time"
-                  name="time"
-                  label="Start Time"
-                  value={program.time}
-                  onChange={handleTimeChange}
+                  value={dayjs(program.date)}
+                  onChange={handleDateTimeChange}
                   renderInput={(props) => <TextField {...props} fullWidth />}
                 />
               </LocalizationProvider>
@@ -89,7 +85,12 @@ const handleTimeChange = (time) => {
           </Grid>
           {program.pieces.map((piece, pieceIndex) => {
             return (
-              <Grid sx={{textAlign: "center"}} container spacing={1} key={pieceIndex}>
+              <Grid
+                sx={{ textAlign: "center" }}
+                container
+                spacing={1}
+                key={pieceIndex}
+              >
                 <Grid item xs={12} sm={12}>
                   <Typography variant={"h6"}>
                     Piece #{pieceIndex + 1}
@@ -118,7 +119,7 @@ const handleTimeChange = (time) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <InputLabel  htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
+                  <InputLabel htmlFor={`piece-${pieceIndex}-lengthInSeconds`}>
                     Length:
                   </InputLabel>
                   <Grid container spacing={1}>
@@ -167,8 +168,8 @@ const handleTimeChange = (time) => {
                 </Grid>
                 {piece.movements.map((movement, movementIndex) => {
                   return (
-                    <Grid container spacing={6}>
-                      <Grid item xs={12} sm={12} key={movementIndex}>
+                    <Grid container key={movementIndex} spacing={6}>
+                      <Grid item xs={12} sm={12}>
                         <Typography sx={{ textAlign: "center" }} variant={"h6"}>
                           Movement #{movementIndex + 1}
                         </Typography>
