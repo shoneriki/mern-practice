@@ -103,7 +103,7 @@ useEffect(() => {
       try {
         console.log("from inside try of fetchEditData from create-program page")
         const response = await axios.get(
-          `http://localhost:3001/programs/program/${id}`
+          `http://localhost:3001/program/${id}`
           );
           let programData = response.data;
           console.log("programData from fetchEditData", programData)

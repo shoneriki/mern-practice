@@ -37,7 +37,7 @@ router.get("/search", async (req, res) => {
 });
 
 //get specific program
-router.get(`program/:id`, async (req, res) => {
+router.get(`/program/:id`, async (req, res) => {
   try {
     const id = req.params.id;
     console.log("INSIDE THE NEW GET FOR THE PROGRAM", id)
