@@ -30,25 +30,13 @@ export const ProgramForm = ({
   id,
 }) => {
   let { program } = useLocation().state;
-  console.log("program from ProgramForm component", program)
+  console.log("program from ProgramForm component", program);
 
   const handleDateTimeChange = (datetime) => {
     handleChangeProgram({
       target: { name: "date", value: dayjs(datetime) },
     });
   };
-
-  // const handleDateChange = (date) => {
-  //   handleChangeProgram({
-  //     target: { name: "date", value: dayjs(date) },
-  //   });
-  // };
-
-  // const handleTimeChange = (time) => {
-  //   handleChangeProgram({
-  //     target: { name: "time", value: dayjs(time) },
-  //   });
-  // };
 
   return (
     <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
@@ -298,4 +286,4 @@ export const ProgramForm = ({
       </form>
     </Box>
   );
-  }
+}

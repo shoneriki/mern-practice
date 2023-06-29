@@ -23,12 +23,11 @@ export const ProgramList = () => {
           console.log("response.data from the program list component", response.data)
          response.data && response.data.length > 0
            ? setPrograms(
-               response.data.map((program) => ({
-                 ...program,
-                 date: dayjs(program.date),
-                 time: dayjs(program.time),
-               }))
-             )
+              response.data.map((program) => ({
+                ...program,
+                dateTime: new Date(program.date),
+              }))
+            )
            : setPrograms([]);
        } catch (error) {
          if (error.response) {
