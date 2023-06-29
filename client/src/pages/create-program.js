@@ -225,6 +225,13 @@ export const CreateProgram = () => {
     });
   };
 
+  const handleDateTimeChange = (datetime) => {
+    console.log("dateTime?", datetime);
+    handleChangeProgram({
+      target: { name: "date", value: datetime.toDate() },
+    });
+  };
+
 
 
   const handleSubmit = async (event) => {
@@ -278,6 +285,7 @@ export const CreateProgram = () => {
         addPiece={addPiece}
         handleSubmit={handleSubmit}
         id={id}
+        handleDateTimeChange={handleDateTimeChange}
       />
     </Box>
   );

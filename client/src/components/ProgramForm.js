@@ -4,7 +4,6 @@ import {
   Box,
   FormControl,
   InputLabel,
-  Input,
   Typography,
   TextField,
   Grid,
@@ -29,16 +28,10 @@ export const ProgramForm = ({
   addPiece,
   handleSubmit,
   id,
+  handleDateTimeChange
 }) => {
   console.log("program from ProgramForm component", program);
 
-
-  const handleDateTimeChange = (datetime) => {
-    console.log("dateTime?", datetime);
-    handleChangeProgram({
-      target: { name: "date", value: datetime.toDate() },
-    });
-  };
 
 
   return (
