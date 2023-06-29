@@ -10,7 +10,7 @@ import {ProgramForm} from "../components/ProgramForm"
 
 import dayjs from "dayjs"
 
-export const CreateProgram = () => {
+export const ProgramCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
 

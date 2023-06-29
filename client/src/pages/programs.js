@@ -9,12 +9,6 @@ import {ProgramList} from "../components/ProgramList"
 
 export const Programs = () => {
 
-  const userID = useGetUserID();
-
-  const [programs, setPrograms] = useState([]);
-
-
-
   return (
     <ProgramList/>
   )
