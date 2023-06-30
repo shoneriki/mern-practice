@@ -3,7 +3,7 @@ import axios from "axios";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useForm } from "../../hooks/useForm";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 import { Box, Grid, Typography } from "@mui/material";
@@ -13,6 +13,8 @@ import { PracticePlanForm } from "../../components/PracticePlanForm.js";
 export const PracticePlanCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
+
+  const { id } = useParams();
 
   const [programId, setProgramId] = useState(null);
   const {
@@ -112,7 +114,7 @@ export const PracticePlanCreateEdit = () => {
       );
 
       alert("Practice Plan Created");
-      navigate("/");
+      navigate("/practice-plans");
     } catch (error) {
       console.error(error);
     }
@@ -128,7 +130,6 @@ export const PracticePlanCreateEdit = () => {
         width: "80%",
       }}
     >
-      <Typography variant={"h6"}>Create Practice Plan</Typography>
       <PracticePlanForm
         practicePlan={practicePlan}
         handleChange={handleChange}

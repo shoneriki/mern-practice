@@ -22,45 +22,32 @@ export const PracticePlanList = () => {
 
   const [practicePlans, setPracticePlans] = useState([]);
 
-  useEffect(() => {
-    const fetchPracticePlans = async (id) => {
+    const fetchPracticePlans = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3001/practicePlans/user/${userID}`
         );
-        console.log(
-          "response.data from the practice plan list component",
-          response.data
-        );
         response.data && response.data.length > 0
           ? setPracticePlans(
               response.data.map((practicePlan) => ({
-                ...practicePlan
+                ...practicePlan,
               }))
             )
           : setPracticePlans([]);
       } catch (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code that falls out of the range of 2xx
-          console.log("Data:", error.response.data);
-          console.log("Status:", error.response.status);
-          console.log("Headers:", error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log("Request:", error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error:", error.message);
-        }
+        console.error("Error fetching practice plans:", error);
       }
     };
+
+  useEffect(() => {
     fetchPracticePlans();
   }, [userID]);
 
   // edit functionality
 
   const handleEdit = (id) => {
-    navigate(`/practiceplan/edit/${id}`);
+    console.log("id from handleEdit: ", id);
+    navigate(`/practice-plan/edit/${id}`);
   };
 
   // end edit functionality
@@ -68,9 +55,10 @@ export const PracticePlanList = () => {
   // delete functionality
 
   const [open, setOpen] = useState(false);
-  const [_, setToDelete] = useState(null);
+  const [toDelete, setToDelete] = useState(null);
 
   const handleClickOpen = (id) => {
+    console.log("Opening delete dialog for ID:", id);
     setOpen(true);
     setToDelete(id);
   };
@@ -79,12 +67,18 @@ export const PracticePlanList = () => {
     setOpen(false);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
+    console.log("Deleting practice plan with ID:", toDelete);
     try {
-      await axios.delete(`http://localhost:3001/practiceplans/practiceplan/${id}`);
+      await axios.delete(
+        `http://localhost:3001/practiceplans/practiceplan/${toDelete}`
+      );
       console.log("Deleted");
       setOpen(false);
-      setPracticePlans(practicePlans.filter((practicePlan) => practicePlan._id !== id));
+      // setPracticePlans(
+      //   practicePlans.filter((practicePlan) => practicePlan._id !== id)
+      // );
+      fetchPracticePlans()
     } catch (err) {
       console.log("error: ", err);
     }
@@ -159,7 +153,7 @@ export const PracticePlanList = () => {
                         Cancel
                       </Button>
                       <Button
-                        onClick={() => handleDelete(practicePlan._id)}
+                        onClick={handleDelete}
                         color="primary"
                         autoFocus
                       >

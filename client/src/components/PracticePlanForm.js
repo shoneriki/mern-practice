@@ -13,6 +13,7 @@ export const PracticePlanForm = ({
 }) => {
   return (
     <form className="practice-plan-form" onSubmit={handleSubmit}>
+      <Typography sx={{textAlign: "center", }} variant={'h6'}>Create Practice Plan</Typography>
       <Box
         name="Form Box"
         sx={{

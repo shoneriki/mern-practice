@@ -33,11 +33,13 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/login" element={<Login />} />
+          <Route path="/practice-plans" element={<PracticePlans />}/>
           <Route
             path="/practice-plan/create"
             element={<PracticePlanCreateEdit />}
           />
-          <Route path="/practice-plans" element={<PracticePlans />}/>
+          <Route path="/practice-plan/edit/:id" element={<PracticePlanCreateEdit/>}/>
+
           <Route path="/programs" element={<ProgramList />} />
           <Route path="/program/create" element={<ProgramCreateEdit />} />
           <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
