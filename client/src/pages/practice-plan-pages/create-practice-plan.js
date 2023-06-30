@@ -20,13 +20,33 @@ export const PracticePlanCreateEdit = () => {
     handleChange,
     handleSubmit,
     handleValueChange,
+    handleChangeNested,
+    handleChangeDeeplyNested,
   } = useForm({
     initialValues: {
       pieceTitle: "",
       composer: "",
       excerpts: [],
-      movements: "",
-      endMetronomeGoal: 0,
+      movements: [
+        {
+          movementNumber: 1,
+          shouldPractice: false,
+          tempi: [
+            {
+              tempo: 0,
+            },
+          ],
+          shouldSplitIntoExcerpts: false,
+          excerpts: [
+            {
+              text: "",
+              repetitions: 1,
+              targetTempo: 60,
+              endMetronomeGoal: 120,
+            },
+          ],
+        },
+      ],
       practiceStartDate: new Date().toISOString().split("T")[0],
       daily: false,
       timesPerWeek: 1,
@@ -52,6 +72,7 @@ export const PracticePlanCreateEdit = () => {
         programName: suggestion.programName,
         programId: suggestion.programId,
         untilDate: formattedUntilDate,
+        movements: suggestion.movements,
       };
     },
   });
@@ -67,6 +88,7 @@ export const PracticePlanCreateEdit = () => {
         .then((res) => {
           if (Array.isArray(res.data)) {
             setSuggestions(res.data);
+            console.log("SUGGESTIONS FROM BACKEND", suggestions)
           } else {
             console.log("Unexpected response data:", res.data);
           }
@@ -113,6 +135,9 @@ export const PracticePlanCreateEdit = () => {
         handleValueChange={handleValueChange}
         handleSubmit={handleSubmit(submitForm)}
         suggestions={suggestions}
+        handleChangeMovement={(e, index) =>
+          handleChangeNested(e, "movements", index)
+        }
       />
     </Box>
   );

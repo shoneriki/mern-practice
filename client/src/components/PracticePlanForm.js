@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Box, Button, Grid, TextField, Radio, RadioGroup, FormControlLabel} from "@mui/material"
+import {Box, Button, Grid, Typography, TextField, Radio,Select, MenuItem, RadioGroup, FormControlLabel} from "@mui/material"
 
 export const PracticePlanForm = ({
   practicePlan,
@@ -8,6 +8,8 @@ export const PracticePlanForm = ({
   handleChange,
   handleSubmit,
   suggestions,
+  handleChangeMovement,
+  handleChangeDeeplyNested,
 }) => {
   return (
     <form className="practice-plan-form" onSubmit={handleSubmit}>
@@ -35,7 +37,7 @@ export const PracticePlanForm = ({
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   marginTop: "2px",
-                  maxHeight: "150px",
+                  maxHeight: "400px",
                   overflowY: "auto",
                 }}
               >
@@ -157,6 +159,146 @@ export const PracticePlanForm = ({
             />
           </Grid>
 
+          {practicePlan.movements.map((movement, movementIndex) => (
+            <Grid
+              name="movement-grid"
+              sx={{ backgroundColor: "orange" }}
+              item
+              xs={12}
+            >
+              <TextField
+                id="movementNumber"
+                name="movementNumber"
+                label="Movement Number"
+                type="number"
+                value={movement.movementNumber}
+                onChange={(e) => handleChangeMovement(e, 0)}
+                fullWidth
+              />
+              <RadioGroup
+                row
+                name="shouldPractice"
+                value={movement.shouldPractice}
+                onChange={(event) => {
+                  handleChange({
+                    target: {
+                      name: event.target.name,
+                      value: event.target.value === "true",
+                    },
+                  });
+                }}
+              >
+                <FormControlLabel
+                  value={true}
+                  control={<Radio />}
+                  label="Practice?"
+                />
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label="It's ok"
+                />
+              </RadioGroup>
+
+              <RadioGroup
+                row
+                name="shouldSplitIntoExcerpts"
+                value={movement.shouldSplitIntoExcerpts}
+                onChange={(event) => {
+                  handleChange({
+                    target: {
+                      name: event.target.name,
+                      value: event.target.value === "true",
+                    },
+                  });
+                }}
+              >
+                <FormControlLabel
+                  value={true}
+                  control={<Radio />}
+                  label="break it up?"
+                />
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label="It's ok"
+                />
+              </RadioGroup>
+
+              {movement.shouldSplitIntoExcerpts &&
+                movement.excerpts.map((excerpt, excerptIndex) => (
+                  <Grid item xs={12}>
+                    <TextField
+                      id="text"
+                      name="text"
+                      label="Excerpt text"
+                      value={excerpt.text}
+                      onChange={(e) =>
+                        handleChangeDeeplyNested(
+                          e,
+                          "movements",
+                          movementIndex,
+                          "excerpts",
+                          excerptIndex
+                        )
+                      }
+                    />
+                    <TextField
+                      id="repetitions"
+                      name="repetitions"
+                      label="Repetitions"
+                      type="number"
+                      value={excerpt.repetitions}
+                      onChange={(e) =>
+                        handleChangeDeeplyNested(
+                          e,
+                          "movements",
+                          movementIndex,
+                          "excerpts",
+                          excerptIndex
+                        )
+                      }
+                    />
+                    <TextField
+                      id="targetTempo"
+                      name="targetTempo"
+                      label="Target Tempo"
+                      type="number"
+                      value={excerpt.targetTempo}
+                      onChange={(e) =>
+                        handleChangeDeeplyNested(
+                          e,
+                          "movements",
+                          movementIndex,
+                          "excerpts",
+                          excerptIndex
+                        )
+                      }
+                    />
+                    <Select
+                      id="endMetronomeGoal"
+                      name="endMetronomeGoal"
+                      label="End Metronome Goal"
+                      value={excerpt.endMetronomeGoal}
+                      onChange={(e) =>
+                        handleChangeDeeplyNested(
+                          e,
+                          "movements",
+                          movementIndex,
+                          "excerpts",
+                          excerptIndex
+                        )
+                      }
+                    >
+                      {movement.tempi.map((tempi, tempiIndex) => (
+                        <MenuItem value={tempi.tempo}>{tempi.tempo}</MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
+                ))}
+            </Grid>
+          ))}
+
           <Grid name="notes-grid" item xs={12}>
             <TextField
               id="notes"
@@ -170,7 +312,7 @@ export const PracticePlanForm = ({
             />
           </Grid>
 
-          {/* Add this inside your form, anywhere before the submit button */}
+          {/* programId hidden*/}
           <input
             type="hidden"
             name="programId"

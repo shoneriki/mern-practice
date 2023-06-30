@@ -3,18 +3,19 @@ import { ProgramsModel } from "./Programs.js";
 
 const movementSchema = new mongoose.Schema({
   movementNumber: Number,
-  shouldPractice: {
-    type: Boolean,
-    default: false
-  },
   tempi: [
     {
       tempo: {
         type: Number,
+        text: String,
       },
     },
   ],
-  isExcerpted: {
+  shouldPractice: {
+    type: Boolean,
+    default: false
+  },
+  shouldSplitIntoExcerpts: {
     type: Boolean,
     default: false,
   },
