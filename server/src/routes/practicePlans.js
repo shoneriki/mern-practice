@@ -6,6 +6,20 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
+//get specific practicePlan
+router.get(`/practicePlan/:id`, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const practicePlan = await PracticePlansModel.findById(id);
+    if (practicePlan) {
+      res.json(program);
+    } else {
+      res.status(404).json({ message: "PracticePlan not found" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 //get all practice plans
 router.get("/user/:userID", async (req, res) => {
   console.log("req.params from practicePlans router")
@@ -17,6 +31,7 @@ router.get("/user/:userID", async (req, res) => {
     res.json(err);
   }
 });
+
 
 // Create a new practice plan , add verifyToken when usable
 router.post("/", async (req, res) => {
@@ -66,6 +81,34 @@ router.get('/single/:id', async (req,res) => {
     const practicePlan = await PracticePlansModel.findById(req.params.id).populate('programId').populate('pieceId');
     res.json(practicePlan);
   } catch (err) {
+    res.status(500).json(err)
+  }
+})
+
+//edit a practice plan
+router.put(`/practiceplan/:id`, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updates = req.body;
+    const updatedPracticePlan = await PracticePlansModel.findByIdAndUpdate(id, updates, {
+      new: true,
+    });
+    console.log("updatedPracticePlan from server side put:", updatedPracticePlan)
+    res.status(200).json(updatedPracticePlan);
+  } catch (err) {
+    console.log("error: ", err);
+    res.status(500).json(err);
+  }
+});
+
+//delete a practice plan
+router.delete("/practicePlan/:id", async (req,res) => {
+  try {
+    const id = req.params.id;
+    await PracticePlansModel.findByIdAndRemove(id);
+    res.status(200).json({message: "Practice Plan deleted successfully"})
+  } catch(err) {
+    console.log("error:", err)
     res.status(500).json(err)
   }
 })

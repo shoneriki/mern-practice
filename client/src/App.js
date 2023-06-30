@@ -7,6 +7,7 @@ import { Auth } from "./pages/user-pages/auth";
 import { Login } from "./pages/user-pages/login";
 import { Register } from "./pages/user-pages/register";
 import { Home } from "./pages/home";
+import {PracticePlans} from "./pages/practice-plan-pages/practice-plans"
 import { PracticePlanCreateEdit } from "./pages/practice-plan-pages/create-practice-plan";
 import { ProgramCreateEdit } from "./pages/program-pages/program-create-edit";
 import { Programs } from "./pages/program-pages/programs";
@@ -36,6 +37,7 @@ function App() {
             path="/practice-plan/create"
             element={<PracticePlanCreateEdit />}
           />
+          <Route path="/practice-plans" element={<PracticePlans />}/>
           <Route path="/programs" element={<ProgramList />} />
           <Route path="/program/create" element={<ProgramCreateEdit />} />
           <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
