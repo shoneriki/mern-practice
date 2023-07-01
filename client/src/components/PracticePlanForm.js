@@ -9,11 +9,14 @@ export const PracticePlanForm = ({
   handleSubmit,
   suggestions,
   handleChangeMovement,
+  handleChangeNested,
   handleChangeDeeplyNested,
 }) => {
   return (
     <form className="practice-plan-form" onSubmit={handleSubmit}>
-      <Typography sx={{textAlign: "center", }} variant={'h6'}>Create Practice Plan</Typography>
+      <Typography sx={{ textAlign: "center" }} variant={"h6"}>
+        Create Practice Plan
+      </Typography>
       <Box
         name="Form Box"
         sx={{
@@ -181,12 +184,16 @@ export const PracticePlanForm = ({
                 name="shouldPractice"
                 value={movement.shouldPractice}
                 onChange={(event) => {
-                  handleChange({
-                    target: {
-                      name: event.target.name,
-                      value: event.target.value === "true",
+                  handleChangeNested(
+                    {
+                      target: {
+                        name: event.target.name,
+                        value: event.target.value === "true",
+                      },
                     },
-                  });
+                    "movements",
+                    movementIndex
+                  );
                 }}
               >
                 <FormControlLabel
