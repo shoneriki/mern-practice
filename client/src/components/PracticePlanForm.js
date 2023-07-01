@@ -208,30 +208,36 @@ export const PracticePlanForm = ({
                 />
               </RadioGroup>
 
-              <RadioGroup
-                row
-                name="shouldSplitIntoExcerpts"
-                value={movement.shouldSplitIntoExcerpts}
-                onChange={(event) => {
-                  handleChange({
-                    target: {
-                      name: event.target.name,
-                      value: event.target.value === "true",
-                    },
-                  });
-                }}
-              >
-                <FormControlLabel
-                  value={true}
-                  control={<Radio />}
-                  label="break it up?"
-                />
-                <FormControlLabel
-                  value={false}
-                  control={<Radio />}
-                  label="It's ok"
-                />
-              </RadioGroup>
+              {movement.shouldPractice && (
+                <RadioGroup
+                  row
+                  name="shouldSplitIntoExcerpts"
+                  value={movement.shouldSplitIntoExcerpts}
+                  onChange={(event) => {
+                    handleChangeNested(
+                      {
+                        target: {
+                          name: event.target.name,
+                          value: event.target.value === "true",
+                        },
+                      },
+                      "movements",
+                      movementIndex
+                    );
+                  }}
+                >
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="break it up?"
+                  />
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="It's ok"
+                  />
+                </RadioGroup>
+              )}
 
               {movement.shouldSplitIntoExcerpts &&
                 movement.excerpts.map((excerpt, excerptIndex) => (

@@ -170,6 +170,7 @@ export const PracticePlanCreateEdit = () => {
           handleChangeNested(e, "movements", index)
         }
         handleChangeNested={handleChangeNested}
+        handleChangeDeeplyNested={handleChangeDeeplyNested}
       />
     </Box>
   );
