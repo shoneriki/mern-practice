@@ -79,6 +79,36 @@ export const PracticePlanCreateEdit = () => {
     },
   });
 
+    useEffect(() => {
+      const fetchEditData = async () => {
+        if (id) {
+          console.log("ID EXISTS!");
+          console.log("id in fetch", id);
+          try {
+            console.log(
+              "from inside try of fetchEditData from create-practice-plan page"
+            );
+            const response = await axios.get(
+              `http://localhost:3001/practicePlans/practicePlan/${id}`
+            );
+            let practicePlanData = response.data;
+
+            console.log("PRACTICEPLANDATA? From fetch", practicePlanData);
+
+
+            // setProgram(programData);
+          } catch (error) {
+            console.log("Inside the fetchEditData catch");
+            console.error(
+              "an error occurred while fetching the program: ",
+              error
+            );
+          }
+        }
+      };
+      fetchEditData();
+    }, [id]);
+
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {

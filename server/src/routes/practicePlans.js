@@ -12,7 +12,7 @@ router.get(`/practicePlan/:id`, async (req, res) => {
     const id = req.params.id;
     const practicePlan = await PracticePlansModel.findById(id);
     if (practicePlan) {
-      res.json(program);
+      res.json(practicePlan);
     } else {
       res.status(404).json({ message: "PracticePlan not found" });
     }
@@ -60,7 +60,7 @@ router.get('/single/:id', async (req,res) => {
 })
 
 //edit a practice plan
-router.put(`/practiceplan/:id`, async (req, res) => {
+router.put(`/practicePlan/:id`, async (req, res) => {
   try {
     const id = req.params.id;
     const updates = req.body;
@@ -76,7 +76,7 @@ router.put(`/practiceplan/:id`, async (req, res) => {
 });
 
 //delete a practice plan
-router.delete("/practiceplan/:id", async (req,res) => {
+router.delete("/practicePlan/:id", async (req,res) => {
   try {
     const id = req.params.id;
     console.log("Received delete request for ID: ", id);
