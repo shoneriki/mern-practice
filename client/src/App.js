@@ -8,6 +8,7 @@ import { Login } from "./pages/user-pages/login";
 import { Register } from "./pages/user-pages/register";
 import { Home } from "./pages/home";
 import AddPieceForm from "./pages/piece-pages/create-edit-piece"
+import {PieceList} from "./components/PieceList"
 import {PracticePlans} from "./pages/practice-plan-pages/practice-plans"
 import { PracticePlanCreateEdit } from "./pages/practice-plan-pages/create-practice-plan";
 import { ProgramCreateEdit } from "./pages/program-pages/program-create-edit";
@@ -34,7 +35,10 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/login" element={<Login />} />
+
+          <Route path="/pieces" element={<PieceList />} />
           <Route path="/piece/create" element={<AddPieceForm />}/>
+
           <Route path="/practice-plans" element={<PracticePlans />}/>
           <Route
             path="/practice-plan/create"
@@ -45,6 +49,7 @@ function App() {
           <Route path="/programs" element={<ProgramList />} />
           <Route path="/program/create" element={<ProgramCreateEdit />} />
           <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
+
           <Route path="/workspace" element={<Workspace />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

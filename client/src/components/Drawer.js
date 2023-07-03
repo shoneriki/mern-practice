@@ -57,18 +57,26 @@ function DrawerComponent({ open, onClose, logout, cookies }) {
       </MyListItem>
       <MyListItem className={classes.listItem} onClick={onClose}>
         <ListItemText>
-          <MyLink className={classes.link} to="/piece/create">
-            Add Piece
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
           <MyLink className={classes.link} to="/program/create">
             Create Program
           </MyLink>
         </ListItemText>
       </MyListItem>
+      <MyListItem className={classes.listItem} onClick={onClose}>
+        <ListItemText>
+          <MyLink className={classes.link} to="/pieces">
+            Pieces
+          </MyLink>
+        </ListItemText>
+      </MyListItem>
+      <MyListItem className={classes.listItem} onClick={onClose}>
+        <ListItemText>
+          <MyLink className={classes.link} to="/piece/create">
+            Add/Edit Piece
+          </MyLink>
+        </ListItemText>
+      </MyListItem>
+
       <MyListItem className={classes.listItem} onClick={onClose}>
         <ListItemText>
           <MyLink className={classes.link} to="/practice-plan/create">
