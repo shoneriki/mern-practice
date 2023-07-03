@@ -14,6 +14,9 @@ const SettingsSchema = new mongoose.Schema(
     totalPracticeTime: {
       type: Number,
     },
+    startingTempoPercentage: {
+      type: Number
+    }
   },
   { timestamps: true }
 );

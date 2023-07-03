@@ -38,6 +38,7 @@ export const Settings = () => {
     mediumTime: 15,
     longTime: 60,
     totalPracticeTime: 120,
+    startingTempoPercentage: 50,
   });
 
   const update = (name, val) => {
@@ -101,6 +102,13 @@ export const Settings = () => {
             id="totalPracticeTime"
             name="totalPracticeTime"
             value={defaultSettings.totalPracticeTime}
+            onChange={(e) => update(e.target.name, e.target.value)}
+          />
+          <CustomFormControl
+            label="Starting Tempo Percentage"
+            id="startingTempoPercentage"
+            name="startingTempoPercentage"
+            value={defaultSettings.startingTempoPercentage}
             onChange={(e) => update(e.target.name, e.target.value)}
           />
         </Box>
