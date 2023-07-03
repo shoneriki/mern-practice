@@ -7,6 +7,7 @@ import {userRouter} from './routes/users.js'
 import {practicePlansRouter} from './routes/practicePlans.js'
 import {programsRouter} from './routes/programs.js'
 import {settingsRouter} from "./routes/settings.js"
+import {piecesRouter} from "./routes/pieces.js"
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use("/auth", userRouter)
 app.use("/programs", programsRouter)
 app.use("/practicePlans", practicePlansRouter)
 app.use("/settings", settingsRouter)
+
+app.use("/pieces", piecesRouter)
 
 
 mongoose.connect(process.env.MONGO_URI, {
