@@ -47,6 +47,16 @@ function AddPieceForm() {
     setPiece({ ...piece, [event.target.name]: event.target.value });
   };
 
+  const handleAddMovement = () => {
+    setPiece({
+      ...piece,
+      movements: [
+        ...piece.movements,
+        { name: "", number: 0, tempi: [], excerpts: [] },
+      ],
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(piece);
@@ -63,6 +73,7 @@ function AddPieceForm() {
         onChange={handleChange}
         fullWidth
       />
+      <Typography variant={'h6'}>Length of Piece</Typography>
       <TextField
         type="number"
         label="Hours"
@@ -84,15 +95,21 @@ function AddPieceForm() {
         onChange={handleChange}
         fullWidth
       />
-      <h3>Movement</h3>
-      <TextField
-        type="number"
-        label="Number"
-        name="number"
-        onChange={handleChange}
-        fullWidth
-      />
-      <TextField label="Name" name="name" onChange={handleChange} fullWidth />
+
+      {piece.movements.map((movement, index) => (
+        <div key={index}>
+          <h3>Movement {index + 1} </h3>
+          <TextField
+            type="number"
+            label="Number"
+            name="number"
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField label="Name" name="name" onChange={handleChange} fullWidth />
+        </div>
+      ))}
+      <Button>Add a movement?</Button>
 
       <h3>Tempi</h3>
       <TextField
