@@ -170,6 +170,7 @@ export const PracticePlanForm = ({
               item
               xs={12}
             >
+            {console.log("movement from map of movements", movement)}
               <TextField
                 id="movementNumber"
                 name="movementNumber"
@@ -212,7 +213,7 @@ export const PracticePlanForm = ({
                 <RadioGroup
                   row
                   name="shouldSplitIntoExcerpts"
-                  value={movement.shouldSplitIntoExcerpts}
+                  value={movement?.shouldSplitIntoExcerpts}
                   onChange={(event) => {
                     handleChangeNested(
                       {
@@ -239,75 +240,82 @@ export const PracticePlanForm = ({
                 </RadioGroup>
               )}
 
-              {movement.shouldSplitIntoExcerpts &&
-                movement.excerpts.map((excerpt, excerptIndex) => (
-                  <Grid item xs={12}>
-                    <TextField
-                      id="text"
-                      name="text"
-                      label="Excerpt text"
-                      value={excerpt.text}
-                      onChange={(e) =>
-                        handleChangeDeeplyNested(
-                          e,
-                          "movements",
-                          movementIndex,
-                          "excerpts",
-                          excerptIndex
-                        )
-                      }
-                    />
-                    <TextField
-                      id="repetitions"
-                      name="repetitions"
-                      label="Repetitions"
-                      type="number"
-                      value={excerpt.repetitions}
-                      onChange={(e) =>
-                        handleChangeDeeplyNested(
-                          e,
-                          "movements",
-                          movementIndex,
-                          "excerpts",
-                          excerptIndex
-                        )
-                      }
-                    />
-                    <TextField
-                      id="targetTempo"
-                      name="targetTempo"
-                      label="Target Tempo"
-                      type="number"
-                      value={excerpt.targetTempo}
-                      onChange={(e) =>
-                        handleChangeDeeplyNested(
-                          e,
-                          "movements",
-                          movementIndex,
-                          "excerpts",
-                          excerptIndex
-                        )
-                      }
-                    />
-                    <Select
-                      id="endMetronomeGoal"
-                      name="endMetronomeGoal"
-                      label="End Metronome Goal"
-                      value={excerpt.endMetronomeGoal}
-                      onChange={(e) =>
-                        handleChangeDeeplyNested(
-                          e,
-                          "movements",
-                          movementIndex,
-                          "excerpts",
-                          excerptIndex
-                        )
-                      }
-                    >
-                      {movement.tempi.map((tempi, tempiIndex) => (
-                        <MenuItem value={tempi.tempo}>{tempi.tempo}</MenuItem>
-                      ))}
-                    </Select>
+              {movement?.shouldSplitIntoExcerpts &&
+                movement?.excerpts.map((excerpt, excerptIndex) => (
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="text"
+                        name="text"
+                        label="Excerpt text"
+                        value={excerpt.text}
+                        onChange={(e) =>
+                          handleChangeDeeplyNested(
+                            e,
+                            "movements",
+                            movementIndex,
+                            "excerpts",
+                            excerptIndex
+                          )
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        xs={12}
+                        id="repetitions"
+                        name="repetitions"
+                        label="Repetitions"
+                        type="number"
+                        value={excerpt.repetitions}
+                        onChange={(e) =>
+                          handleChangeDeeplyNested(
+                            e,
+                            "movements",
+                            movementIndex,
+                            "excerpts",
+                            excerptIndex
+                          )
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="targetTempo"
+                        name="targetTempo"
+                        label="Target Tempo"
+                        type="number"
+                        value={excerpt.targetTempo}
+                        onChange={(e) =>
+                          handleChangeDeeplyNested(
+                            e,
+                            "movements",
+                            movementIndex,
+                            "excerpts",
+                            excerptIndex
+                          )
+                        }
+                      />
+                      <Select
+                        id="endMetronomeGoal"
+                        name="endMetronomeGoal"
+                        label="End Metronome Goal"
+                        value={excerpt.endMetronomeGoal}
+                        onChange={(e) =>
+                          handleChangeDeeplyNested(
+                            e,
+                            "movements",
+                            movementIndex,
+                            "excerpts",
+                            excerptIndex
+                          )
+                        }
+                      >
+                        {movement.tempi.map((tempi, tempiIndex) => (
+                          <MenuItem value={tempi.tempo}>{tempi.tempo}</MenuItem>
+                        ))}
+                      </Select>
+                    </Grid>
                   </Grid>
                 ))}
             </Grid>
