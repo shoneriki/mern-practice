@@ -357,6 +357,43 @@ function AddPieceForm() {
                   </Button>
                 </Grid>
               ))}
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="shouldPractice"
+                      color="primary"
+                      onChange={(e) =>
+                        setPiece({
+                          ...piece,
+                          shouldPractice: e.target.checked,
+                        })
+                      }
+                    />
+                  }
+                  label="Should Practice"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="shouldSplitIntoExcerpts"
+                      color="primary"
+                      onChange={(e) =>
+                        setPiece({
+                          ...piece,
+                          shouldSplitIntoExcerpts: e.target.checked,
+                        })
+                      }
+                    />
+                  }
+                  label="Should Split Into Excerpts"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Button type="button" onClick={movementHandler.add}>
+                  Add a movement?
+                </Button>
+              </Grid>
 
               {/* outer movement container */}
             </Grid>

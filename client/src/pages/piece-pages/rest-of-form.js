@@ -503,7 +503,7 @@
             <Grid item xs={4}>
               <Button
                 type="button"
-                onClick={movementHandler.add()}
+                onClick={movementHandler.add}
               >
                 Add a movement?
               </Button>
