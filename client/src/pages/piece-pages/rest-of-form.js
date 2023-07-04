@@ -283,7 +283,7 @@
 
 
 
-<Box
+<Grid
   sx={{
     width: "80%",
     display: "flex",
@@ -558,9 +558,7 @@
                     fullWidth
                   />
                   <Button
-                    onClick={excerptHandler.addExcerpt(
-                      movementIndex
-                    )}
+                    onClick={() => excerptHandler.addExcerpt(movementIndex)}
                   >
                     Add Excerpt?
                   </Button>
@@ -580,4 +578,4 @@
       </Button>
     </Grid>
   </form>
-</Box>;
+</Grid>;
