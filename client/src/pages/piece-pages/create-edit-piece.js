@@ -2,12 +2,12 @@ import { useState } from "react";
 
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useCookies } from "react-cookie";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import {useParams} from "react-router-dom"
 
 import { Formik, Form, Field, FieldArray } from "formik";
 
-import {produce} from "immer";
+import { produce } from "immer";
 
 import {
   Box,
@@ -69,193 +69,43 @@ function AddPieceForm() {
     userOwner: userID,
   };
 
-
-  // const unnestedFieldHandler = {
-  //   handleFieldChange: (field) => (event) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft[field] = event.target.value;
-  //       })
-  //     );
-  //   },
-  //   handleLengthChange: (field) => (event) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.length[field] = event.target.value;
-  //       })
-  //     );
-  //   },
-  // };
-
-  // handlers for movement
-
-  // const movementHandler = {
-  //   add: () => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements.push({
-  //           number: 0,
-  //           name: "",
-  //           movementNumber: 0,
-  //           tempi: [
-  //             {
-  //               tempo: 0,
-  //               text: "",
-  //             },
-  //           ],
-  //           settings: "",
-  //           shouldPractice: false,
-  //           shouldSplitIntoExcerpts: false,
-  //           excerpts: [
-  //             {
-  //               text: "",
-  //               repetitions: 0,
-  //               targetTempo: 0,
-  //               endMetronomeGoal: 0,
-  //             },
-  //           ],
-  //         });
-  //       })
-  //     );
-  //   },
-  //   change: (movementIndex, field) => (e) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex][field] = e.target.value;
-  //       })
-  //     );
-  //   },
-  //   delete: (movementIndex) => {
-  //     setPiece((piece) => {
-  //       const newMovements = piece.movements.filter(
-  //         (_, index) => index !== movementIndex
-  //       );
-  //       return { ...piece, movements: newMovements };
-  //     });
-  //   },
-  // };
-
-  // const tempiHandler = {
-  //   addTempo: (movementIndex) => (event) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex].tempi.push({ tempo: 0, text: "" });
-  //       })
-  //     );
-  //   },
-  //   removeTempo: (movementIndex, tempoIndex) => (event) => {
-  //     event.persist()
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex].tempi = draft.movements[
-  //           movementIndex
-  //         ].tempi.filter((_, index) => index !== tempoIndex);
-  //       })
-  //     );
-  //   },
-  //   changeTempo: (movementIndex, tempoIndex, field) => (event) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex].tempi[tempoIndex][field] =
-  //           event.target.value;
-  //       })
-  //     );
-  //   },
-  // };
-
-
-  // const excerptHandler = {
-  //   addExcerpt: (movementIndex) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex].excerpts.push({
-  //           text: "",
-  //           repetitions: 0,
-  //           targetTempo: 0,
-  //           endMetronomeGoal: 0,
-  //         });
-  //       })
-  //     );
-  //   },
-  //   removeExcerpt: (movementIndex, excerptIndex) => (event) => {
-  //     event.persist()
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex].excerpts = draft.movements[
-  //           movementIndex
-  //         ].excerpts.filter((_, index) => index !== excerptIndex);
-  //       })
-  //     );
-  //   },
-  //   changeExcerpt: (movementIndex, excerptIndex, field) => (event) => {
-  //     setPiece(
-  //       produce((draft) => {
-  //         draft.movements[movementIndex].excerpts[excerptIndex][field] =
-  //           event.target.value;
-  //       })
-  //     );
-  //   },
-  // };
-
-
-
-  // end of movement handlers
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault()
-  //   try {
-  //     await axios.post(
-  //       `http://localhost:3001/pieces`,
-  //       { ...piece},
-  //       {
-  //         headers: { authorization: cookies.access_token },
-  //       }
-  //     );
-
-  //     alert("Piece created");
-  //     navigate("/pieces");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
-    >
-      {({ values }) => (
-        <Grid
-          sx={{
-            width: "70%",
-          }}
-          container
-          spacing={4}
-        >
-          <Form>
-            <Grid item xs={12} sm={4}>
-              <Typography variant={"h6"}>Add a piece</Typography>
-              <Field
-                label="Name"
-                name="name"
-                placeholder="Piece Name"
-                value={values.name}
-                fullWidth
-              />
-              <Field
-                label="Composer"
-                name="composer"
-                placeholder="composer"
-                value={values.composer}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputLabel htmlFor={`piece-lengthInSeconds`}>Length:</InputLabel>
-              <Grid container spacing={1}>
-                <Grid item xs={12} sm={4}>
+    <Grid container spacing={4}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+      >
+        {({ values }) => (
+          <Grid
+            item
+            name="outer-container"
+            xs={12}
+          >
+            <Form>
+              <Grid name="grid-inside-form" item xs={12} sm={8} md={6}>
+                <Typography variant={"h6"}>Add a piece</Typography>
+                <Field
+                  label="Name"
+                  name="name"
+                  placeholder="Piece Name"
+                  value={values.name}
+                  fullWidth
+                />
+                <Field
+                  label="Composer"
+                  name="composer"
+                  placeholder="composer"
+                  value={values.composer}
+                  fullWidth
+                />
+              </Grid>
+              <Grid name="grid-length" item xs={12} sm={6} md={4}>
+                <InputLabel htmlFor={`piece-lengthInSeconds`}>
+                  Length:
+                </InputLabel>
+                <Grid name="hours" item xs={12} sm={6} md={4}>
                   <Field
                     type="number"
                     id={`piece-hours`}
@@ -266,7 +116,7 @@ function AddPieceForm() {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid name="minute" item xs={12} sm={4}>
                   <Field
                     type="number"
                     id={`piece-minutes`}
@@ -275,7 +125,7 @@ function AddPieceForm() {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid name="seconds" item xs={12} sm={4}>
                   <Field
                     type="number"
                     id={`piece-seconds`}
@@ -285,16 +135,19 @@ function AddPieceForm() {
                   />
                 </Grid>
               </Grid>
-            </Grid>
 
-            <FieldArray
-              name="movements"
-              render={(arrayHelpers) => (
-                <section>
-                  {values.movements && values.movements.length > 0 ? (
-                    values.movements.map((movement, movementIndex) => (
-                      <Grid container item key={movementIndex}>
-                        <Grid item xs={12}>
+              <FieldArray
+                name="movements"
+                render={(movementArrayHelpers) => (
+                  <Grid name="movement-outer-grid" item xs={12}>
+                    {values.movements.map((movement, movementIndex) => (
+                      <Grid
+                        name="movement-grid"
+                        item
+                        xs={12}
+                        key={movementIndex}
+                      >
+                        <Grid name="movement-name" item xs={12}>
                           <Typography variant={"h6"}>
                             Movement {movementIndex + 1}
                           </Typography>
@@ -305,52 +158,91 @@ function AddPieceForm() {
                             fullWidth
                           />
                         </Grid>
-                        {movement.tempi.map((tempo, tempoIndex) => (
-                          <Grid item xs={4} name="tempo">
-                            <Typography variant={"h6"}>
-                              Movement {movementIndex + 1} Tempi{" "}
-                              {tempoIndex + 1}
-                            </Typography>
-                            <Field
-                              type="number"
-                              label="Tempo"
-                              name={`movements.${movementIndex}.tempi.${tempoIndex}.tempo`}
-                              value={tempo.tempo}
-                              fullWidth
-                            />
-                            <Field
-                              label="Text"
-                              name={`movements.${movementIndex}.tempi.${tempoIndex}.text`}
-                              value={tempo.text}
-                              placeholder="text"
-                              fullWidth
-                            />
-
-                            <Button
-                              name="tempo tap"
-                              sx={{
-                                backgroundColor: "orange",
-                                color: "white",
-                                "&:hover": {
-                                  backgroundColor: "red",
-                                },
-                              }}
-                            >
-                              Tempo Tap
-                            </Button>
-                            <Button
-                              sx={{
-                                backgroundColor: "green",
-                                color: "white",
-                                "&:hover": {
-                                  backgroundColor: "lightgreen",
-                                },
-                              }}
-                            >
-                              Add Tempo?
-                            </Button>
-                          </Grid>
-                        ))}
+                        <FieldArray
+                          name={`movements.${movementIndex}.tempi`}
+                          render={(tempoArrayHelpers) => (
+                            <Grid name="movement-tempi-outer-container">
+                              {movement.tempi.map((tempo, tempoIndex) => (
+                                <Grid
+                                  name="tempo-container"
+                                  item
+                                  xs={12}
+                                  sm={6}
+                                  md={4}
+                                >
+                                  <Typography variant={"h6"}>
+                                    Movement {movementIndex + 1} Tempi{" "}
+                                    {tempoIndex + 1}
+                                  </Typography>
+                                  <Field
+                                    type="number"
+                                    label="Tempo"
+                                    name={`movements.${movementIndex}.tempi.${tempoIndex}.tempo`}
+                                    value={tempo.tempo}
+                                    fullWidth
+                                  />
+                                  <Field
+                                    label="Text"
+                                    name={`movements.${movementIndex}.tempi.${tempoIndex}.text`}
+                                    value={tempo.text}
+                                    placeholder="text"
+                                    fullWidth
+                                  />
+                                  <Grid item xs={12} sm={6} md={4}>
+                                    <Button
+                                      name="tempo tap"
+                                      sx={{
+                                        backgroundColor: "orange",
+                                        color: "white",
+                                        "&:hover": {
+                                          backgroundColor: "red",
+                                        },
+                                      }}
+                                    >
+                                      Tempo Tap
+                                    </Button>
+                                  </Grid>
+                                  <Button
+                                    type="button"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() =>
+                                      tempoArrayHelpers.push({
+                                        tempo: 0,
+                                        text: "",
+                                      })
+                                    }
+                                  >
+                                    Add a Tempo
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant="contained"
+                                    color="error"
+                                    onClick={() =>
+                                      tempoArrayHelpers.remove(tempoIndex)
+                                    }
+                                  >
+                                    Remove Tempo
+                                  </Button>
+                                </Grid>
+                              ))}
+                              <Button
+                                type="button"
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  tempoArrayHelpers.push({
+                                    tempo: 0,
+                                    text: "",
+                                  })
+                                }
+                              >
+                                Add a Tempo
+                              </Button>
+                            </Grid>
+                          )}
+                        />
                         <Grid item xs={12}>
                           <FormControlLabel
                             control={
@@ -371,55 +263,94 @@ function AddPieceForm() {
                             label="Should Split Into Excerpts"
                           />
                         </Grid>
-                        {movement.excerpts.map((excerpt, excerptIndex) => (
-                          <Grid item xs={12}>
-                            <Typography variant={"h6"}>Excerpt:</Typography>
-                            <Grid item xs={4}>
-                              <Field
-                                label="Text"
-                                name={`movements.${movementIndex}.excerpts.${excerptIndex}.text`}
-                                value={excerpt.text}
-                                placeholder="description"
-                                fullWidth
-                              />
-                            </Grid>
-                            <Grid item xs={4}>
-                              <Field
-                                type="number"
-                                label="Repetitions"
-                                name={`movements.${movementIndex}.excerpts.${excerptIndex}.repetitions`}
-                                value={excerpt.repetitions}
-                                fullWidth
-                              />
-                            </Grid>
-                            <Grid item xs={4}>
-                              <Field
-                                type="number"
-                                label="Target Tempo"
-                                name={`movements.${movementIndex}.excerpts.${excerptIndex}.targetTempo`}
-                                value={excerpt.targetTempo}
-                                fullWidth
-                              />
-                            </Grid>
-                            <Grid item xs={4}>
-                              <Field
-                                type="number"
-                                label="End Metronome Goal"
-                                name={`movements.${movementIndex}.excerpts.${excerptIndex}.endMetronomeGoal`}
-                                value={excerpt.endMetronomeGoal}
-                                fullWidth
-                              />
-                            </Grid>
 
-                            <Button variant="contained"> Add Excerpt?</Button>
-                          </Grid>
-                        ))}
+                        <FieldArray
+                          name={`movements.${movementIndex}.excerpts`}
+                          render={(excerptArrayHelpers) => (
+                            <Grid name="excerpt-outer-container">
+                              {movement.excerpts.map(
+                                (excerpt, excerptIndex) => (
+                                  <Grid item xs={12}>
+                                    <Typography variant={"h6"}>
+                                      Excerpt:
+                                    </Typography>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                      <Field
+                                        label="Text"
+                                        name={`movements.${movementIndex}.excerpts.${excerptIndex}.text`}
+                                        value={excerpt.text}
+                                        placeholder="description"
+                                        fullWidth
+                                      />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                      <Field
+                                        type="number"
+                                        label="Repetitions"
+                                        name={`movements.${movementIndex}.excerpts.${excerptIndex}.repetitions`}
+                                        value={excerpt.repetitions}
+                                        fullWidth
+                                      />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                      <Field
+                                        type="number"
+                                        label="Target Tempo"
+                                        name={`movements.${movementIndex}.excerpts.${excerptIndex}.targetTempo`}
+                                        value={excerpt.targetTempo}
+                                        fullWidth
+                                      />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                      <Field
+                                        type="number"
+                                        label="End Metronome Goal"
+                                        name={`movements.${movementIndex}.excerpts.${excerptIndex}.endMetronomeGoal`}
+                                        value={excerpt.endMetronomeGoal}
+                                        fullWidth
+                                      />
+                                    </Grid>
+                                    <Button
+                                      variant="contained"
+                                      color="error"
+                                      onClick={() =>
+                                        excerptArrayHelpers.remove(excerptIndex)
+                                      }
+                                    >
+                                      Remove Excerpt
+                                    </Button>
+                                  </Grid>
+                                )
+                              )}
+                              <Button
+                                type="button"
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  excerptArrayHelpers.push({
+                                    text: "",
+                                    repetitions: 0,
+                                    length: {
+                                      hours: 0,
+                                      minutes: 0,
+                                      seconds: 0,
+                                    },
+                                    targetTempo: 0,
+                                    endMetronomeGoal: 0,
+                                  })
+                                }
+                              >
+                                Add an Excerpt
+                              </Button>
+                            </Grid>
+                          )}
+                        />
                         <Button
                           type="button"
                           variant="contained"
                           color="primary"
                           onClick={() =>
-                            arrayHelpers.push({
+                            movementArrayHelpers.push({
                               name: "",
                               movementNumber: 0,
                               tempi: [
@@ -453,58 +384,26 @@ function AddPieceForm() {
                           type="button"
                           variant="contained"
                           color="error"
-                          onClick={() => arrayHelpers.remove(movementIndex)}
+                          onClick={() =>
+                            movementArrayHelpers.remove(movementIndex)
+                          }
                         >
                           Remove Movement
                         </Button>
                       </Grid>
-                    ))
-                  ) : (
-                    <Button
-                      type="button"
-                      onClick={() =>
-                        arrayHelpers.push({
-                          name: "",
-                          movementNumber: 0,
-                          tempi: [
-                            {
-                              tempo: 0,
-                              text: "",
-                            },
-                          ],
-                          settings: "",
-                          shouldPractice: false,
-                          shouldSplitIntoExcerpts: false,
-                          excerpts: [
-                            {
-                              text: "",
-                              repetitions: 0,
-                              length: {
-                                hours: 0,
-                                minutes: 0,
-                                seconds: 0,
-                              },
-                              targetTempo: 0,
-                              endMetronomeGoal: 0,
-                            },
-                          ],
-                        })
-                      }
-                    >
-                      Add a Movement
-                    </Button>
-                  )}
-                </section>
-              )}
-            />
+                    ))}
+                  </Grid>
+                )}
+              />
 
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
-          </Form>
-        </Grid>
-      )}
-    </Formik>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </Form>
+          </Grid>
+        )}
+      </Formik>
+    </Grid>
   );
 }
 
