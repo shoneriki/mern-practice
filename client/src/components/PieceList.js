@@ -16,82 +16,82 @@ import {
 } from "@mui/material";
 
 export const PieceList = () => {
-  // const userID = useGetUserID();
+  const userID = useGetUserID();
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const [pieces, setPieces] = useState([]);
+  const [pieces, setPieces] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchPieces = async (id) => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:3001/pieces/user/${userID}`
-  //       );
-  //       console.log(
-  //         "response.data from the program list component",
-  //         response.data
-  //       );
-  //       response.data && response.data.length > 0
-  //         ? setPieces(
-  //             response.data.map((program) => ({
-  //               ...program,
-  //               dateTime: new Date(program.date),
-  //             }))
-  //           )
-  //         : setPieces([]);
-  //     } catch (error) {
-  //       if (error.response) {
-  //         // The request was made and the server responded with a status code that falls out of the range of 2xx
-  //         console.log("Data:", error.response.data);
-  //         console.log("Status:", error.response.status);
-  //         console.log("Headers:", error.response.headers);
-  //       } else if (error.request) {
-  //         // The request was made but no response was received
-  //         console.log("Request:", error.request);
-  //       } else {
-  //         // Something happened in setting up the request that triggered an Error
-  //         console.log("Error:", error.message);
-  //       }
-  //     }
-  //   };
-  //   fetchPieces();
-  // }, [userID]);
+  useEffect(() => {
+    const fetchPieces = async (id) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/pieces/user/${userID}`
+        );
+        console.log(
+          "response.data from the pieces list component",
+          response.data
+        );
+        response.data && response.data.length > 0
+          ? setPieces(
+              response.data.map((piece) => ({
+                ...piece,
+                dateTime: new Date(piece.date),
+              }))
+            )
+          : setPieces([]);
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          console.log("Data:", error.response.data);
+          console.log("Status:", error.response.status);
+          console.log("Headers:", error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log("Request:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error:", error.message);
+        }
+      }
+    };
+    fetchPieces();
+  }, [userID]);
 
-  // // edit functionality
+  // edit functionality
 
-  // const handleEdit = (id) => {
-  //   navigate(`/piece/edit/${id}`);
-  // };
+  const handleEdit = (id) => {
+    navigate(`/piece/edit/${id}`);
+  };
 
-  // // end edit functionality
+  // end edit functionality
 
-  // // delete functionality
+  // delete functionality
 
-  // const [open, setOpen] = useState(false);
-  // const [_, setToDelete] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [_, setToDelete] = useState(null);
 
-  // const handleClickOpen = (id) => {
-  //   setOpen(true);
-  //   setToDelete(id);
-  // };
+  const handleClickOpen = (id) => {
+    setOpen(true);
+    setToDelete(id);
+  };
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     await axios.delete(`http://localhost:3001/programs/program/${id}`);
-  //     console.log("Deleted");
-  //     setOpen(false);
-  //     setPieces(pieces.filter((piece) => piece._id !== id));
-  //   } catch (err) {
-  //     console.log("error: ", err);
-  //   }
-  // };
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/pieces/piece/${id}`);
+      console.log("Deleted");
+      setOpen(false);
+      setPieces(pieces.filter((piece) => piece._id !== id));
+    } catch (err) {
+      console.log("error: ", err);
+    }
+  };
 
-  // // end of delete functionality
+  // end of delete functionality
 
   return (
     <h2>Pieces List</h2>

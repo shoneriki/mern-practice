@@ -12,34 +12,6 @@ const excerptSchema = new mongoose.Schema({
   endMetronomeGoal: { type: Number },
 });
 
-const tempiSchema = new mongoose.Schema({
-  tempo: {
-    type: Number,
-    text: String,
-  },
-});
-
-const movementSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  movementNumber: Number,
-  tempi: [tempiSchema],
-  settings: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Settings",
-  },
-  shouldPractice: {
-    type: Boolean,
-    default: false,
-  },
-  shouldSplitIntoExcerpts: {
-    type: Boolean,
-    default: false,
-  },
-  excerpts: [excerptSchema],
-});
-
 const pieceSchema = new mongoose.Schema(
   {
     name: {
@@ -54,7 +26,7 @@ const pieceSchema = new mongoose.Schema(
       minutes: { type: Number, min: 0, max: 59, default: 0 },
       seconds: { type: Number, min: 0, max: 59, default: 0 },
     },
-    movements: [movementSchema],
+    excerpts: [excerptSchema],
   },
   { timestamps: true }
 );
