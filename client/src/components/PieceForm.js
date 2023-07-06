@@ -16,30 +16,45 @@ import {
 import axios from "axios";
 
 export const PieceForm = ({
+  key,
+  piece,
   initialValues,
   validationSchema,
   // userID,
-  // id,
+  id,
   cookies,
   navigate,
 }) => {
+  console.log("initialValues?", initialValues)
   return (
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log("something is wrong here?");
+
           try {
-            console.log("you are going into onSubmit");
-            await axios.post(
-              `http://localhost:3001/pieces`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("piece created");
-            navigate("/pieces");
+            if (id) {
+              console.log("ID in pieces in onSubmit for edit", id);
+              await axios.put(
+                `http://localhost:3001/pieces/piece/${id}`,
+                { ...values},
+                {
+                  headers: { authorization: cookies.access_token },
+                }
+              );
+              alert("piece updated");
+              navigate("/pieces")
+            } else {
+                await axios.post(
+                  `http://localhost:3001/pieces`,
+                  { ...values },
+                  {
+                    headers: { authorization: cookies.access_token },
+                  }
+                );
+                alert("piece created");
+                navigate("/pieces");
+            }
           } catch (error) {
             alert("I'm sorry, there's an error in submitting this form");
             console.log("error", error);
