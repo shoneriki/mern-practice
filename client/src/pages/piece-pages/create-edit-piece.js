@@ -1,4 +1,4 @@
-import {useEffect} from "react"
+import {useState, useEffect} from "react"
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
@@ -14,35 +14,6 @@ function AddPieceForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const initialValues = {
-    name: "",
-    composer: "",
-    length: {
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-    },
-    //excerpt array of objects
-    excerpts: [
-      {
-        location: "",
-        notes: "",
-        repetitions: 0,
-        timeToSpend: {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        },
-        tempi: [
-          {
-            notes: "",
-            bpm: 60,
-          },
-        ],
-      },
-    ],
-    userOwner: userID,
-  };
 
   const seedData = {
     name: "Symphony No. 5",
@@ -88,6 +59,8 @@ function AddPieceForm() {
     ],
     userOwner: userID,
   };
+
+  const [piece, setPiece] = useState(null)
 
   const validationSchema = Yup.object({
     name: Yup.string(),
@@ -135,11 +108,12 @@ function AddPieceForm() {
               const response = await axios.get(
                 `http://localhost:3001/pieces/piece/${id}`
               );
-              let pieceData = response.data;
+              const pieceData = response.data;
+              console.log("pieceData: ", pieceData)
+              setPiece(pieceData)
 
               console.log("PIECE DATA? From fetch", pieceData);
 
-              // setProgram(programData);
             } catch (error) {
               console.log("Inside the fetchEditData catch");
               console.error(
@@ -154,7 +128,8 @@ function AddPieceForm() {
 
   return (
     <PieceForm
-      seedData={seedData}
+      key={piece ? "loaded" : "loading"}
+      initialValues={piece || seedData}
       validationSchema={validationSchema}
       cookies={cookies}
       navigate={navigate}
