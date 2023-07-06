@@ -55,8 +55,13 @@ export const PieceForm = ({
                 <Typography variant={"h6"} sx={{ textAlign: "center" }}>
                   Add a piece
                 </Typography>
-                <Grid name="name-composer-length-container" container spacing={4} sx={{width: "100%"}}>
-                  <Grid item xs={12} sm={4}>
+                <Grid
+                  name="name-composer-length-container"
+                  container
+                  spacing={4}
+                  sx={{ width: "100%" }}
+                >
+                  <Grid item xs={12} sm={6}>
                     <Field name="name">
                       {({ field }) => (
                         <TextField
@@ -68,7 +73,7 @@ export const PieceForm = ({
                       )}
                     </Field>
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6}>
                     <Field name="composer">
                       {({ field }) => (
                         <TextField
@@ -80,9 +85,15 @@ export const PieceForm = ({
                       )}
                     </Field>
                   </Grid>
-                  <Grid item name="length-container" xs={12} sm={4}>
-                    <InputLabel sx={{textAlign: "center"}}>Length:</InputLabel>
-                    <Grid container name="time-container?" sx={{width: "100%"}}>
+                  <Grid item name="length-container" xs={12}>
+                    <InputLabel sx={{ textAlign: "center" }}>
+                      Length:
+                    </InputLabel>
+                    <Grid
+                      container
+                      name="time-container?"
+                      sx={{ width: "100%" }}
+                    >
                       <Grid item xs={12} sm={4}>
                         <Field name="length.hours">
                           {({ field }) => (
@@ -130,94 +141,109 @@ export const PieceForm = ({
 
                 <FieldArray name={`excerpts`}>
                   {(excerptArrayHelpers) => (
-                    <Grid container name="box-surrounding-excerpts">
+                    <Grid container spacing={4} name="box-surrounding-excerpts">
                       {values.excerpts.map((excerpt, excerptIndex) => (
-                        <Box item xs={12} key={excerptIndex}>
+                        <Grid item xs={12} sm={4} key={excerptIndex}>
                           <Typography variant={"h6"}>
                             Excerpt {excerptIndex + 1}
                           </Typography>
-                          <Grid container name="excerpt-grid-container">
-                            <Grid item xs={12}>
-                              <Field name={`excerpts.${excerptIndex}.location`}>
-                                {({ field }) => (
-                                  <TextField
-                                    {...field}
-                                    label="Location"
-                                    placeholder="Location"
-                                  />
-                                )}
-                              </Field>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Field name={`excerpts.${excerptIndex}.notes`}>
-                                {({ field }) => (
-                                  <TextField
-                                    {...field}
-                                    label="Notes"
-                                    placeholder="Notes"
-                                  />
-                                )}
-                              </Field>
-                            </Grid>
-                            <Grid item xs={12}>
+
+                          <Grid item xs={12}>
+                            <Field name={`excerpts.${excerptIndex}.location`}>
+                              {({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label="Location"
+                                  placeholder="Location"
+                                  fullWidth
+                                />
+                              )}
+                            </Field>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Field name={`excerpts.${excerptIndex}.notes`}>
+                              {({ field }) => (
+                                <TextField
+                                  {...field}
+                                  label="Notes"
+                                  placeholder="Notes"
+                                  fullWidth
+                                />
+                              )}
+                            </Field>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <Field
+                              name={`excerpts.${excerptIndex}.repetitions`}
+                            >
+                              {({ field }) => (
+                                <TextField
+                                  {...field}
+                                  type="number"
+                                  label="Repetitions"
+                                  fullWidth
+                                />
+                              )}
+                            </Field>
+                          </Grid>
+
+                          <Box>
+                            <Typography sx={{ textAlign: "center" }}>
+                              Time To Spend:
+                            </Typography>
+                          </Box>
+                          <Grid container name="timeToSpend-grid-container">
+                            <Grid item xs={12} sm={4}>
                               <Field
-                                name={`excerpts.${excerptIndex}.repetitions`}
+                                name={`excerpts.${excerptIndex}.timeToSpend.hours`}
                               >
                                 {({ field }) => (
                                   <TextField
                                     {...field}
                                     type="number"
-                                    label="Repetitions"
+                                    label="hours"
+                                    fullWidth
+                                  />
+                                )}
+                              </Field>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                              <Field
+                                name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
+                              >
+                                {({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    type="number"
+                                    label="minutes"
+                                    fullWidth
+                                  />
+                                )}
+                              </Field>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                              <Field
+                                name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
+                              >
+                                {({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    type="number"
+                                    label="seconds"
+                                    fullWidth
                                   />
                                 )}
                               </Field>
                             </Grid>
                           </Grid>
-
-                          <Typography>Time To Spend:</Typography>
-                          <Field
-                            name={`excerpts.${excerptIndex}.timeToSpend.hours`}
-                          >
-                            {({ field }) => (
-                              <TextField
-                                {...field}
-                                type="number"
-                                label="hours"
-                              />
-                            )}
-                          </Field>
-                          <Field
-                            name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
-                          >
-                            {({ field }) => (
-                              <TextField
-                                {...field}
-                                type="number"
-                                label="minutes"
-                              />
-                            )}
-                          </Field>
-                          <Field
-                            name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
-                          >
-                            {({ field }) => (
-                              <TextField
-                                {...field}
-                                type="number"
-                                label="seconds"
-                              />
-                            )}
-                          </Field>
                           <FieldArray name={`excerpts.${excerptIndex}.tempi`}>
                             {(tempoArrayHelpers) => (
-                              <Box>
+                              <Box name="tempo-box">
                                 {values.excerpts[excerptIndex].tempi.map(
                                   (tempo, tempoIndex) => (
                                     <Grid
                                       item
                                       xs={12}
-                                      sm={6}
-                                      md={4}
                                       key={tempoIndex}
                                     >
                                       <Field
@@ -228,6 +254,7 @@ export const PieceForm = ({
                                             {...field}
                                             type="number"
                                             label="BPM"
+                                            fullWidth
                                           />
                                         )}
                                       </Field>
@@ -235,7 +262,7 @@ export const PieceForm = ({
                                         name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
                                       >
                                         {({ field }) => (
-                                          <TextField {...field} label="Notes" />
+                                          <TextField {...field} label="Notes" fullWidth />
                                         )}
                                       </Field>
                                       <Button
@@ -291,7 +318,7 @@ export const PieceForm = ({
                           >
                             Add an Excerpt
                           </Button>
-                        </Box>
+                        </Grid>
                       ))}
                     </Grid>
                   )}
