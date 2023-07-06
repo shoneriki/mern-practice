@@ -56,7 +56,6 @@ router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
     const result = await PiecesModel.find({ userOwner: userID });
-    console.log("result from get?", result)
     res.json(result);
   } catch (err) {
     res.json(err);

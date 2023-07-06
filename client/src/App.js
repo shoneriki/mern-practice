@@ -38,6 +38,7 @@ function App() {
 
           <Route path="/pieces" element={<PieceList />} />
           <Route path="/piece/create" element={<AddPieceForm />}/>
+          <Route path="/piece/edit/:id" element={<AddPieceForm/>}/>
 
           <Route path="/practice-plans" element={<PracticePlans />}/>
           <Route

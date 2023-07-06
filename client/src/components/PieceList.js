@@ -4,6 +4,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import {PieceForm} from "./PieceForm"
 
 import {
   Box,
@@ -60,6 +61,7 @@ export const PieceList = () => {
   // edit functionality
 
   const handleEdit = (id) => {
+    console.log("id from handleEdit", id)
     navigate(`/piece/edit/${id}`);
   };
 
