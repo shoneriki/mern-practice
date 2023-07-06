@@ -241,6 +241,10 @@ export const PieceForm = ({
                               <Box name="tempo-box">
                                 {values.excerpts[excerptIndex].tempi.map(
                                   (tempo, tempoIndex) => (
+                                    <>
+                                    <Typography variant={'h6'}>
+                                      Tempo {tempoIndex + 1}
+                                    </Typography>
                                     <Grid
                                       item
                                       xs={12}
@@ -275,6 +279,7 @@ export const PieceForm = ({
                                         Remove Tempo
                                       </Button>
                                     </Grid>
+                                    </>
                                   )
                                 )}
                                 <Button
@@ -317,6 +322,16 @@ export const PieceForm = ({
                             }
                           >
                             Add an Excerpt
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="contained"
+                            color="error"
+                            onClick={() =>
+                              excerptArrayHelpers.remove(excerptIndex)
+                            }
+                          >
+                            Remove Excerpt
                           </Button>
                         </Grid>
                       ))}

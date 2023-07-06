@@ -85,6 +85,7 @@ export const PieceList = () => {
     try {
       await axios.delete(`http://localhost:3001/pieces/piece/${id}`);
       console.log("Deleted");
+      alert("deleted")
       setOpen(false);
       setPieces(pieces.filter((piece) => piece._id !== id));
     } catch (err) {
@@ -160,7 +161,7 @@ export const PieceList = () => {
                       <Button onClick={handleClose} color="primary">
                         Cancel
                       </Button>
-                      <Button onClick={handleDelete} color="primary" autoFocus>
+                      <Button onClick={() => handleDelete(piece._id)} color="primary" autoFocus>
                         Yes, Delete
                       </Button>
                     </DialogActions>
