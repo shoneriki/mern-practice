@@ -25,7 +25,6 @@ export const PieceForm = ({
   cookies,
   navigate,
 }) => {
-  console.log("initialValues?", initialValues)
   return (
       <Formik
         initialValues={initialValues}
@@ -34,7 +33,6 @@ export const PieceForm = ({
 
           try {
             if (id) {
-              console.log("ID in pieces in onSubmit for edit", id);
               await axios.put(
                 `http://localhost:3001/pieces/piece/${id}`,
                 { ...values},

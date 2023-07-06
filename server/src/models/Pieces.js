@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const excerptSchema = new mongoose.Schema({
-  text: { type: String },
+  location: { type: String },
+  notes: {type: String},
   repetitions: { type: Number },
   timeToSpend: {
     hours: { type: Number, default: 0 },

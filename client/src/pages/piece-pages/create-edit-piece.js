@@ -137,7 +137,6 @@ function AddPieceForm() {
   return (
     <PieceForm
       id={id}
-      key={piece ? "loaded" : "loading"}
       initialValues={piece || seedData}
       validationSchema={validationSchema}
       cookies={cookies}
