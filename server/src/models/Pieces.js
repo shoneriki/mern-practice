@@ -8,8 +8,12 @@ const excerptSchema = new mongoose.Schema({
     minutes: { type: Number, min: 0, max: 59, default: 0 },
     seconds: { type: Number, min: 0, max: 59, default: 0 },
   },
-  targetTempo: { type: Number },
-  endMetronomeGoal: { type: Number },
+  tempi: [
+    {
+      notes: {type: String},
+      bpm: {type: Number, min: 10, max: 300},
+    },
+  ],
 });
 
 const pieceSchema = new mongoose.Schema(
