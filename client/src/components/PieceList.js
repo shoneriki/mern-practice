@@ -23,7 +23,7 @@ export const PieceList = () => {
   const [pieces, setPieces] = useState([]);
 
   useEffect(() => {
-    const fetchPieces = async (id) => {
+    const fetchPieces = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3001/pieces/user/${userID}`
@@ -35,8 +35,7 @@ export const PieceList = () => {
         response.data && response.data.length > 0
           ? setPieces(
               response.data.map((piece) => ({
-                ...piece,
-                dateTime: new Date(piece.date),
+                ...piece
               }))
             )
           : setPieces([]);
@@ -94,6 +93,82 @@ export const PieceList = () => {
   // end of delete functionality
 
   return (
-    <h2>Pieces List</h2>
+    <Box className="piecelist">
+      <Typography
+        variant={"h4"}
+        sx={{ textAlign: "center", margin: "1rem auto" }}
+      >
+        List of Pieces
+      </Typography>
+      <Grid container spacing={3}>
+        {pieces.map((piece) => {
+          return (
+            <Grid item sx={12} sm={6} md={4} key={piece._id}>
+              <Box sx={{ border: "1px solid black", padding: "1rem" }}>
+                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                  {piece.name}
+                </Typography>
+                <Box
+                  name="delete-edit-btn-box"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    name="edit-btn"
+                    variant="outlined"
+                    sx={{
+                      backgroundColor: "yellow",
+                      color: "black",
+                      border: "none",
+                      "&:hover": {
+                        backgroundColor: "orange",
+                        border: "none",
+                        cursor: "pointer",
+                      },
+                    }}
+                    onClick={() => handleEdit(piece._id)}
+                  >
+                    Edit?
+                  </Button>
+                  <Button
+                    name="delete-btn"
+                    variant="outlined"
+                    sx={{
+                      backgroundColor: "red",
+                      color: "white",
+                      border: "none",
+                      "&:hover": {
+                        backgroundColor: "darkred",
+                        border: "none",
+                        cursor: "pointer",
+                      },
+                    }}
+                    onClick={() => handleClickOpen(piece._id)}
+                  >
+                    Delete
+                  </Button>
+                  <Dialog name="dialog" open={open} onClose={handleClose}>
+                    <DialogTitle>
+                      {"Are you sure you want to delete this program?"}
+                    </DialogTitle>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={handleDelete} color="primary" autoFocus>
+                        Yes, Delete
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </Box>
+              </Box>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </Box>
   );
 };

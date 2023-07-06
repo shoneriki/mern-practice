@@ -6,35 +6,35 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
-router.get("/search", async (req, res) => {
-  try {
-    const pieceTitle = req.query.pieceTitle;
-    const programs = await ProgramsModel.find({
-      "pieces.name": { $regex: new RegExp(pieceTitle, "i") },
-    });
-    const pieces = [];
-    programs.forEach((program) => {
-      program.pieces.forEach((piece) => {
-        if (piece.name.toLowerCase().includes(pieceTitle.toLowerCase())) {
-          const pieceWithProgramId = program._id
-            ? {
-                ...piece._doc,
-                programId: program._id,
-                programName: program.name,
-                programDate: program.date,
-              }
-            : {
-                ...piece._doc,
-              };
-          pieces.push(pieceWithProgramId);
-        }
-      });
-    });
-    res.json(pieces);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+// router.get("/search", async (req, res) => {
+//   try {
+//     const pieceTitle = req.query.pieceTitle;
+//     const programs = await ProgramsModel.find({
+//       "pieces.name": { $regex: new RegExp(pieceTitle, "i") },
+//     });
+//     const pieces = [];
+//     programs.forEach((program) => {
+//       program.pieces.forEach((piece) => {
+//         if (piece.name.toLowerCase().includes(pieceTitle.toLowerCase())) {
+//           const pieceWithProgramId = program._id
+//             ? {
+//                 ...piece._doc,
+//                 programId: program._id,
+//                 programName: program.name,
+//                 programDate: program.date,
+//               }
+//             : {
+//                 ...piece._doc,
+//               };
+//           pieces.push(pieceWithProgramId);
+//         }
+//       });
+//     });
+//     res.json(pieces);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 //get specific program
 router.get(`/piece/:id`, async (req, res) => {
@@ -56,6 +56,7 @@ router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
     const result = await PiecesModel.find({ userOwner: userID });
+    console.log("result from get?", result)
     res.json(result);
   } catch (err) {
     res.json(err);

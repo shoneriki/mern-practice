@@ -27,6 +27,11 @@ const pieceSchema = new mongoose.Schema(
       seconds: { type: Number, min: 0, max: 59, default: 0 },
     },
     excerpts: [excerptSchema],
+    userOwner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );

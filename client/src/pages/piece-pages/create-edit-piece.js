@@ -132,6 +132,11 @@ function AddPieceForm() {
         ),
       })
     ),
+    userOwner: Yup.string().test(
+      "userOwner",
+      "User Owner ID does not match",
+      (value) => value === userID
+    ),
   });
 
   return (
