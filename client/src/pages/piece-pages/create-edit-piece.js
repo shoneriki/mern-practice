@@ -126,6 +126,14 @@ function AddPieceForm() {
         fetchEditData();
       }, [id]);
 
+      if(piece === null && id) {
+        return (
+          <section>
+            Loading...
+          </section>
+        )
+      }
+
   return (
     <PieceForm
       id={id}
