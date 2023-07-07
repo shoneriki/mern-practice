@@ -15,6 +15,7 @@ const excerptSchema = new mongoose.Schema({
       bpm: {type: Number, min: 10, max: 300},
     },
   ],
+  mastered: {type: Boolean}
 });
 
 const pieceSchema = new mongoose.Schema(
@@ -32,6 +33,7 @@ const pieceSchema = new mongoose.Schema(
       seconds: { type: Number, min: 0, max: 59, default: 0 },
     },
     excerpts: [excerptSchema],
+    mastered: {type: Boolean},
     userOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

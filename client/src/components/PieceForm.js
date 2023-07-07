@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   InputLabel,
   Typography,
+  Switch,
 } from "@mui/material";
 
 import axios from "axios";
@@ -62,6 +63,7 @@ export const PieceForm = ({
         }}
       >
         {({ values, handleChange, errors }) => {
+          console.log("values: ", values)
           return (
             <Box sx={{ width: "100%" }}>
               <Form>
@@ -104,7 +106,7 @@ export const PieceForm = ({
                     </InputLabel>
                     <Grid
                       container
-                      name="time-container?"
+                      name="time-container"
                       sx={{ width: "100%" }}
                     >
                       <Grid item xs={12} sm={4}>
@@ -255,43 +257,43 @@ export const PieceForm = ({
                                 {values.excerpts[excerptIndex].tempi.map(
                                   (tempo, tempoIndex) => (
                                     <>
-                                    <Typography variant={'h6'}>
-                                      Tempo {tempoIndex + 1}
-                                    </Typography>
-                                    <Grid
-                                      item
-                                      xs={12}
-                                      key={tempoIndex}
-                                    >
-                                      <Field
-                                        name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.bpm`}
-                                      >
-                                        {({ field }) => (
-                                          <TextField
-                                            {...field}
-                                            type="number"
-                                            label="BPM"
-                                            fullWidth
-                                          />
-                                        )}
-                                      </Field>
-                                      <Field
-                                        name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
-                                      >
-                                        {({ field }) => (
-                                          <TextField {...field} label="Notes" fullWidth />
-                                        )}
-                                      </Field>
-                                      <Button
-                                        variant="contained"
-                                        color="error"
-                                        onClick={() =>
-                                          tempoArrayHelpers.remove(tempoIndex)
-                                        }
-                                      >
-                                        Remove Tempo
-                                      </Button>
-                                    </Grid>
+                                      <Typography variant={"h6"}>
+                                        Tempo {tempoIndex + 1}
+                                      </Typography>
+                                      <Grid item xs={12} key={tempoIndex}>
+                                        <Field
+                                          name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.bpm`}
+                                        >
+                                          {({ field }) => (
+                                            <TextField
+                                              {...field}
+                                              type="number"
+                                              label="BPM"
+                                              fullWidth
+                                            />
+                                          )}
+                                        </Field>
+                                        <Field
+                                          name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
+                                        >
+                                          {({ field }) => (
+                                            <TextField
+                                              {...field}
+                                              label="Notes"
+                                              fullWidth
+                                            />
+                                          )}
+                                        </Field>
+                                        <Button
+                                          variant="contained"
+                                          color="error"
+                                          onClick={() =>
+                                            tempoArrayHelpers.remove(tempoIndex)
+                                          }
+                                        >
+                                          Remove Tempo
+                                        </Button>
+                                      </Grid>
                                     </>
                                   )
                                 )}
@@ -311,6 +313,20 @@ export const PieceForm = ({
                               </Box>
                             )}
                           </FieldArray>
+                          <Grid item xs={12} sm={6} md={4}>
+                            <Field
+                              name={`excerpts.${excerptIndex}.mastered`}
+                              type="checkbox"
+                              render={({ field }) => (
+                                <FormControlLabel
+                                  control={
+                                    <Switch checked={field.value} {...field} />
+                                  }
+                                  label="Excerpt Mastered?"
+                                />
+                              )}
+                            />
+                          </Grid>
                           <Button
                             type="button"
                             variant="contained"
@@ -351,6 +367,16 @@ export const PieceForm = ({
                     </Grid>
                   )}
                 </FieldArray>
+                <Field
+                  name="mastered"
+                  type="checkbox"
+                  render={({ field }) => (
+                    <FormControlLabel
+                      control={<Switch checked={field.value} {...field} />}
+                      label="Piece Mastered?"
+                    />
+                  )}
+                />
                 <Button type="submit" variant="contained" color="primary">
                   Submit
                 </Button>

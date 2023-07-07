@@ -39,6 +39,7 @@ function AddPieceForm() {
             bpm: 108,
           },
         ],
+        mastered: false,
       },
       {
         location: "Andante con moto",
@@ -55,8 +56,10 @@ function AddPieceForm() {
             bpm: 72,
           },
         ],
+        mastered: false,
       },
     ],
+    mastered: false,
     userOwner: userID,
   };
 
@@ -86,8 +89,10 @@ function AddPieceForm() {
             bpm: Yup.number().min(10).max(300),
           })
         ),
+        mastered: Yup.boolean(),
       })
     ),
+    mastered: Yup.boolean(),
     userOwner: Yup.string().test(
       "userOwner",
       "User Owner ID does not match",
