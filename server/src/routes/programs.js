@@ -10,7 +10,7 @@ router.get("/search", async (req, res) => {
   try {
     const pieceTitle = req.query.pieceTitle;
     const programs = await ProgramsModel.find({
-      "pieces.name": { $regex: new RegExp(pieceTitle, "i") },
+      "pieces.name": { $regex: new RegExp(piece, "i") },
     });
     const pieces = [];
     programs.forEach((program) => {

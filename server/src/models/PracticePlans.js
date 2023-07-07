@@ -1,65 +1,48 @@
 import mongoose from "mongoose";
-import { ProgramsModel } from "./Programs.js";
-
-const excerptSchema = new mongoose.Schema({
-  text: { type: String },
-  repetitions: { type: Number },
-  targetTempo: { type: Number },
-  endMetronomeGoal: { type: Number },
-});
-
-const movementSchema = new mongoose.Schema({
-  movementNumber: Number,
-  tempi: [
-    {
-      tempo: {
-        type: Number,
-        text: String,
-      },
-    },
-  ],
-  settings: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Settings",
-  },
-});
-
-const practiceMovementSchema = new mongoose.Schema({
-  movement: movementSchema,
-  shouldPractice: {
-    type: Boolean,
-    default: false,
-  },
-  shouldSplitIntoExcerpts: {
-    type: Boolean,
-    default: false,
-  },
-  excerpts: [excerptSchema],
-});
 
 const practicePlanSchema = new mongoose.Schema(
   {
-    composer: {
-      type: String,
-    },
-    pieceTitle: {
-      type: String,
-    },
-    pieceId: {
+    piece: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Programs.pieces",
+      ref: "Pieces",
+      required: true,
     },
-    movements: [practiceMovementSchema],
-    practiceStartDate: [{ type: Date }],
-    daily: { type: Boolean, default: false },
-    timesPerWeek: { type: Number, min: 1, max: 7 },
+    totalPlanLength: {
+      hours: { type: Number, min: 0, max: 24 },
+      minutes: { type: Number, min: 0, max: 59 },
+      seconds: { type: Number, min: 0, max: 59 },
+    },
+    excerpts: [
+      {
+        excerpt: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Pieces.excerpts",
+        },
+        location: { type: String },
+        notes: { type: String },
+        repetitions: { type: Number },
+        timeToSpend: {
+          hours: { type: Number, min: 0, max: 10 },
+          minutes: { type: Number, min: 0, max: 59 },
+          seconds: { type: Number, min: 0, max: 59 },
+        },
+        tempi: [
+          {
+            notes: { type: String },
+            bpm: { type: Number, min: 10, max: 300 },
+          },
+        ],
+      },
+    ],
+    runThrough: { type: Boolean, default: false },
+    runThroughLength: {
+      hours: { type: Number, min: 0, max: 10 },
+      minutes: { type: Number, min: 0, max: 59 },
+      seconds: { type: Number, min: 0, max: 59 },
+    },
+    practiceStartDate: { type: Date },
     untilDate: { type: Date },
-    practiceLengthInMinutes: { type: Number, min: 1, max: 1440 },
     notes: { type: String },
-    programId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Programs",
-    },
     userOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

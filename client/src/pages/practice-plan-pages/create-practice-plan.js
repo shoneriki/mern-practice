@@ -3,6 +3,8 @@ import axios from "axios";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useForm } from "../../hooks/useForm";
 
+import * as Yup from "yup";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -13,142 +15,126 @@ import { PracticePlanForm } from "../../components/PracticePlanForm.js";
 export const PracticePlanCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
-
+  const navigate = useNavigate();
   const { id } = useParams();
 
-  const [programId, setProgramId] = useState(null);
-  const {
-    values: practicePlan,
-    handleChange,
-    handleSubmit,
-    handleValueChange,
-    handleChangeNested,
-    handleChangeDeeplyNested,
-  } = useForm({
-    initialValues: {
-      pieceTitle: "",
-      composer: "",
-      excerpts: [],
-      movements: [
-        {
-          movementNumber: 1,
-          shouldPractice: false,
-          tempi: [
-            {
-              tempo: 0,
-            },
-          ],
-          shouldSplitIntoExcerpts: false,
-          excerpts: [
-            {
-              text: "",
-              repetitions: 1,
-              targetTempo: 60,
-              endMetronomeGoal: 120,
-            },
-          ],
+  const [practicePlan, setPracticePlan] = useState(null);
+
+
+  const initialValues = {
+    piece: "",
+    excerpts: [
+      {
+        excerpt: "",
+        location: "",
+        repetitions: 0,
+        timeToSpend: {
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
         },
-      ],
-      practiceStartDate: new Date().toISOString().split("T")[0],
-      daily: false,
-      timesPerWeek: 1,
-      untilDate: new Date().toISOString().split("T")[0],
-      practiceLengthInMinutes: 1,
-      notes: "",
-
-      programName: "",
-      programId: "",
-
-      userOwner: userID,
+        tempi: [
+          {
+            notes: "",
+            bpm: 60,
+          },
+        ],
+        mastered: false,
+        practiceStartDate: new Date(),
+        untilDate: new Date(),
+        notes: "",
+      },
+    ],
+    runThrough: false,
+    runThroughLength: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
     },
-    onValueChange: (suggestion) => {
-      let formattedUntilDate = new Date().toISOString().split("T")[0];
-      if (suggestion.programDate) {
-        const programDate = new Date(suggestion.programDate);
-        formattedUntilDate = programDate.toISOString().split("T")[0];
-      }
+    userOwner: "",
+  };
 
-      return {
-        pieceTitle: suggestion.name,
-        composer: suggestion.composer,
-        programName: suggestion.programName,
-        programId: suggestion.programId,
-        untilDate: formattedUntilDate,
-        movements: suggestion.movements,
-      };
-    },
+  const validationSchema = Yup.object({
+    piece: Yup.string(),
+    excerpts: Yup.array(
+      Yup.object({
+        excerpt: Yup.string(),
+        repetitions: Yup.number().min(1).max(100),
+        targetTempo: Yup.number().min(10).max(300),
+        practiceLength: Yup.object({
+          hours: Yup.number().min(0).max(10),
+          minutes: Yup.number().min(0).max(59),
+          seconds: Yup.number().min(0).max(59),
+        }),
+        practiceStartDate: Yup.date(),
+        untilDate: Yup.date(),
+        notes: Yup.string(),
+      })
+    ),
+    runThrough: Yup.boolean(),
+    runThroughLength: Yup.object({
+      hours: Yup.number().min(0).max(10),
+      minutes: Yup.number().min(0).max(59),
+      seconds: Yup.number().min(0).max(59),
+    }),
+    userOwner: Yup.string(),
   });
 
-    useEffect(() => {
-      const fetchEditData = async () => {
-        if (id) {
-          console.log("ID EXISTS!");
-          console.log("id in fetch", id);
-          try {
-            console.log(
-              "from inside try of fetchEditData from create-practice-plan page"
-            );
-            const response = await axios.get(
-              `http://localhost:3001/practicePlans/practicePlan/${id}`
-            );
-            let practicePlanData = response.data;
-
-            console.log("PRACTICEPLANDATA? From fetch", practicePlanData);
 
 
-            // setProgram(programData);
-          } catch (error) {
-            console.log("Inside the fetchEditData catch");
-            console.error(
-              "an error occurred while fetching the program: ",
-              error
-            );
-          }
+  useEffect(() => {
+    const fetchEditData = async () => {
+      if (id) {
+        console.log("id in fetch", id);
+        try {
+          console.log(
+            "from inside try of fetchEditData from create-edit practicePlan page"
+          );
+          const response = await axios.get(
+            `http://localhost:3001/practicePlans/practicePlan/${id}`
+          );
+          const practicePlanData = response.data;
+          console.log("practiePlanData: ", practicePlanData);
+          setPracticePlan(practicePlanData);
+
+          console.log("PIECE DATA? From fetch", practicePlanData);
+        } catch (error) {
+          console.log("Inside the fetchEditData catch for practicePlan");
+          console.error(
+            "an error occurred while fetching the program: ",
+            error
+          );
         }
-      };
-      fetchEditData();
-    }, [id]);
+      }
+    };
+    fetchEditData();
+  }, [id]);
 
   const [suggestions, setSuggestions] = useState([]);
 
-  useEffect(() => {
-    if (practicePlan.pieceTitle) {
-      axios
-        .get(
-          `http://localhost:3001/programs/search?pieceTitle=${practicePlan.pieceTitle}`
-        )
-        .then((res) => {
-          if (Array.isArray(res.data)) {
-            setSuggestions(res.data);
-            console.log("SUGGESTIONS FROM BACKEND", suggestions)
-          } else {
-            console.log("Unexpected response data:", res.data);
-          }
-        })
-        .catch((err) => console.error(err));
-    } else {
-      setSuggestions([]);
-    }
-  }, [practicePlan.pieceTitle]);
+  // useEffect(() => {
+  //   if (practicePlan.piece) {
+  //     axios
+  //       .get(
+  //         `http://localhost:3001/programs/search?piece=${practicePlan.piece}`
+  //       )
+  //       .then((res) => {
+  //         if (Array.isArray(res.data)) {
+  //           setSuggestions(res.data);
+  //           console.log("SUGGESTIONS FROM BACKEND", suggestions);
+  //         } else {
+  //           console.log("Unexpected response data:", res.data);
+  //         }
+  //       })
+  //       .catch((err) => console.error(err));
+  //   } else {
+  //     setSuggestions([]);
+  //   }
+  // }, [practicePlan?.piece]);
 
-  const navigate = useNavigate();
-
-  const submitForm = async (practicePlan) => {
-    try {
-      await axios.post(
-        `http://localhost:3001/practicePlans`,
-        { ...practicePlan, programId },
-        {
-          headers: { authorization: cookies.access_token },
-        }
-      );
-
-      alert("Practice Plan Created");
-      navigate("/practice-plans");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  if (practicePlan === null && id) {
+    return <section>Loading...</section>;
+  }
 
   return (
     <Box
@@ -161,16 +147,12 @@ export const PracticePlanCreateEdit = () => {
       }}
     >
       <PracticePlanForm
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        id={id}
         practicePlan={practicePlan}
-        handleChange={handleChange}
-        handleValueChange={handleValueChange}
-        handleSubmit={handleSubmit(submitForm)}
-        suggestions={suggestions}
-        handleChangeMovement={(e, index) =>
-          handleChangeNested(e, "movements", index)
-        }
-        handleChangeNested={handleChangeNested}
-        handleChangeDeeplyNested={handleChangeDeeplyNested}
+        cookies={cookies}
+        navigate={navigate}
       />
     </Box>
   );

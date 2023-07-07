@@ -1,353 +1,122 @@
 import React from "react";
+import { Formik, Field, Form, FieldArray } from "formik";
+import {
+  TextField,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Checkbox,
+  Button,
+} from "@mui/material";
+import axios from "axios";
 
-import {Box, Button, Grid, Typography, TextField, Radio,Select, MenuItem, RadioGroup, FormControlLabel} from "@mui/material"
+/*
+    const validationSchema = Yup.object({
+    piece: Yup.string(),
+    excerpts: Yup.array(
+      Yup.object({
+        excerpt: Yup.string(),
+        repetitions: Yup.number().min(1).max(100),
+        targetTempo: Yup.number().min(10).max(300),
+        practiceLength: Yup.object({
+          hours: Yup.number().min(0).max(10),
+          minutes: Yup.number().min(0).max(59),
+          seconds: Yup.number().min(0).max(59),
+        }),
+        practiceStartDate: Yup.date(),
+        daily: Yup.boolean(),
+        timesPerWeek: Yup.number().min(1).max(7),
+        untilDate: Yup.date(),
+        notes: Yup.string(),
+      })
+    ),
+    runThrough: Yup.boolean(),
+    runThroughLength: Yup.object({
+      hours: Yup.number().min(0).max(10),
+      minutes: Yup.number().min(0).max(59),
+      seconds: Yup.number().min(0).max(59),
+    }),
+    userOwner: Yup.string(),
+  });
+*/
 
 export const PracticePlanForm = ({
+  initialValues,
+  validationSchema,
+  id,
   practicePlan,
-  handleValueChange,
-  handleChange,
-  handleSubmit,
-  suggestions,
-  handleChangeMovement,
-  handleChangeNested,
-  handleChangeDeeplyNested,
+  cookies,
+  navigate,
 }) => {
   return (
-    <form className="practice-plan-form" onSubmit={handleSubmit}>
-      <Typography sx={{ textAlign: "center" }} variant={"h6"}>
-        Create Practice Plan
-      </Typography>
-      <Box
-        name="Form Box"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Grid container spacing={2} name="form-grid">
-          <Grid item xs={12}>
-            <TextField
-              id="pieceTitle"
-              name="pieceTitle"
-              label="Piece Title"
-              value={practicePlan.pieceTitle}
-              onChange={handleChange}
-              fullWidth
-            />
-            {suggestions.length > 0 && (
-              <Box
-                name="suggestion-box"
-                sx={{
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  marginTop: "2px",
-                  maxHeight: "400px",
-                  overflowY: "auto",
-                }}
-              >
-                {suggestions.map((suggestion) => (
-                  <Box
-                    name="suggestion-item"
-                    key={suggestion._id}
-                    sx={{ padding: "4px", cursor: "pointer" }}
-                    onClick={() => handleValueChange(suggestion)}
-                  >
-                    {suggestion.name} by {suggestion.composer},
-                  </Box>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={async (values, { setSubmitting }) => {
+        try {
+          if (id) {
+            await axios.put(
+              `http://localhost:3001/practicePlans/practicePlan/${id}`,
+              { ...values },
+              {
+                headers: { authorization: cookies.access_token },
+              }
+            );
+            alert("practicePlan updated");
+            navigate("/practicePlans");
+          } else {
+            await axios.post(
+              `http://localhost:3001/practicePlans`,
+              { ...values },
+              {
+                headers: { authorization: cookies.access_token },
+              }
+            );
+            alert("practicePlan created");
+            navigate("/practicePlan");
+          }
+        } catch (error) {
+          alert("I'm sorry, there's an error in submitting this form");
+          console.log("error", error);
+        } finally {
+          setSubmitting(false);
+        }
+      }}
+    >
+      {({ values, handleChange, errors }) => (
+        <Form name="practicePlan-form">
+          <Field name="piece" as={TextField} label="Piece" />
+
+          <FieldArray name="excerpts">
+            {({ push, remove }) => (
+              <div>
+                {values.excerpts.map((excerpt, index) => (
+                  <section key={index}>
+                    <Field
+                      name={`excerpts.${index}.excerpt`}
+                      as={TextField}
+                      label="Excerpt"
+                    />
+                    <Field
+                      name={`excerpts.${index}.repetitions`}
+                      type="number"
+                      as={TextField}
+                      label="Repetitions"
+                    />
+
+                    <Button onClick={() => remove(index)}>
+                      Remove excerpt
+                    </Button>
+                  </section>
                 ))}
-              </Box>
+                <Button onClick={() => push({ excerpt: "", repetitions: 0 })}>
+                  Add excerpt
+                </Button>
+              </div>
             )}
-          </Grid>
-          <Grid name="composer-grid" item xs={12}>
-            <TextField
-              id="composer"
-              name="composer"
-              label="Composer"
-              value={practicePlan.composer}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="programName"
-              name="programName"
-              label="Program"
-              value={practicePlan.programName}
-              disabled
-              fullWidth
-            />
-          </Grid>
-
-          <Grid name="practiceStartDate-grid" item xs={12}>
-            <TextField
-              id="practiceStartDate"
-              name="practiceStartDate"
-              label="Date of Practice Start"
-              type="date"
-              value={practicePlan.practiceStartDate}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Grid>
-          <Grid name="daily-grid" item xs={12}>
-            <RadioGroup
-              row
-              name="daily"
-              value={practicePlan.daily}
-              onChange={(event) => {
-                handleChange({
-                  target: {
-                    name: event.target.name,
-                    value: event.target.value === "true",
-                  },
-                });
-              }}
-            >
-              <FormControlLabel
-                value={true}
-                control={<Radio />}
-                label="Daily"
-              />
-              <FormControlLabel
-                value={false}
-                control={<Radio />}
-                label="Not Daily"
-              />
-            </RadioGroup>
-          </Grid>
-
-          {!practicePlan.daily && (
-            <Grid name="timesPerWeek-grid" item xs={12}>
-              <TextField
-                id="timesPerWeek"
-                name="timesPerWeek"
-                label="Times Per Week"
-                type="number"
-                InputProps={{ inputProps: { min: 1, max: 7 } }}
-                value={practicePlan.timesPerWeek}
-                onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-          )}
-
-          <Grid name="untilDate-grid" item xs={12}>
-            <TextField
-              id="untilDate"
-              name="untilDate"
-              label="Until Date"
-              type="date"
-              value={practicePlan.untilDate}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Grid>
-
-          <Grid name="practiceLengthInMinutes-grid" item xs={12}>
-            <TextField
-              id="practiceLengthInMinutes"
-              name="practiceLengthInMinutes"
-              label="Length of practice session(minutes)"
-              type="number"
-              InputProps={{ inputProps: { min: 1, max: 1440 } }}
-              value={practicePlan.practiceLengthInMinutes}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-
-          {practicePlan.movements.map((movement, movementIndex) => (
-            <Grid
-              name="movement-grid"
-              sx={{ backgroundColor: "orange" }}
-              item
-              xs={12}
-            >
-            {console.log("movement from map of movements", movement)}
-              <TextField
-                id="movementNumber"
-                name="movementNumber"
-                label="Movement Number"
-                type="number"
-                value={movement.movementNumber}
-                onChange={(e) => handleChangeMovement(e, 0)}
-                fullWidth
-              />
-              <RadioGroup
-                row
-                name="shouldPractice"
-                value={movement.shouldPractice}
-                onChange={(event) => {
-                  handleChangeNested(
-                    {
-                      target: {
-                        name: event.target.name,
-                        value: event.target.value === "true",
-                      },
-                    },
-                    "movements",
-                    movementIndex
-                  );
-                }}
-              >
-                <FormControlLabel
-                  value={true}
-                  control={<Radio />}
-                  label="Practice?"
-                />
-                <FormControlLabel
-                  value={false}
-                  control={<Radio />}
-                  label="It's ok"
-                />
-              </RadioGroup>
-
-              {movement.shouldPractice && (
-                <RadioGroup
-                  row
-                  name="shouldSplitIntoExcerpts"
-                  value={movement?.shouldSplitIntoExcerpts}
-                  onChange={(event) => {
-                    handleChangeNested(
-                      {
-                        target: {
-                          name: event.target.name,
-                          value: event.target.value === "true",
-                        },
-                      },
-                      "movements",
-                      movementIndex
-                    );
-                  }}
-                >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio />}
-                    label="break it up?"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="It's ok"
-                  />
-                </RadioGroup>
-              )}
-
-              {movement?.shouldSplitIntoExcerpts &&
-                movement?.excerpts.map((excerpt, excerptIndex) => (
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="text"
-                        name="text"
-                        label="Excerpt text"
-                        value={excerpt.text}
-                        onChange={(e) =>
-                          handleChangeDeeplyNested(
-                            e,
-                            "movements",
-                            movementIndex,
-                            "excerpts",
-                            excerptIndex
-                          )
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        xs={12}
-                        id="repetitions"
-                        name="repetitions"
-                        label="Repetitions"
-                        type="number"
-                        value={excerpt.repetitions}
-                        onChange={(e) =>
-                          handleChangeDeeplyNested(
-                            e,
-                            "movements",
-                            movementIndex,
-                            "excerpts",
-                            excerptIndex
-                          )
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="targetTempo"
-                        name="targetTempo"
-                        label="Target Tempo"
-                        type="number"
-                        value={excerpt.targetTempo}
-                        onChange={(e) =>
-                          handleChangeDeeplyNested(
-                            e,
-                            "movements",
-                            movementIndex,
-                            "excerpts",
-                            excerptIndex
-                          )
-                        }
-                      />
-                      <Select
-                        id="endMetronomeGoal"
-                        name="endMetronomeGoal"
-                        label="End Metronome Goal"
-                        value={excerpt.endMetronomeGoal}
-                        onChange={(e) =>
-                          handleChangeDeeplyNested(
-                            e,
-                            "movements",
-                            movementIndex,
-                            "excerpts",
-                            excerptIndex
-                          )
-                        }
-                      >
-                        {movement.tempi.map((tempi, tempiIndex) => (
-                          <MenuItem value={tempi.tempo}>{tempi.tempo}</MenuItem>
-                        ))}
-                      </Select>
-                    </Grid>
-                  </Grid>
-                ))}
-            </Grid>
-          ))}
-
-          <Grid name="notes-grid" item xs={12}>
-            <TextField
-              id="notes"
-              name="notes"
-              label="Extra notes"
-              multiline
-              rows={4}
-              value={practicePlan.notes}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-
-          {/* programId hidden*/}
-          <input
-            type="hidden"
-            name="programId"
-            value={practicePlan.programId}
-          />
-
-          <Grid name="create-plan-btn-grid" item xs={12}>
-            <Button variant="contained" color="primary" type="submit">
-              Create Plan
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-    </form>
+          </FieldArray>
+        </Form>
+      )}
+    </Formik>
   );
 };
