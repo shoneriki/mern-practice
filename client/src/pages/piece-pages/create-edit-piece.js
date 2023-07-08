@@ -8,6 +8,10 @@ import {PieceForm} from "../../components/PieceForm.js"
 import * as Yup from "yup";
 import axios from "axios";
 
+import {
+  Box,
+} from "@mui/material";
+
 function AddPieceForm() {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
@@ -140,13 +144,24 @@ function AddPieceForm() {
       }
 
   return (
-    <PieceForm
-      id={id}
-      initialValues={piece || seedData}
-      validationSchema={validationSchema}
-      cookies={cookies}
-      navigate={navigate}
-    />
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "80%",
+      }}
+    >
+      <PieceForm
+        id={id}
+        initialValues={piece || seedData}
+        validationSchema={validationSchema}
+        cookies={cookies}
+        navigate={navigate}
+      />
+
+    </Box>
   );
 }
 

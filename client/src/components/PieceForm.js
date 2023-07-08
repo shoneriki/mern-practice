@@ -31,7 +31,6 @@ export const PieceForm = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-
           try {
             if (id) {
               await axios.put(
@@ -74,7 +73,9 @@ export const PieceForm = ({
                   name="name-composer-length-container"
                   container
                   spacing={4}
-                  sx={{ width: "100%" }}
+                  sx={{
+                    width: "100%",
+                  }}
                 >
                   <Grid item xs={12} sm={6}>
                     <Field name="name">
@@ -100,58 +101,66 @@ export const PieceForm = ({
                       )}
                     </Field>
                   </Grid>
-                  <Grid item name="length-container" xs={12}>
-                    <InputLabel sx={{ textAlign: "center" }}>
-                      Length:
-                    </InputLabel>
-                    <Grid
-                      container
-                      name="time-container"
-                      sx={{ width: "100%" }}
-                    >
-                      <Grid item xs={12} sm={4}>
-                        <Field name="length.hours">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              type="number"
-                              label="Hours"
-                              id={`piece-hours`}
-                              fullWidth
-                              min="1"
-                              max="10"
-                            />
-                          )}
-                        </Field>
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <Field name="length.minutes">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              type="number"
-                              label="Minutes"
-                              id={`piece-minutes`}
-                              fullWidth
-                            />
-                          )}
-                        </Field>
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <Field name="length.seconds">
-                          {({ field }) => (
-                            <TextField
-                              {...field}
-                              type="number"
-                              label="Seconds"
-                              id={`piece-seconds`}
-                              fullWidth
-                            />
-                          )}
-                        </Field>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Grid item name="length-container" xs={12} sm={4}>
+                      <InputLabel sx={{ textAlign: "center" }}>
+                        Length:
+                      </InputLabel>
+                      <Grid
+                        container
+                        name="time-container"
+                        sx={{ width: "100%" }}
+                      >
+                        <Grid item xs={12} sm={4}>
+                          <Field name="length.hours">
+                            {({ field }) => (
+                              <TextField
+                                {...field}
+                                type="number"
+                                label="Hours"
+                                id={`piece-hours`}
+                                fullWidth
+                                min="1"
+                                max="10"
+                              />
+                            )}
+                          </Field>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <Field name="length.minutes">
+                            {({ field }) => (
+                              <TextField
+                                {...field}
+                                type="number"
+                                label="Minutes"
+                                id={`piece-minutes`}
+                                fullWidth
+                              />
+                            )}
+                          </Field>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <Field name="length.seconds">
+                            {({ field }) => (
+                              <TextField
+                                {...field}
+                                type="number"
+                                label="Seconds"
+                                id={`piece-seconds`}
+                                fullWidth
+                              />
+                            )}
+                          </Field>
+                        </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
+                  </Box>
                 </Grid>
 
                 <FieldArray name={`excerpts`}>
@@ -327,6 +336,27 @@ export const PieceForm = ({
                               )}
                             />
                           </Grid>
+
+                          <Button
+                            type="button"
+                            variant="contained"
+                            color="error"
+                            onClick={() =>
+                              excerptArrayHelpers.remove(excerptIndex)
+                            }
+                          >
+                            Remove Excerpt
+                          </Button>
+                        </Grid>
+                      ))}
+                      <Box  sx={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          margin: "1rem 0"
+                        }}
+                      >
+                        <Grid item xs={12} sm={4}>
                           <Button
                             type="button"
                             variant="contained"
@@ -352,34 +382,34 @@ export const PieceForm = ({
                           >
                             Add an Excerpt
                           </Button>
-                          <Button
-                            type="button"
-                            variant="contained"
-                            color="error"
-                            onClick={() =>
-                              excerptArrayHelpers.remove(excerptIndex)
-                            }
-                          >
-                            Remove Excerpt
-                          </Button>
                         </Grid>
-                      ))}
+                      </Box>
                     </Grid>
                   )}
                 </FieldArray>
-                <Field
-                  name="mastered"
-                  type="checkbox"
-                  render={({ field }) => (
-                    <FormControlLabel
-                      control={<Switch checked={field.value} {...field} />}
-                      label="Piece Mastered?"
-                    />
-                  )}
-                />
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
+                <Box
+                  name="submit-btn-mastered-container"
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Field
+                    name="mastered"
+                    type="checkbox"
+                    render={({ field }) => (
+                      <FormControlLabel
+                        control={<Switch checked={field.value} {...field} />}
+                        label="Piece Mastered?"
+                      />
+                    )}
+                  />
+                  <Button type="submit" variant="contained" color="primary" sx={{width: "60%"}}>
+                    Submit
+                  </Button>
+                </Box>
               </Form>
             </Box>
           );
