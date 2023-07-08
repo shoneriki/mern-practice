@@ -6,35 +6,23 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
-// router.get("/search", async (req, res) => {
-//   try {
-//     const pieceTitle = req.query.pieceTitle;
-//     const programs = await ProgramsModel.find({
-//       "pieces.name": { $regex: new RegExp(pieceTitle, "i") },
-//     });
-//     const pieces = [];
-//     programs.forEach((program) => {
-//       program.pieces.forEach((piece) => {
-//         if (piece.name.toLowerCase().includes(pieceTitle.toLowerCase())) {
-//           const pieceWithProgramId = program._id
-//             ? {
-//                 ...piece._doc,
-//                 programId: program._id,
-//                 programName: program.name,
-//                 programDate: program.date,
-//               }
-//             : {
-//                 ...piece._doc,
-//               };
-//           pieces.push(pieceWithProgramId);
-//         }
-//       });
-//     });
-//     res.json(pieces);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+router.get("/suggestions", async (req, res) => {
+  const { search } = req.query;
+  try {
+    // Fetch pieces matching the search query from the database
+    const pieces = await PiecesModel.find({
+      $or: [
+        { name: { $regex: search, $options: "i" } }, // Match by name
+        { composer: { $regex: search, $options: "i" } }, // Match by composer
+      ],
+    }).limit(10); // Limit the number of suggestions returned
+
+    res.json(pieces);
+  } catch (error) {
+    console.error("Error while fetching piece suggestions:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 //get specific program
 router.get(`/piece/:id`, async (req, res) => {

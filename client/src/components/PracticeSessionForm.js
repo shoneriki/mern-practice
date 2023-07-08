@@ -47,8 +47,8 @@ export const PracticeSessionForm = ({
                 headers: { authorization: cookies.access_token },
               }
             );
-            alert("practicePlan created");
-            navigate("/practicePlan");
+            alert("practiceSession created");
+            navigate("/practiceSessions");
           }
         } catch (error) {
           alert("I'm sorry, there's an error in submitting this form");

@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import { Box, Grid, Typography, InputLabel } from "@mui/material";
+import { Box, Grid, Typography, InputLabel, TextField, Autocomplete } from "@mui/material";
 
 import  {PracticeSessionForm}  from "../../components/PracticeSessionForm";
 
@@ -19,14 +19,17 @@ export const PracticeSessionCreateEdit = () => {
   const { id } = useParams();
 
   const [practiceSession, setPracticeSession] = useState(null);
+  const [selectedPiece, setSelectedPiece] = useState(null);
 
   const initialValues = {
-    practiceSessionLength: {
+    dateOfExecution:  new Date(),
+    name: "",
+    totalSessionLength: {
       hours: 0,
       minutes: 0,
       seconds: 0,
     },
-    piece: "",
+    piece: null,
     excerpts: [
       {
         excerpt: "",
@@ -49,7 +52,7 @@ export const PracticeSessionCreateEdit = () => {
       },
     ],
     runThrough: false,
-    runThroughLength: {
+    pieceLength: {
       hours: 0,
       minutes: 0,
       seconds: 0,
@@ -58,7 +61,14 @@ export const PracticeSessionCreateEdit = () => {
   };
 
   const validationSchema = Yup.object({
-    piece: Yup.string(),
+    dateOfExecution: Yup.date(),
+    name: Yup.string(),
+    totalSessionLength: Yup.object({
+      hours: Yup.number().min(0).max(10),
+      minutes: Yup.number().min(0).max(59),
+      seconds: Yup.number().min(0).max(59),
+    }),
+    piece: Yup.object().nullable().required("Piece is required"), // Updated to require a selected piece
     excerpts: Yup.array(
       Yup.object({
         excerpt: Yup.string(),
@@ -73,32 +83,13 @@ export const PracticeSessionCreateEdit = () => {
         tempi: Yup.array(
           Yup.object({
             notes: Yup.string(),
-            bpm: Yup.number().min(10).max(300)
+            bpm: Yup.number().min(10).max(300),
           })
         ),
         mastered: Yup.boolean(),
         untilDate: Yup.date(),
       })
     ),
-    /*
-      const excerptSchema = new mongoose.Schema({
-  location: { type: String },
-  notes: {type: String},
-  repetitions: { type: Number },
-  timeToSpend: {
-    hours: { type: Number, default: 0 },
-    minutes: { type: Number, min: 0, max: 59, default: 0 },
-    seconds: { type: Number, min: 0, max: 59, default: 0 },
-  },
-  tempi: [
-    {
-      notes: {type: String},
-      bpm: {type: Number, min: 10, max: 300},
-    },
-  ],
-  mastered: {type: Boolean}
-});
-    */
     runThrough: Yup.boolean(),
     runThroughLength: Yup.object({
       hours: Yup.number().min(0).max(10),
@@ -107,8 +98,6 @@ export const PracticeSessionCreateEdit = () => {
     }),
     userOwner: Yup.string(),
   });
-
-
 
   useEffect(() => {
     const fetchEditData = async () => {
@@ -119,7 +108,7 @@ export const PracticeSessionCreateEdit = () => {
             "from inside try of fetchEditData from create-edit practicePlan page"
           );
           const response = await axios.get(
-            `http://localhost:3001/practicePlans/practicePlan/${id}`
+            `http://localhost:3001/practiceSessions/practiceSession/${id}`
           );
           const practiceSessionData = response.data;
           console.log("practiePlanData: ", practiceSessionData);
@@ -140,25 +129,22 @@ export const PracticeSessionCreateEdit = () => {
 
   const [suggestions, setSuggestions] = useState([]);
 
-  // useEffect(() => {
-  //   if (practicePlan.piece) {
-  //     axios
-  //       .get(
-  //         `http://localhost:3001/programs/search?piece=${practicePlan.piece}`
-  //       )
-  //       .then((res) => {
-  //         if (Array.isArray(res.data)) {
-  //           setSuggestions(res.data);
-  //           console.log("SUGGESTIONS FROM BACKEND", suggestions);
-  //         } else {
-  //           console.log("Unexpected response data:", res.data);
-  //         }
-  //       })
-  //       .catch((err) => console.error(err));
-  //   } else {
-  //     setSuggestions([]);
-  //   }
-  // }, [practicePlan?.piece]);
+  const handlePieceSearch = async (searchValue) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/pieces?search=${searchValue}`
+      );
+      const pieceSuggestions = response.data;
+      setSuggestions(pieceSuggestions);
+    } catch (error) {
+      console.error("Error while fetching piece suggestions:", error);
+    }
+  };
+
+  const handlePieceSelection = (event, value) => {
+    setSelectedPiece(value);
+  };
+
 
   if (practiceSession === null && id) {
     return <section>Loading...</section>;
@@ -174,6 +160,15 @@ export const PracticeSessionCreateEdit = () => {
         width: "80%",
       }}
     >
+      <Autocomplete
+        options={suggestions}
+        getOptionLabel={(option) => option.name}
+        onInputChange={(event, value) => handlePieceSearch(value)}
+        onChange={handlePieceSelection}
+        renderInput={(params) => (
+          <TextField {...params} label="Piece" variant="outlined" />
+        )}
+      />
       <PracticeSessionForm
         initialValues={initialValues}
         validationSchema={validationSchema}
