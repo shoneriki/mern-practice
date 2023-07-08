@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { format } from "date-fns";
 import { Button } from "@mui/material";
-import { PracticePlanList } from "../../components/PracticePlanList";
+import { PracticePlanList } from "../../components/PracticeSessionList";
 
-export const PracticePlans = () => {
+export const PracticeSessions = () => {
   return <PracticePlanList />;
 };

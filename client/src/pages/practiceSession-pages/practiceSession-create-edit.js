@@ -8,20 +8,24 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, InputLabel } from "@mui/material";
 
-import { PracticePlanForm } from "../../components/PracticePlanForm.js";
+import  {PracticeSessionForm}  from "../../components/PracticeSessionForm";
 
-export const PracticePlanCreateEdit = () => {
+export const PracticeSessionCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [practicePlan, setPracticePlan] = useState(null);
-
+  const [practiceSession, setPracticeSession] = useState(null);
 
   const initialValues = {
+    practiceSessionLength: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    },
     piece: "",
     excerpts: [
       {
@@ -40,7 +44,6 @@ export const PracticePlanCreateEdit = () => {
           },
         ],
         mastered: false,
-        practiceStartDate: new Date(),
         untilDate: new Date(),
         notes: "",
       },
@@ -59,18 +62,43 @@ export const PracticePlanCreateEdit = () => {
     excerpts: Yup.array(
       Yup.object({
         excerpt: Yup.string(),
+        location: Yup.string(),
+        notes: Yup.string(),
         repetitions: Yup.number().min(1).max(100),
-        targetTempo: Yup.number().min(10).max(300),
-        practiceLength: Yup.object({
+        timeToSpend: Yup.object({
           hours: Yup.number().min(0).max(10),
           minutes: Yup.number().min(0).max(59),
           seconds: Yup.number().min(0).max(59),
         }),
-        practiceStartDate: Yup.date(),
+        tempi: Yup.array(
+          Yup.object({
+            notes: Yup.string(),
+            bpm: Yup.number().min(10).max(300)
+          })
+        ),
+        mastered: Yup.boolean(),
         untilDate: Yup.date(),
-        notes: Yup.string(),
       })
     ),
+    /*
+      const excerptSchema = new mongoose.Schema({
+  location: { type: String },
+  notes: {type: String},
+  repetitions: { type: Number },
+  timeToSpend: {
+    hours: { type: Number, default: 0 },
+    minutes: { type: Number, min: 0, max: 59, default: 0 },
+    seconds: { type: Number, min: 0, max: 59, default: 0 },
+  },
+  tempi: [
+    {
+      notes: {type: String},
+      bpm: {type: Number, min: 10, max: 300},
+    },
+  ],
+  mastered: {type: Boolean}
+});
+    */
     runThrough: Yup.boolean(),
     runThroughLength: Yup.object({
       hours: Yup.number().min(0).max(10),
@@ -93,11 +121,11 @@ export const PracticePlanCreateEdit = () => {
           const response = await axios.get(
             `http://localhost:3001/practicePlans/practicePlan/${id}`
           );
-          const practicePlanData = response.data;
-          console.log("practiePlanData: ", practicePlanData);
-          setPracticePlan(practicePlanData);
+          const practiceSessionData = response.data;
+          console.log("practiePlanData: ", practiceSessionData);
+          setPracticeSession(practiceSessionData);
 
-          console.log("PIECE DATA? From fetch", practicePlanData);
+          console.log("PIECE DATA? From fetch", practiceSessionData);
         } catch (error) {
           console.log("Inside the fetchEditData catch for practicePlan");
           console.error(
@@ -132,7 +160,7 @@ export const PracticePlanCreateEdit = () => {
   //   }
   // }, [practicePlan?.piece]);
 
-  if (practicePlan === null && id) {
+  if (practiceSession === null && id) {
     return <section>Loading...</section>;
   }
 
@@ -146,11 +174,11 @@ export const PracticePlanCreateEdit = () => {
         width: "80%",
       }}
     >
-      <PracticePlanForm
+      <PracticeSessionForm
         initialValues={initialValues}
         validationSchema={validationSchema}
         id={id}
-        practicePlan={practicePlan}
+        practiceSession={practiceSession}
         cookies={cookies}
         navigate={navigate}
       />

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const practicePlanSchema = new mongoose.Schema(
+const practiceSessionSchema = new mongoose.Schema(
   {
     piece: {
       type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +52,7 @@ const practicePlanSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const PracticePlansModel = mongoose.model(
-  "PracticePlans",
-  practicePlanSchema
+export const PracticeSessionsModel = mongoose.model(
+  "PracticeSessions",
+  practiceSessionSchema
 );

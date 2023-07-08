@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import {PracticePlansModel} from "../models/PracticePlans.js"
+import {PracticeSessionsModel} from "../models/PracticeSessions.js"
 import { UserModel } from "../models/Users.js";
 // import { verifyToken } from "../controllers/UserController.js";
 
@@ -89,4 +89,4 @@ router.delete("/practicePlan/:id", async (req,res) => {
 })
 
 
-export { router as practicePlansRouter };
+export { router as practiceSessionsRouter };

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import "dotenv/config.js";
 import {userRouter} from './routes/users.js'
 // import {recipesRouter} from './routes/recipes.js'
-import {practicePlansRouter} from './routes/practicePlans.js'
+import {practiceSessionsRouter} from './routes/practiceSessions.js'
 import {programsRouter} from './routes/programs.js'
 import {settingsRouter} from "./routes/settings.js"
 import {piecesRouter} from "./routes/pieces.js"
@@ -16,7 +16,7 @@ app.use(cors());
 app.use("/auth", userRouter)
 // app.use("/recipes", recipesRouter)
 app.use("/programs", programsRouter)
-app.use("/practicePlans", practicePlansRouter)
+app.use("/practiceSessions", practiceSessionsRouter)
 app.use("/settings", settingsRouter)
 
 app.use("/pieces", piecesRouter)

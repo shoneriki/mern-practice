@@ -7,12 +7,16 @@ import { Auth } from "./pages/user-pages/auth";
 import { Login } from "./pages/user-pages/login";
 import { Register } from "./pages/user-pages/register";
 import { Home } from "./pages/home";
+
 import AddPieceForm from "./pages/piece-pages/create-edit-piece"
 import {PieceList} from "./components/PieceList"
-import {PracticePlans} from "./pages/practice-plan-pages/practice-plans"
-import { PracticePlanCreateEdit } from "./pages/practice-plan-pages/create-practice-plan";
+
+import { PracticeSessionCreateEdit } from "./pages/practiceSession-pages/practiceSession-create-edit";
+import {PracticeSessions} from "./pages/practiceSession-pages/practiceSessions"
+
 import { ProgramCreateEdit } from "./pages/program-pages/program-create-edit";
 import { Programs } from "./pages/program-pages/programs";
+
 import { Workspace } from "./pages/workspace";
 import { Settings } from "./pages/settings";
 import { NAVBAR_HEIGHT } from "./components/constants";
@@ -40,12 +44,12 @@ function App() {
           <Route path="/piece/create" element={<AddPieceForm />}/>
           <Route path="/piece/edit/:id" element={<AddPieceForm/>}/>
 
-          <Route path="/practice-plans" element={<PracticePlans />}/>
+          <Route path="/practiceSessions" element={<PracticeSessions />}/>
           <Route
-            path="/practice-plan/create"
-            element={<PracticePlanCreateEdit />}
+            path="/practiceSession/create"
+            element={<PracticeSessionCreateEdit />}
           />
-          <Route path="/practice-plan/edit/:id" element={<PracticePlanCreateEdit/>}/>
+          <Route path="/practiceSession/edit/:id" element={<PracticeSessionCreateEdit/>}/>
 
           <Route path="/programs" element={<ProgramList />} />
           <Route path="/program/create" element={<ProgramCreateEdit />} />

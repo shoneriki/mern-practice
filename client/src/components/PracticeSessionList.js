@@ -20,34 +20,34 @@ export const PracticePlanList = () => {
 
   const navigate = useNavigate();
 
-  const [practicePlans, setPracticePlans] = useState([]);
+  const [practiceSessions, setPracticeSessions] = useState([]);
 
-    const fetchPracticePlans = async () => {
+    const fetchPracticeSessions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/practicePlans/user/${userID}`
+          `http://localhost:3001/practiceSessions/user/${userID}`
         );
         response.data && response.data.length > 0
-          ? setPracticePlans(
+          ? setPracticeSessions(
               response.data.map((practicePlan) => ({
                 ...practicePlan,
               }))
             )
-          : setPracticePlans([]);
+          : setPracticeSessions([]);
       } catch (error) {
         console.error("Error fetching practice plans:", error);
       }
     };
 
   useEffect(() => {
-    fetchPracticePlans();
+    fetchPracticeSessions();
   }, [userID]);
 
   // edit functionality
 
   const handleEdit = (id) => {
     console.log("id from handleEdit: ", id);
-    navigate(`/practice-plan/edit/${id}`);
+    navigate(`/practiceSession/edit/${id}`);
   };
 
   // end edit functionality
@@ -71,14 +71,14 @@ export const PracticePlanList = () => {
     console.log("Deleting practice plan with ID:", toDelete);
     try {
       await axios.delete(
-        `http://localhost:3001/practiceplans/practiceplan/${toDelete}`
+        `http://localhost:3001/practiceSessions/practiceSession/${toDelete}`
       );
       console.log("Deleted");
       setOpen(false);
       // setPracticePlans(
       //   practicePlans.filter((practicePlan) => practicePlan._id !== id)
       // );
-      fetchPracticePlans()
+      fetchPracticeSessions()
     } catch (err) {
       console.log("error: ", err);
     }
@@ -87,7 +87,7 @@ export const PracticePlanList = () => {
   // end of delete functionality
 
   return (
-    <Box className="programList">
+    <Box className="practiceSessionsList">
       <Typography
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
@@ -95,12 +95,12 @@ export const PracticePlanList = () => {
         Impending Practice Plans
       </Typography>
       <Grid container spacing={3}>
-        {practicePlans.map((practicePlan) => {
+        {practiceSessions.map((practiceSession) => {
           return (
-            <Grid item sx={12} sm={6} md={4} key={practicePlan._id}>
+            <Grid item sx={12} sm={6} md={4} key={practiceSession._id}>
               <Box sx={{ border: "1px solid black", padding: "1rem" }}>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  {practicePlan.pieceTitle}
+                  {practiceSession.piece}
                 </Typography>
                 <Box
                   name="delete-edit-btn-box"
@@ -123,7 +123,7 @@ export const PracticePlanList = () => {
                         cursor: "pointer",
                       },
                     }}
-                    onClick={() => handleEdit(practicePlan._id)}
+                    onClick={() => handleEdit(practiceSession._id)}
                   >
                     Edit?
                   </Button>
@@ -140,7 +140,7 @@ export const PracticePlanList = () => {
                         cursor: "pointer",
                       },
                     }}
-                    onClick={() => handleClickOpen(practicePlan._id)}
+                    onClick={() => handleClickOpen(practiceSession._id)}
                   >
                     Delete
                   </Button>
