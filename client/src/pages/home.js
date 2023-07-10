@@ -10,7 +10,7 @@ import {
   Box,
 } from "@mui/material";
 
-import {ProgramList} from "../components/ProgramList"
+import {ProgramList} from "../components/program-components/ProgramList"
 
 export const Home = () => {
   // const [recipes, setRecipes] = useState([]);

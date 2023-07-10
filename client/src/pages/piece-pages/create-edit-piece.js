@@ -3,7 +3,7 @@ import { useGetUserID } from "../../hooks/useGetUserID";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import {useParams} from "react-router-dom"
-import {PieceForm} from "../../components/PieceForm.js"
+import {PieceForm} from "../../components/piece-components/PieceForm.js"
 
 import * as Yup from "yup";
 import axios from "axios";

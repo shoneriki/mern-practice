@@ -9,7 +9,7 @@ import { Register } from "./pages/user-pages/register";
 import { Home } from "./pages/home";
 
 import AddPieceForm from "./pages/piece-pages/create-edit-piece"
-import {PieceList} from "./components/PieceList"
+import {PieceList} from "./components/piece-components/PieceList"
 
 import { PracticeSessionCreateEdit } from "./pages/practiceSession-pages/practiceSession-create-edit";
 import {PracticeSessions} from "./pages/practiceSession-pages/practiceSessions"
@@ -22,7 +22,7 @@ import { Settings } from "./pages/settings";
 import { NAVBAR_HEIGHT } from "./components/constants";
 import { GlobalStyles } from "@mui/system";
 
-import { ProgramList } from "./components/ProgramList";
+import { ProgramList } from "./components/program-components/ProgramList";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";

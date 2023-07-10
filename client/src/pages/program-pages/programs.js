@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { format } from "date-fns";
 import { Button } from "@mui/material";
-import { ProgramList } from "../../components/ProgramList";
+import { ProgramList } from "../../components/program-components/ProgramList";
 
 export const Programs = () => {
   return <ProgramList />;

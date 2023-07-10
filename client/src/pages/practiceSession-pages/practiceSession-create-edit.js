@@ -10,7 +10,7 @@ import { useCookies } from "react-cookie";
 
 import { Box, Grid, Typography, InputLabel, TextField, Autocomplete } from "@mui/material";
 
-import  {PracticeSessionForm}  from "../../components/PracticeSessionForm";
+import  {PracticeSessionForm}  from "../../components/practiceSession-components/PracticeSessionForm";
 
 export const PracticeSessionCreateEdit = () => {
   const userID = useGetUserID();

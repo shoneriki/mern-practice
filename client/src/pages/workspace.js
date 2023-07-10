@@ -1,7 +1,7 @@
 import React from "react";
-import {Metronome} from "../components/Metronome"
+import {Metronome} from "../components/workspace-components/Metronome"
 // import {MetronomeE6} from "../components/MetronomeE6"
-import {Counter} from "../components/Counter"
+import {Counter} from "../components/workspace-components/Counter"
 import { Box } from "@mui/material";
 
 

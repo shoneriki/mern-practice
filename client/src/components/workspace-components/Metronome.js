@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import click from "../assets/sounds/click.mp3"
-import woodblock from "../assets/sounds/woodblock.mp3"
-import drumstick from "../assets/sounds/drumstick.mp3"
+import click from "../../assets/sounds/click.mp3"
+import woodblock from "../../assets/sounds/woodblock.mp3"
+import drumstick from "../../assets/sounds/drumstick.mp3"
 
 import { Button, Slider, Box, TextField, Grid, InputAdornment, Typography} from "@mui/material";
 

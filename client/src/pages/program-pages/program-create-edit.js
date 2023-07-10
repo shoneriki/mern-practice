@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 
 import { Box, Typography } from "@mui/material";
 
-import { ProgramForm } from "../../components/ProgramForm";
+import { ProgramForm } from "../../components/program-components/ProgramForm";
 
 import dayjs from "dayjs";
 
