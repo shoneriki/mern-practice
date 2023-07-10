@@ -38,6 +38,7 @@ export const PracticeSessionForm = ({
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
+        console.log("entering the submit?");
         try {
           if (id) {
             await axios.put(
@@ -47,9 +48,10 @@ export const PracticeSessionForm = ({
                 headers: { authorization: cookies.access_token },
               }
             );
-            alert("practicePlan updated");
-            navigate("/practicePlans");
+            alert("practiceSession updated");
+            navigate("/practiceSessions");
           } else {
+            console.log("inside the else... for submitting");
             await axios.post(
               `http://localhost:3001/practiceSessions`,
               { ...values },
@@ -57,7 +59,7 @@ export const PracticeSessionForm = ({
                 headers: { authorization: cookies.access_token },
               }
             );
-            alert("practiceSession created");
+            alert("Practice Session created");
             navigate("/practiceSessions");
           }
         } catch (error) {
@@ -67,6 +69,7 @@ export const PracticeSessionForm = ({
           setSubmitting(false);
         }
       }}
+      enableReinitialize
     >
       {({ values, handleChange, errors, setFieldValue }) => (
         <Form id="practiceSession-form" name="practiceSession-form">
@@ -75,7 +78,7 @@ export const PracticeSessionForm = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Autocomplete
@@ -86,10 +89,9 @@ export const PracticeSessionForm = ({
                 width: "100%",
               }}
               getOptionLabel={(option) => option.name}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
               onInputChange={(event, value) => handlePieceSearch(value)}
               onChange={async (event, newValue) => {
-                console.log("Selected piece before change:", selectedPiece); // Add logging
-                console.log("New value received:", newValue); // Add logging
                 handlePieceSelection(event, newValue);
                 const response = await axios.get(
                   `http://localhost:3001/pieces/piece/${newValue._id}`,
@@ -100,16 +102,14 @@ export const PracticeSessionForm = ({
 
                 const pieceData = response.data;
 
-                console.log("Piece data received:", pieceData); // Add logging
                 setFieldValue("length", pieceData.length);
                 setFieldValue("excerpts", pieceData.excerpts);
-                console.log("Selected piece after change:", selectedPiece); // Add logging
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Piece" variant="outlined" />
               )}
-              multiline
             />
+
             <Field name="dateOfExecution">
               {({ field, form }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -126,14 +126,14 @@ export const PracticeSessionForm = ({
               )}
             </Field>
             <Field
-              name={`values.name`}
+              name="name"
               as={TextField}
               label="Name of session"
               sx={{ width: "100%" }}
             />
             <InputLabel>Total Session Length:</InputLabel>
             <Box>
-              <Grid container center>
+              <Grid container>
                 <Grid item xs={12} sm={4}>
                   <Field
                     name="totalSessionLength.hours"
@@ -171,13 +171,7 @@ export const PracticeSessionForm = ({
                   spacing={4}
                 >
                   {values.excerpts.map((excerpt, excerptIndex) => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={4}
-                      key={excerptIndex}
-                      sx={{ }}
-                    >
+                    <Grid item xs={12} sm={4} key={excerptIndex} sx={{}}>
                       <Grid item xs={12}>
                         <Field
                           name={`excerpts.${excerptIndex}.excerpt`}
@@ -194,6 +188,7 @@ export const PracticeSessionForm = ({
                         <Field
                           name={`excerpts.${excerptIndex}.notes`}
                           as={TextField}
+                          multiline
                           label="notes"
                           sx={{ width: "100%" }}
                         />
@@ -210,27 +205,35 @@ export const PracticeSessionForm = ({
                           {() => (
                             <Box name="timeToSpend-box">
                               <InputLabel>Time to Spend:</InputLabel>
-                              <Field
-                                name={`excerpts.${excerptIndex}.timeToSpend.hours`}
-                                as={TextField}
-                                type="number"
-                                label="hours"
-                                fullWidth
-                              />
-                              <Field
-                                name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
-                                as={TextField}
-                                type="number"
-                                label="minutes"
-                                fullWidth
-                              />
-                              <Field
-                                name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
-                                as={TextField}
-                                type="number"
-                                label="seconds"
-                                fullWidth
-                              />
+                              <Grid container>
+                                <Grid item xs={12} sm={4}>
+                                  <Field
+                                    name={`excerpts.${excerptIndex}.timeToSpend.hours`}
+                                    as={TextField}
+                                    type="number"
+                                    label="hours"
+                                    fullWidth
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                  <Field
+                                    name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
+                                    as={TextField}
+                                    type="number"
+                                    label="minutes"
+                                    fullWidth
+                                  />
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                  <Field
+                                    name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
+                                    as={TextField}
+                                    type="number"
+                                    label="seconds"
+                                    fullWidth
+                                  />
+                                </Grid>
+                              </Grid>
                             </Box>
                           )}
                         </FieldArray>

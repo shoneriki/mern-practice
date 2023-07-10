@@ -38,7 +38,7 @@ export const PracticeSessionCreateEdit = (props) => {
       {
         excerpt: "",
         location: "",
-        repetitions: 0,
+        repetitions: 1,
         timeToSpend: {
           hours: 0,
           minutes: 0,
@@ -72,7 +72,7 @@ export const PracticeSessionCreateEdit = (props) => {
       minutes: Yup.number().min(0).max(59),
       seconds: Yup.number().min(0).max(59),
     }),
-    piece: Yup.object().nullable().required("Piece is required"), // Updated to require a selected piece
+    piece: Yup.object().nullable(),
     excerpts: Yup.array(
       Yup.object({
         excerpt: Yup.string(),
@@ -148,10 +148,25 @@ export const PracticeSessionCreateEdit = (props) => {
   };
 
   const handlePieceSelection = (event, value) => {
-    console.log("value? ", value)
     setSelectedPiece(value);
-    console.log("selectedPiece? ", selectedPiece)
   };
+
+  const errors = {};
+  try {
+    validationSchema.validateSync(initialValues, { abortEarly: false });
+  } catch (validationErrors) {
+    validationErrors.inner.forEach((error) => {
+      errors[error.path] = error.message;
+    });
+  }
+
+  // Step 4: Check validation errors
+  if (Object.keys(errors).length === 0) {
+    console.log("No validation errors.");
+  } else {
+    console.log("Validation errors:");
+    console.log(errors);
+  }
 
 
   if (practiceSession === null && id) {

@@ -15,7 +15,7 @@ import {
   DialogActions,
 } from "@mui/material";
 
-export const PracticePlanList = () => {
+export const PracticeSessionList = () => {
   const userID = useGetUserID();
 
   const navigate = useNavigate();
@@ -27,10 +27,11 @@ export const PracticePlanList = () => {
         const response = await axios.get(
           `http://localhost:3001/practiceSessions/user/${userID}`
         );
+        console.log("response, ", response)
         response.data && response.data.length > 0
           ? setPracticeSessions(
-              response.data.map((practicePlan) => ({
-                ...practicePlan,
+              response.data.map((practiceSession) => ({
+                ...practiceSession,
               }))
             )
           : setPracticeSessions([]);
@@ -92,7 +93,7 @@ export const PracticePlanList = () => {
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
       >
-        Impending Practice Plans
+        Impending Practice Sessions
       </Typography>
       <Grid container spacing={3}>
         {practiceSessions.map((practiceSession) => {

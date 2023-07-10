@@ -62,7 +62,7 @@ export const PieceForm = ({
         }}
       >
         {({ values, handleChange, errors }) => {
-          console.log("values: ", values)
+          console.log("errors", errors)
           return (
             <Box sx={{ width: "100%" }}>
               <Form>

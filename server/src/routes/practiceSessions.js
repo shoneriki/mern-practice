@@ -7,14 +7,14 @@ import { UserModel } from "../models/Users.js";
 const router = express.Router();
 
 //get specific practicePlan
-router.get(`/practicePlan/:id`, async (req, res) => {
+router.get(`/practiceSession/:id`, async (req, res) => {
   try {
     const id = req.params.id;
-    const practicePlan = await PracticePlansModel.findById(id);
-    if (practicePlan) {
-      res.json(practicePlan);
+    const practicePlan = await PracticeSessionsModel.findById(id);
+    if (practiceSession) {
+      res.json(practiceSession);
     } else {
-      res.status(404).json({ message: "PracticePlan not found" });
+      res.status(404).json({ message: "Practice Session not found" });
     }
   } catch (err) {
     res.status(500).json(err);
@@ -35,14 +35,14 @@ router.get("/user/:userID", async (req, res) => {
   // Create a new practice plan , add verifyToken when usable
   router.post("/", async (req, res) => {
     console.log("req.body from post", req.body);
-    const practicePlan = new PracticePlansModel({
+    const practiceSession = new PracticeSessionsModel({
       _id: new mongoose.Types.ObjectId(),
       ...req.body,
     });
 
     try {
-      const savedPracticePlan = await practicePlan.save();
-      res.status(201).json(savedPracticePlan);
+      const savedPracticeSession = await practiceSession.save();
+      res.status(201).json(savedPracticeSession);
     } catch (err) {
       console.log(err);
       res.json(err);
@@ -52,7 +52,7 @@ router.get("/user/:userID", async (req, res) => {
 router.get('/single/:id', async (req,res) => {
   try {
     console.log("inside mysterious .get in router")
-    const practicePlan = await PracticePlansModel.findById(req.params.id).populate('programId').populate('pieceId');
+    const practiceSession = await PracticeSessionsModel.findById(req.params.id).populate('programId').populate('pieceId');
     console.log("practicePlan inside /single/:id", practicePlan)
   } catch (err) {
     res.status(500).json(err)
@@ -60,15 +60,15 @@ router.get('/single/:id', async (req,res) => {
 })
 
 //edit a practice plan
-router.put(`/practicePlan/:id`, async (req, res) => {
+router.put(`/practiceSession/:id`, async (req, res) => {
   try {
     const id = req.params.id;
     const updates = req.body;
-    const updatedPracticePlan = await PracticePlansModel.findByIdAndUpdate(id, updates, {
+    const updatedPracticeSession = await PracticeSessionsModel.findByIdAndUpdate(id, updates, {
       new: true,
     });
-    console.log("updatedPracticePlan from server side put:", updatedPracticePlan)
-    res.status(200).json(updatedPracticePlan);
+    console.log("updatedPracticeSession from server side put:", updatedPracticeSession)
+    res.status(200).json(updatedPracticeSession);
   } catch (err) {
     console.log("error: ", err);
     res.status(500).json(err);
@@ -76,12 +76,12 @@ router.put(`/practicePlan/:id`, async (req, res) => {
 });
 
 //delete a practice plan
-router.delete("/practicePlan/:id", async (req,res) => {
+router.delete("/practiceSession/:id", async (req,res) => {
   try {
     const id = req.params.id;
     console.log("Received delete request for ID: ", id);
     await PracticePlansModel.findByIdAndRemove(id);
-    res.status(200).json({ message: "Practice Plan deleted successfully" });
+    res.status(200).json({ message: "Practice Session deleted successfully" });
   } catch(err) {
     console.log("error:", err)
     res.status(500).json(err)
