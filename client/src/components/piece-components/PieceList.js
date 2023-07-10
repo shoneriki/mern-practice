@@ -70,9 +70,10 @@ export const PieceList = () => {
   // delete functionality
 
   const [open, setOpen] = useState(false);
-  const [_, setToDelete] = useState(null);
+  const [toDelete, setToDelete] = useState(null);
 
   const handleClickOpen = (id) => {
+    console.log("id from handleClickOpen", id)
     setOpen(true);
     setToDelete(id);
   };
@@ -82,12 +83,13 @@ export const PieceList = () => {
   };
 
   const handleDelete = async (id) => {
+    console.log("id", toDelete)
     try {
       await axios.delete(`http://localhost:3001/pieces/piece/${id}`);
       console.log("Deleted");
       alert("deleted")
       setOpen(false);
-      setPieces(pieces.filter((piece) => piece._id !== id));
+      setPieces(pieces.filter((piece) => piece._id !== toDelete));
     } catch (err) {
       console.log("error: ", err);
     }
