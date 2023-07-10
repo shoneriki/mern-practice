@@ -82,6 +82,7 @@ export const PracticeSessionForm = ({
                   ? `${selectedPiece.name} by ${selectedPiece.composer}`
                   : ""
               }
+              multiline
             />
 
             <FieldArray name="excerpts">

@@ -177,6 +177,7 @@ export const PracticeSessionCreateEdit = (props) => {
         renderInput={(params) => (
           <TextField {...params} label="Piece" variant="outlined" />
         )}
+        multiline
       />
       <PracticeSessionForm
         initialValues={initialValues}
