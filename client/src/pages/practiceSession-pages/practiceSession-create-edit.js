@@ -21,6 +21,10 @@ export const PracticeSessionCreateEdit = (props) => {
   const [practiceSession, setPracticeSession] = useState(null);
   const [selectedPiece, setSelectedPiece] = useState(null);
 
+  useEffect(() => {
+    console.log("selectedPiece updated", selectedPiece);
+  }, [selectedPiece]);
+
   const initialValues = {
     dateOfExecution:  new Date(),
     name: "",
@@ -164,21 +168,6 @@ export const PracticeSessionCreateEdit = (props) => {
         width: "80%",
       }}
     >
-      <Autocomplete
-        id="autocomplete"
-        value={selectedPiece}
-        options={suggestions}
-        sx={{
-          width: "100%"
-        }}
-        getOptionLabel={(option) => option.name}
-        onInputChange={(event, value) => handlePieceSearch(value)}
-        onChange={handlePieceSelection}
-        renderInput={(params) => (
-          <TextField {...params} label="Piece" variant="outlined" />
-        )}
-        multiline
-      />
       <PracticeSessionForm
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -187,6 +176,9 @@ export const PracticeSessionCreateEdit = (props) => {
         cookies={cookies}
         navigate={navigate}
         selectedPiece={selectedPiece}
+        suggestions={suggestions}
+        handlePieceSearch={handlePieceSearch}
+        handlePieceSelection={handlePieceSelection}
       />
     </Box>
   );

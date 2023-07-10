@@ -1,6 +1,7 @@
 import React from "react";
-import { Formik, Field, Form, FieldArray } from "formik";
+import { Formik, Field, Form, FieldArray} from "formik";
 import {
+  Autocomplete,
   TextField,
   Box,
   Grid,
@@ -11,6 +12,11 @@ import {
   Checkbox,
   Button,
 } from "@mui/material";
+
+// components/FormikDatePicker.tsx
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
 
 
@@ -23,6 +29,9 @@ export const PracticeSessionForm = ({
   cookies,
   navigate,
   selectedPiece,
+  suggestions,
+  handlePieceSearch,
+  handlePieceSelection,
 }) => {
   return (
     <Formik
@@ -59,44 +68,116 @@ export const PracticeSessionForm = ({
         }
       }}
     >
-      {({ values, handleChange, errors }) => (
+      {({ values, handleChange, errors, setFieldValue }) => (
         <Form id="practiceSession-form" name="practiceSession-form">
           <Box
             id="inside-form-box"
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
-            <Field
-              id="piece-field"
-              name="piece"
-              as={TextField}
-              label="Piece"
+            <Autocomplete
+              id="autocomplete"
+              value={selectedPiece}
+              options={suggestions}
               sx={{
                 width: "100%",
               }}
-              value={
-                selectedPiece
-                  ? `${selectedPiece.name} by ${selectedPiece.composer}`
-                  : ""
-              }
+              getOptionLabel={(option) => option.name}
+              onInputChange={(event, value) => handlePieceSearch(value)}
+              onChange={async (event, newValue) => {
+                console.log("Selected piece before change:", selectedPiece); // Add logging
+                console.log("New value received:", newValue); // Add logging
+                handlePieceSelection(event, newValue);
+                const response = await axios.get(
+                  `http://localhost:3001/pieces/piece/${newValue._id}`,
+                  {
+                    headers: { authorization: cookies.access_token },
+                  }
+                );
+
+                const pieceData = response.data;
+
+                console.log("Piece data received:", pieceData); // Add logging
+                setFieldValue("length", pieceData.length);
+                setFieldValue("excerpts", pieceData.excerpts);
+                console.log("Selected piece after change:", selectedPiece); // Add logging
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Piece" variant="outlined" />
+              )}
               multiline
             />
-
+            <Field name="dateOfExecution">
+              {({ field, form }) => (
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateTimePicker
+                    label="Date and Time of Execution"
+                    value={field.value}
+                    onChange={(value) => {
+                      form.setFieldValue(field.name, value);
+                    }}
+                    sx={{ width: "100%" }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              )}
+            </Field>
+            <Field
+              name={`values.name`}
+              as={TextField}
+              label="Name of session"
+              sx={{ width: "100%" }}
+            />
+            <InputLabel>Total Session Length:</InputLabel>
+            <Box>
+              <Grid container center>
+                <Grid item xs={12} sm={4}>
+                  <Field
+                    name="totalSessionLength.hours"
+                    as={TextField}
+                    type="number"
+                    label="Hours"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Field
+                    name="totalSessionLength.minutes"
+                    as={TextField}
+                    type="number"
+                    label="Minutes"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Field
+                    name="totalSessionLength.seconds"
+                    as={TextField}
+                    type="number"
+                    label="Seconds"
+                  />
+                </Grid>
+              </Grid>
+            </Box>
             <FieldArray name="excerpts">
               {({ push, remove }) => (
                 <Grid
-                  containera
+                  container
                   sx={{
                     width: "100%",
-                    border: "1px solid black",
                     display: "flex",
                   }}
+                  spacing={4}
                 >
                   {values.excerpts.map((excerpt, excerptIndex) => (
-                    <Grid item xs={12} sm={4} key={excerptIndex}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={4}
+                      key={excerptIndex}
+                      sx={{ }}
+                    >
                       <Grid item xs={12}>
                         <Field
                           name={`excerpts.${excerptIndex}.excerpt`}
@@ -106,14 +187,12 @@ export const PracticeSessionForm = ({
                         />
                         <Field
                           name={`excerpts.${excerptIndex}.location`}
-                          type="number"
                           as={TextField}
                           label="location"
                           sx={{ width: "100%" }}
                         />
                         <Field
                           name={`excerpts.${excerptIndex}.notes`}
-                          type="number"
                           as={TextField}
                           label="notes"
                           sx={{ width: "100%" }}
@@ -156,29 +235,29 @@ export const PracticeSessionForm = ({
                           )}
                         </FieldArray>
 
-                        <Button onClick={() => remove(excerptIndex)}>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => remove(excerptIndex)}
+                        >
                           Remove excerpt
                         </Button>
                       </Grid>
                     </Grid>
                   ))}
-                  <Grid
-                    container
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Grid item xs={12} sx={{ width: "100%" }}>
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={() => push({ excerpt: "", repetitions: 0 })}
-                      >
-                        Add excerpt
-                      </Button>
-                    </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => push({ excerpt: "", repetitions: 0 })}
+                    >
+                      Add excerpt
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button type="submit" variant="contained" color="success">
+                      Submit
+                    </Button>
                   </Grid>
                 </Grid>
               )}
