@@ -12,7 +12,7 @@ import { Box, Grid, Typography, InputLabel, TextField, Autocomplete } from "@mui
 
 import  {PracticeSessionForm}  from "../../components/practiceSession-components/PracticeSessionForm";
 
-export const PracticeSessionCreateEdit = () => {
+export const PracticeSessionCreateEdit = (props) => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const PracticeSessionCreateEdit = () => {
       minutes: 0,
       seconds: 0,
     },
-    piece: null,
+    piece: selectedPiece,
     excerpts: [
       {
         excerpt: "",
@@ -130,19 +130,23 @@ export const PracticeSessionCreateEdit = () => {
   const [suggestions, setSuggestions] = useState([]);
 
   const handlePieceSearch = async (searchValue) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/pieces?search=${searchValue}`
-      );
-      const pieceSuggestions = response.data;
-      setSuggestions(pieceSuggestions);
-    } catch (error) {
-      console.error("Error while fetching piece suggestions:", error);
+    if (searchValue) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/pieces/suggestions?search=${searchValue}`
+        );
+        const pieceSuggestions = response.data;
+        setSuggestions(pieceSuggestions);
+      } catch (error) {
+        console.error("Error while fetching piece suggestions:", error);
+      }
     }
   };
 
   const handlePieceSelection = (event, value) => {
+    console.log("value? ", value)
     setSelectedPiece(value);
+    console.log("selectedPiece? ", selectedPiece)
   };
 
 
@@ -161,7 +165,12 @@ export const PracticeSessionCreateEdit = () => {
       }}
     >
       <Autocomplete
+        id="autocomplete"
+        value={selectedPiece}
         options={suggestions}
+        sx={{
+          width: "100%"
+        }}
         getOptionLabel={(option) => option.name}
         onInputChange={(event, value) => handlePieceSearch(value)}
         onChange={handlePieceSelection}
@@ -176,6 +185,7 @@ export const PracticeSessionCreateEdit = () => {
         practiceSession={practiceSession}
         cookies={cookies}
         navigate={navigate}
+        selectedPiece={selectedPiece}
       />
     </Box>
   );

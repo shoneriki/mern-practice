@@ -22,6 +22,7 @@ export const PracticeSessionForm = ({
   practicePlan,
   cookies,
   navigate,
+  selectedPiece,
 }) => {
   return (
     <Formik
@@ -59,21 +60,34 @@ export const PracticeSessionForm = ({
       }}
     >
       {({ values, handleChange, errors }) => (
-        <Form name="practicePlan-form">
+        <Form id="practiceSession-form" name="practiceSession-form">
           <Box
-            name="inside-form-box"
+            id="inside-form-box"
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <Field name="piece" as={TextField} label="Piece" />
+            <Field
+              id="piece-field"
+              name="piece"
+              as={TextField}
+              label="Piece"
+              sx={{
+                width: "100%",
+              }}
+              value={
+                selectedPiece
+                  ? `${selectedPiece.name} by ${selectedPiece.composer}`
+                  : ""
+              }
+            />
 
             <FieldArray name="excerpts">
               {({ push, remove }) => (
                 <Grid
-                  container
+                  containera
                   sx={{
                     width: "100%",
                     border: "1px solid black",
