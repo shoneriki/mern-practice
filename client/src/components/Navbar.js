@@ -77,7 +77,7 @@ export const Navbar = () => {
             <LinkStyled to="/program/create">Create Program</LinkStyled>
             <LinkStyled to="/pieces">Pieces</LinkStyled>
             <LinkStyled to="/piece/create">Add/Edit Piece</LinkStyled>
-            <LinkStyled to="/practiceSessions">Practice Plans</LinkStyled>
+            <LinkStyled to="/practiceSessions">Practice Sessions</LinkStyled>
             <LinkStyled to="/practiceSession/create">
               Create Practice Session
             </LinkStyled>
