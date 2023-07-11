@@ -35,6 +35,7 @@ export const PracticeSessionList = () => {
               }))
             )
           : setPracticeSessions([]);
+          console.log("",practiceSessions)
       } catch (error) {
         console.error("Error fetching practice plans:", error);
       }
@@ -96,12 +97,12 @@ export const PracticeSessionList = () => {
         Impending Practice Sessions
       </Typography>
       <Grid container spacing={3}>
-        {practiceSessions.map((practiceSession) => {
+        {practiceSessions.map((practiceSession, practiceSessionIndex) => {
           return (
-            <Grid item sx={12} sm={6} md={4} key={practiceSession._id}>
+            <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
               <Box sx={{ border: "1px solid black", padding: "1rem" }}>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  {practiceSession.piece}
+                  {practiceSession.name}
                 </Typography>
                 <Box
                   name="delete-edit-btn-box"

@@ -25,7 +25,7 @@ router.get(`/practiceSession/:id`, async (req, res) => {
 router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
-    const result = await PracticePlansModel.find({userOwner: userID});
+    const result = await PracticeSessionsModel.find({userOwner: userID});
     res.json(result);
   } catch (err) {
     res.json(err);
@@ -34,7 +34,7 @@ router.get("/user/:userID", async (req, res) => {
 
   // Create a new practice plan , add verifyToken when usable
   router.post("/", async (req, res) => {
-    console.log("req.body from post", req.body);
+    console.log("req.body from post in practiceSessions router", req.body);
     const practiceSession = new PracticeSessionsModel({
       _id: new mongoose.Types.ObjectId(),
       ...req.body,
@@ -43,7 +43,9 @@ router.get("/user/:userID", async (req, res) => {
     try {
       const savedPracticeSession = await practiceSession.save();
       res.status(201).json(savedPracticeSession);
+      console.log("SUBMITTED... YAY!")
     } catch (err) {
+      console.log("oh no, something is wrong")
       console.log(err);
       res.json(err);
     }

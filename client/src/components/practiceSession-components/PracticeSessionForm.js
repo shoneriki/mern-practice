@@ -53,33 +53,42 @@ export const PracticeSessionForm = ({
           >
             <Autocomplete
               id="autocomplete"
-              value={selectedPiece}
+              value={selectedPiece || {}}
               options={suggestions}
               sx={{
                 width: "100%",
               }}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => option.name || ""}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               onInputChange={(event, value) => handlePieceSearch(value)}
               onChange={async (event, newValue) => {
                 handlePieceSelection(event, newValue);
-                const response = await axios.get(
-                  `http://localhost:3001/pieces/piece/${newValue._id}`,
-                  {
-                    headers: { authorization: cookies.access_token },
-                  }
-                );
+                if (newValue) {
+                  const response = await axios.get(
+                    `http://localhost:3001/pieces/piece/${newValue._id}`,
+                    {
+                      headers: { authorization: cookies.access_token },
+                    }
+                  );
 
-                const pieceData = response.data;
+                  const pieceData = response.data;
 
-                setFieldValue("length", pieceData.length);
-                setFieldValue("excerpts", pieceData.excerpts);
-                setFieldValue("composer", pieceData.composer);
+                  setFieldValue("length", pieceData.length);
+                  setFieldValue("excerpts", pieceData.excerpts);
+                  setFieldValue("composer", pieceData.composer);
+                  setFieldValue("piece", pieceData)
+                } else {
+                  setFieldValue("length", "");
+                  setFieldValue("excerpts", []);
+                  setFieldValue("composer", "");
+                  setFieldValue("piece", {})
+                }
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Piece" variant="outlined" />
               )}
             />
+
             <Field
               name="composer"
               as={TextField}
@@ -149,12 +158,6 @@ export const PracticeSessionForm = ({
                   {values.excerpts.map((excerpt, excerptIndex) => (
                     <Grid item xs={12} sm={4} key={excerptIndex} sx={{}}>
                       <Grid item xs={12}>
-                        <Field
-                          name={`excerpts.${excerptIndex}.excerpt`}
-                          as={TextField}
-                          label={`Excerpt ${excerptIndex + 1}`}
-                          sx={{ width: "100%" }}
-                        />
                         <Field
                           name={`excerpts.${excerptIndex}.location`}
                           as={TextField}

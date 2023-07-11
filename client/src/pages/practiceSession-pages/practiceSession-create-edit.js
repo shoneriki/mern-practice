@@ -18,8 +18,8 @@ export const PracticeSessionCreateEdit = (props) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [practiceSession, setPracticeSession] = useState(null);
-  const [selectedPiece, setSelectedPiece] = useState(null);
+  const [practiceSession, setPracticeSession] = useState({});
+  const [selectedPiece, setSelectedPiece] = useState({});
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
@@ -37,7 +37,6 @@ export const PracticeSessionCreateEdit = (props) => {
     piece: selectedPiece,
     excerpts: [
       {
-        excerpt: "",
         location: "",
         repetitions: 1,
         timeToSpend: {
@@ -76,7 +75,6 @@ export const PracticeSessionCreateEdit = (props) => {
     piece: Yup.object().nullable(),
     excerpts: Yup.array(
       Yup.object({
-        excerpt: Yup.string(),
         location: Yup.string(),
         notes: Yup.string(),
         repetitions: Yup.number().min(1).max(100),
