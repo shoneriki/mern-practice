@@ -20,6 +20,7 @@ export const PracticeSessionCreateEdit = (props) => {
 
   const [practiceSession, setPracticeSession] = useState(null);
   const [selectedPiece, setSelectedPiece] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     console.log("selectedPiece updated", selectedPiece);
@@ -61,7 +62,7 @@ export const PracticeSessionCreateEdit = (props) => {
       minutes: 0,
       seconds: 0,
     },
-    userOwner: "",
+    userOwner: userID,
   };
 
   const validationSchema = Yup.object({
@@ -131,8 +132,6 @@ export const PracticeSessionCreateEdit = (props) => {
     fetchEditData();
   }, [id]);
 
-  const [suggestions, setSuggestions] = useState([]);
-
   const handlePieceSearch = async (searchValue) => {
     if (searchValue) {
       try {
@@ -151,6 +150,46 @@ export const PracticeSessionCreateEdit = (props) => {
     setSelectedPiece(value);
   };
 
+  const onSubmit= async (values, { setSubmitting }) => {
+    console.log("entering the submit?");
+    try {
+      if (id) {
+        await axios.put(
+          `http://localhost:3001/practiceSessions/practiceSession/${id}`,
+          { ...values },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        await axios.put(
+          `http://localhost:3001/pieces/piece/${values.piece._id}`,
+          { ...values.piece },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        alert("practiceSession updated");
+        navigate("/practiceSessions");
+      } else {
+        console.log("inside the else... for submitting");
+        await axios.post(
+          `http://localhost:3001/practiceSessions`,
+          { ...values },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        alert("Practice Session created");
+        navigate("/practiceSessions");
+      }
+    } catch (error) {
+      alert("I'm sorry, there's an error in submitting this form");
+      console.log("error", error);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   const errors = {};
   try {
     validationSchema.validateSync(initialValues, { abortEarly: false });
@@ -160,7 +199,6 @@ export const PracticeSessionCreateEdit = (props) => {
     });
   }
 
-  // Step 4: Check validation errors
   if (Object.keys(errors).length === 0) {
     console.log("No validation errors.");
   } else {
@@ -194,6 +232,7 @@ export const PracticeSessionCreateEdit = (props) => {
         suggestions={suggestions}
         handlePieceSearch={handlePieceSearch}
         handlePieceSelection={handlePieceSelection}
+        onSubmit={onSubmit}
       />
     </Box>
   );

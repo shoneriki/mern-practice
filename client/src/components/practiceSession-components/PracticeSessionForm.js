@@ -32,43 +32,13 @@ export const PracticeSessionForm = ({
   suggestions,
   handlePieceSearch,
   handlePieceSelection,
+  onSubmit,
 }) => {
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={async (values, { setSubmitting }) => {
-        console.log("entering the submit?");
-        try {
-          if (id) {
-            await axios.put(
-              `http://localhost:3001/practiceSessions/practiceSession/${id}`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("practiceSession updated");
-            navigate("/practiceSessions");
-          } else {
-            console.log("inside the else... for submitting");
-            await axios.post(
-              `http://localhost:3001/practiceSessions`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("Practice Session created");
-            navigate("/practiceSessions");
-          }
-        } catch (error) {
-          alert("I'm sorry, there's an error in submitting this form");
-          console.log("error", error);
-        } finally {
-          setSubmitting(false);
-        }
-      }}
+      onSubmit={onSubmit}
       enableReinitialize
     >
       {({ values, handleChange, errors, setFieldValue }) => (
@@ -104,12 +74,18 @@ export const PracticeSessionForm = ({
 
                 setFieldValue("length", pieceData.length);
                 setFieldValue("excerpts", pieceData.excerpts);
+                setFieldValue("composer", pieceData.composer);
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Piece" variant="outlined" />
               )}
             />
-
+            <Field
+              name="composer"
+              as={TextField}
+              label="Composer"
+              sx={{ width: "100%" }}
+            />
             <Field name="dateOfExecution">
               {({ field, form }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
