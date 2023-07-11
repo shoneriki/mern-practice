@@ -25,7 +25,12 @@ router.get(`/practiceSession/:id`, async (req, res) => {
 router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
-    const result = await PracticeSessionsModel.find({userOwner: userID});
+    const result = await PracticeSessionsModel.find({ userOwner: userID })
+      .populate("piece")
+      // populate the piece field
+      .then((practiceSession) => {
+        res.send(practiceSession);
+      });
     res.json(result);
   } catch (err) {
     res.json(err);

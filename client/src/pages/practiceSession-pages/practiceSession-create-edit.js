@@ -148,13 +148,19 @@ export const PracticeSessionCreateEdit = (props) => {
     setSelectedPiece(value);
   };
 
+  // submitting the practiceSession form; new or edited
   const onSubmit= async (values, { setSubmitting }) => {
     console.log("entering the submit?");
     try {
+      const practiceSessionData = {
+        ...values,
+        piece: values.piece._id,
+      };
+
       if (id) {
         await axios.put(
           `http://localhost:3001/practiceSessions/practiceSession/${id}`,
-          { ...values },
+          practiceSessionData,
           {
             headers: { authorization: cookies.access_token },
           }
@@ -172,7 +178,7 @@ export const PracticeSessionCreateEdit = (props) => {
         console.log("inside the else... for submitting");
         await axios.post(
           `http://localhost:3001/practiceSessions`,
-          { ...values },
+          practiceSessionData ,
           {
             headers: { authorization: cookies.access_token },
           }
