@@ -102,8 +102,48 @@ export const PracticeSessionList = () => {
             <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
               <Box sx={{ border: "1px solid black", padding: "1rem" }}>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  {practiceSession.name}
+                  Session name: {practiceSession.name}
                 </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column"
+                  }}
+                >
+                  <Grid id="piece" container>
+                    <Grid item sx={12}>
+                      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                        {practiceSession.piece.name}
+                      </Typography>
+                    </Grid>
+                    <Grid item sx={12}>
+                      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                        {practiceSession.piece.composer}
+                      </Typography>
+                    </Grid>
+                    <Grid item sx={12}>
+                      <Typography variant={"h6"}>Length of Piece:</Typography>
+                    </Grid>
+                    <Grid container >
+                      <Grid item sx={12} sm={4}>
+                        <Typography>
+                          {practiceSession.piece.length.hours}
+                        </Typography>
+                      </Grid>
+                      <Grid item sx={12} sm={4}>
+                        <Typography>
+                          {practiceSession.piece.length.minutes}
+                        </Typography>
+                      </Grid>
+                      <Grid item sx={12} sm={4}>
+                        <Typography>
+                          {practiceSession.piece.length.seconds}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Box>
+
                 <Box
                   name="delete-edit-btn-box"
                   sx={{
@@ -145,11 +185,7 @@ export const PracticeSessionList = () => {
                       <Button onClick={handleClose} color="primary">
                         Cancel
                       </Button>
-                      <Button
-                        onClick={handleDelete}
-                        color="primary"
-                        autoFocus
-                      >
+                      <Button onClick={handleDelete} color="primary" autoFocus>
                         Yes, Delete
                       </Button>
                     </DialogActions>

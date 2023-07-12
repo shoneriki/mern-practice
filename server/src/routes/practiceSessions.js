@@ -21,7 +21,7 @@ router.get(`/practiceSession/:id`, async (req, res) => {
   }
 });
 
-//get all practice plans
+//get all practice sessions
 router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
