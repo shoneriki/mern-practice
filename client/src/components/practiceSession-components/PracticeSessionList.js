@@ -114,17 +114,8 @@ export const PracticeSessionList = () => {
                 >
                   <Button
                     name="edit-btn"
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "yellow",
-                      color: "black",
-                      border: "none",
-                      "&:hover": {
-                        backgroundColor: "orange",
-                        border: "none",
-                        cursor: "pointer",
-                      },
-                    }}
+                    variant="contained"
+                    color="warning"
                     onClick={() => handleEdit(practiceSession._id)}
                   >
                     Edit?

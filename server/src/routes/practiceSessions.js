@@ -10,7 +10,7 @@ const router = express.Router();
 router.get(`/practiceSession/:id`, async (req, res) => {
   try {
     const id = req.params.id;
-    const practicePlan = await PracticeSessionsModel.findById(id);
+    const practiceSession = await PracticeSessionsModel.findById(id);
     if (practiceSession) {
       res.json(practiceSession);
     } else {
@@ -26,11 +26,9 @@ router.get("/user/:userID", async (req, res) => {
   try {
     const userID = req.params.userID;
     const result = await PracticeSessionsModel.find({ userOwner: userID })
-      .populate("piece")
+      .populate("piece");
       // populate the piece field
-      .then((practiceSession) => {
-        res.send(practiceSession);
-      });
+
     res.json(result);
   } catch (err) {
     res.json(err);
@@ -74,7 +72,7 @@ router.put(`/practiceSession/:id`, async (req, res) => {
     const updatedPracticeSession = await PracticeSessionsModel.findByIdAndUpdate(id, updates, {
       new: true,
     });
-    console.log("updatedPracticeSession from server side put:", updatedPracticeSession)
+    console.log("updatedPracticeSession from server side put for updated practice session: ", updatedPracticeSession)
     res.status(200).json(updatedPracticeSession);
   } catch (err) {
     console.log("error: ", err);
@@ -87,7 +85,7 @@ router.delete("/practiceSession/:id", async (req,res) => {
   try {
     const id = req.params.id;
     console.log("Received delete request for ID: ", id);
-    await PracticePlansModel.findByIdAndRemove(id);
+    await PracticeSessionsModel.findByIdAndRemove(id);
     res.status(200).json({ message: "Practice Session deleted successfully" });
   } catch(err) {
     console.log("error:", err)

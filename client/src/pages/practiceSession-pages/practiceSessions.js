@@ -4,9 +4,17 @@ import { useGetUserID } from "../../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { format } from "date-fns";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { PracticeSessionList } from "../../components/practiceSession-components/PracticeSessionList";
 
 export const PracticeSessions = () => {
-  return <PracticeSessionList />;
+  return (
+    <Box
+      sx={{
+        width: "80%"
+      }}
+    >
+      <PracticeSessionList />;
+    </Box>
+  )
 };

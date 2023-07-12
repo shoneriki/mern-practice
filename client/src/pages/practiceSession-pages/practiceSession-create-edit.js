@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import { Box, Grid, Typography, InputLabel, TextField, Autocomplete } from "@mui/material";
+import { Box, Grid, Typography, InputLabel, TextField, Autocomplete, avatarGroupClasses } from "@mui/material";
 
 import  {PracticeSessionForm}  from "../../components/practiceSession-components/PracticeSessionForm";
 
@@ -102,33 +102,49 @@ export const PracticeSessionCreateEdit = (props) => {
     userOwner: Yup.string(),
   });
 
-  useEffect(() => {
-    const fetchEditData = async () => {
-      if (id) {
-        console.log("id in fetch", id);
-        try {
-          console.log(
-            "from inside try of fetchEditData from create-edit practicePlan page"
-          );
-          const response = await axios.get(
-            `http://localhost:3001/practiceSessions/practiceSession/${id}`
-          );
-          const practiceSessionData = response.data;
-          console.log("practiePlanData: ", practiceSessionData);
-          setPracticeSession(practiceSessionData);
+const [formValues, setFormValues] = useState(initialValues);
 
-          console.log("PIECE DATA? From fetch", practiceSessionData);
-        } catch (error) {
-          console.log("Inside the fetchEditData catch for practicePlan");
-          console.error(
-            "an error occurred while fetching the program: ",
-            error
-          );
-        }
+useEffect(() => {
+  const fetchEditData = async () => {
+    if (id) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/practiceSessions/practiceSession/${id}`
+        );
+        const practiceSessionData = response.data;
+
+        // Fetch the piece data
+        const pieceResponse = await axios.get(
+          `http://localhost:3001/pieces/piece/${practiceSessionData.piece}`,
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        const pieceData = pieceResponse.data;
+
+        setPracticeSession(practiceSessionData);
+        setSelectedPiece(pieceData); // Set the selected piece to the fetched piece data
+
+
+        setFormValues({
+          ...practiceSessionData,
+          piece: pieceData,
+          composer: pieceData.composer,
+          excerpts: pieceData.excerpts,
+          dateOfExecution: new Date(practiceSessionData.dateOfExecution),
+        });
+        console.log(
+          "formValues from useEffect inside if with id: ",
+          formValues
+        );
+      } catch (error) {
+        console.error("an error occurred while fetching the program: ", error);
       }
-    };
-    fetchEditData();
-  }, [id]);
+    }
+  };
+  fetchEditData();
+}, [id]);
+
 
   const handlePieceSearch = async (searchValue) => {
     if (searchValue) {
@@ -155,6 +171,7 @@ export const PracticeSessionCreateEdit = (props) => {
       const practiceSessionData = {
         ...values,
         piece: values.piece._id,
+        dateOfExecution: new Date(values.dateOfExecution),
       };
 
       if (id) {
@@ -226,7 +243,7 @@ export const PracticeSessionCreateEdit = (props) => {
       }}
     >
       <PracticeSessionForm
-        initialValues={initialValues}
+        initialValues={formValues}
         validationSchema={validationSchema}
         id={id}
         practiceSession={practiceSession}
