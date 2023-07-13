@@ -94,7 +94,7 @@ export const PracticeSessionList = () => {
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
       >
-        Practice Session
+        Practice Sessions
       </Typography>
       <Grid container spacing={3}>
         {practiceSessions.map((practiceSession, practiceSessionIndex) => {

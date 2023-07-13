@@ -21,6 +21,7 @@ export const PracticeSessionCreateEdit = (props) => {
   const [practiceSession, setPracticeSession] = useState({});
   const [selectedPiece, setSelectedPiece] = useState({});
   const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     console.log("selectedPiece updated", selectedPiece);
@@ -103,8 +104,10 @@ export const PracticeSessionCreateEdit = (props) => {
   });
 
 const [formValues, setFormValues] = useState(initialValues);
+const [dataLoaded, setDataLoaded] = useState(false);
 
 useEffect(() => {
+  setIsLoading(true)
   const fetchEditData = async () => {
     if (id) {
       try {
@@ -137,9 +140,14 @@ useEffect(() => {
           "formValues from useEffect inside if with id: ",
           formValues
         );
+        setIsLoading(false)
+        setDataLoaded(true)
       } catch (error) {
         console.error("an error occurred while fetching the program: ", error);
       }
+    } else {
+      setIsLoading(false)
+      setDataLoaded(true);
     }
   };
   fetchEditData();
@@ -228,7 +236,7 @@ useEffect(() => {
   }
 
 
-  if (practiceSession === null && id) {
+  if (isLoading || !dataLoaded) {
     return <section>Loading...</section>;
   }
 

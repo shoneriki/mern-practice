@@ -11,6 +11,7 @@ import {
   Radio,
   Checkbox,
   Button,
+  Typography,
 } from "@mui/material";
 
 // components/FormikDatePicker.tsx
@@ -49,8 +50,57 @@ export const PracticeSessionForm = ({
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              width: "100%",
+              margin: "2rem 0",
             }}
           >
+            <Field
+              name="name"
+              as={TextField}
+              label="Name of session"
+              sx={{ width: "100%" }}
+            />
+            <Box sx={{ width: "60%", margin: "1rem auto" }}>
+              <InputLabel sx={{ textAlign: "center" }}>
+                Total Session Length:
+              </InputLabel>
+              <Grid
+                container
+                sx={{ justifyContent: "center", margin: "auto 1rem" }}
+              >
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Field
+                      name="totalSessionLength.hours"
+                      as={TextField}
+                      type="number"
+                      label="hr"
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Field
+                      name="totalSessionLength.minutes"
+                      as={TextField}
+                      type="number"
+                      label="min"
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Field
+                      name="totalSessionLength.seconds"
+                      as={TextField}
+                      type="number"
+                      label="sec"
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+
             <Autocomplete
               id="autocomplete"
               value={selectedPiece || {}}
@@ -74,14 +124,15 @@ export const PracticeSessionForm = ({
                   const pieceData = response.data;
 
                   setFieldValue("length", pieceData.length);
-                  setFieldValue("excerpts", pieceData.excerpts);
                   setFieldValue("composer", pieceData.composer);
-                  setFieldValue("piece", pieceData._id)
+                  setFieldValue("piece", {
+                    _id: pieceData._id,
+                    excerpts: pieceData.excerpts,
+                  });
                 } else {
                   setFieldValue("length", "");
-                  setFieldValue("excerpts", []);
                   setFieldValue("composer", "");
-                  setFieldValue("piece", {})
+                  setFieldValue("piece", {});
                 }
               }}
               renderInput={(params) => (
@@ -111,7 +162,6 @@ export const PracticeSessionForm = ({
                         !isNaN(new Date(field.value))
                       );
 
-
                       form.setFieldValue(field.name, value);
                     }}
                     sx={{ width: "100%" }}
@@ -120,138 +170,164 @@ export const PracticeSessionForm = ({
                 </LocalizationProvider>
               )}
             </Field>
-            <Field
-              name="name"
-              as={TextField}
-              label="Name of session"
-              sx={{ width: "100%" }}
-            />
-            <InputLabel>Total Session Length:</InputLabel>
-            <Box>
-              <Grid container>
-                <Grid item xs={12} sm={4}>
-                  <Field
-                    name="totalSessionLength.hours"
-                    as={TextField}
-                    type="number"
-                    label="Hours"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Field
-                    name="totalSessionLength.minutes"
-                    as={TextField}
-                    type="number"
-                    label="Minutes"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Field
-                    name="totalSessionLength.seconds"
-                    as={TextField}
-                    type="number"
-                    label="Seconds"
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+
             <FieldArray name="excerpts">
               {({ push, remove }) => (
-                <Grid
-                  container
+                <Box
+                  id="excerpts-box"
                   sx={{
                     width: "100%",
                     display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    margin: "auto 1rem",
                   }}
-                  spacing={4}
                 >
-                  {values.excerpts.map((excerpt, excerptIndex) => (
-                    <Grid item xs={12} sm={4} key={excerptIndex} sx={{}}>
-                      <Grid item xs={12}>
-                        <Field
-                          name={`excerpts.${excerptIndex}.location`}
-                          as={TextField}
-                          label="location"
-                          sx={{ width: "100%" }}
-                        />
-                        <Field
-                          name={`excerpts.${excerptIndex}.notes`}
-                          as={TextField}
-                          multiline
-                          label="notes"
-                          sx={{ width: "100%" }}
-                        />
-                        <Field
-                          name={`excerpts.${excerptIndex}.repetitions`}
-                          type="number"
-                          as={TextField}
-                          label="Repetitions"
-                          sx={{ width: "100%" }}
-                        />
-                        <FieldArray
-                          name={`excerpts.${excerptIndex}.timeToSpend`}
+                  <Grid container id="grid-outside-excerpts">
+                    {values.piece.excerpts.map((excerpt, excerptIndex) => (
+                      <Grid item xs={12} sm={4} key={excerptIndex}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            margin: "1rem auto",
+                            width: "100%",
+                          }}
                         >
-                          {() => (
-                            <Box name="timeToSpend-box">
-                              <InputLabel>Time to Spend:</InputLabel>
-                              <Grid container>
-                                <Grid item xs={12} sm={4}>
-                                  <Field
-                                    name={`excerpts.${excerptIndex}.timeToSpend.hours`}
-                                    as={TextField}
-                                    type="number"
-                                    label="hours"
-                                    fullWidth
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                  <Field
-                                    name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
-                                    as={TextField}
-                                    type="number"
-                                    label="minutes"
-                                    fullWidth
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                  <Field
-                                    name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
-                                    as={TextField}
-                                    type="number"
-                                    label="seconds"
-                                    fullWidth
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Box>
-                          )}
-                        </FieldArray>
-
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => remove(excerptIndex)}
-                        >
-                          Remove excerpt
-                        </Button>
+                          <Grid item xs={12} sm={6} key={excerptIndex} sx={{}}>
+                            <Grid item xs={12}>
+                              <Typography
+                                variant={"h6"}
+                                sx={{ textAlign: "center" }}
+                              >
+                                Excerpt {excerptIndex + 1}:
+                              </Typography>
+                              <Field
+                                name={`piece.excerpts.${excerptIndex}.location`}
+                                as={TextField}
+                                multiline
+                                label="location"
+                                sx={{ width: "100%" }}
+                              />
+                              <Field
+                                name={`piece.excerpts.${excerptIndex}.notes`}
+                                as={TextField}
+                                multiline
+                                label="notes"
+                                sx={{ width: "100%" }}
+                              />
+                              <Field
+                                name={`piece.excerpts.${excerptIndex}.repetitions`}
+                                type="number"
+                                as={TextField}
+                                label="Repetitions"
+                                sx={{ width: "100%" }}
+                              />
+                              <FieldArray
+                                name={`piece.excerpts.${excerptIndex}.timeToSpend`}
+                              >
+                                {() => (
+                                  <Box
+                                    name="timeToSpend-box"
+                                    sx={{
+                                      width: "100%",
+                                      margin: "1rem auto",
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <InputLabel>Time to Spend:</InputLabel>
+                                    <Grid container>
+                                      <Grid item xs={12} md={4}>
+                                        <Field
+                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.hours`}
+                                          as={TextField}
+                                          type="number"
+                                          label="hr"
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} md={4}>
+                                        <Field
+                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.minutes`}
+                                          as={TextField}
+                                          type="number"
+                                          label="min"
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12} md={4}>
+                                        <Field
+                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.seconds`}
+                                          as={TextField}
+                                          type="number"
+                                          label="sec"
+                                          fullWidth
+                                        />
+                                      </Grid>
+                                    </Grid>
+                                  </Box>
+                                )}
+                              </FieldArray>
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Button
+                                  variant="contained"
+                                  color="error"
+                                  onClick={() => remove(excerptIndex)}
+                                  sx={{ margin: "1rem 0" }}
+                                >
+                                  Remove excerpt
+                                </Button>
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        </Box>
                       </Grid>
-                    </Grid>
-                  ))}
-                  <Grid item xs={12}>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => push({ excerpt: "", repetitions: 0 })}
+                    ))}
+                    <Grid
+                      item
+                      xs={12}
+                      style={{ display: "flex", justifyContent: "center" }}
                     >
-                      Add excerpt
-                    </Button>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={() =>
+                          push({
+                            location: "",
+                            notes: "",
+                            repetitions: 0,
+                            timeToSpend: { hours: 0, minutes: 0, seconds: 0 },
+                          })
+                        }
+                        sx={{ margin: "1rem 0" }}
+                      >
+                        Add excerpt
+                      </Button>
+                    </Grid>
+
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "2rem 0",
+                      }}
+                    >
+                      <Button type="submit" variant="contained" color="success">
+                        Submit
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="success">
-                      Submit
-                    </Button>
-                  </Grid>
-                </Grid>
+                </Box>
               )}
             </FieldArray>
           </Box>
