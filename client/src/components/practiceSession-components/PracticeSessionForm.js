@@ -124,12 +124,13 @@ export const PracticeSessionForm = ({
                   const pieceData = response.data;
 
                   setFieldValue("length", pieceData.length);
-                  setFieldValue("excerpts", pieceData.excerpts);
                   setFieldValue("composer", pieceData.composer);
-                  setFieldValue("piece", pieceData._id);
+                  setFieldValue("piece", {
+                    _id: pieceData._id,
+                    excerpts: pieceData.excerpts,
+                  });
                 } else {
                   setFieldValue("length", "");
-                  setFieldValue("excerpts", []);
                   setFieldValue("composer", "");
                   setFieldValue("piece", {});
                 }
@@ -183,7 +184,7 @@ export const PracticeSessionForm = ({
                   }}
                 >
                   <Grid container id="grid-outside-excerpts">
-                    {values.excerpts.map((excerpt, excerptIndex) => (
+                    {values.piece.excerpts.map((excerpt, excerptIndex) => (
                       <Grid item xs={12} sm={4} key={excerptIndex}>
                         <Box
                           sx={{
@@ -202,28 +203,28 @@ export const PracticeSessionForm = ({
                                 Excerpt {excerptIndex + 1}:
                               </Typography>
                               <Field
-                                name={`excerpts.${excerptIndex}.location`}
+                                name={`piece.excerpts.${excerptIndex}.location`}
                                 as={TextField}
                                 multiline
                                 label="location"
                                 sx={{ width: "100%" }}
                               />
                               <Field
-                                name={`excerpts.${excerptIndex}.notes`}
+                                name={`piece.excerpts.${excerptIndex}.notes`}
                                 as={TextField}
                                 multiline
                                 label="notes"
                                 sx={{ width: "100%" }}
                               />
                               <Field
-                                name={`excerpts.${excerptIndex}.repetitions`}
+                                name={`piece.excerpts.${excerptIndex}.repetitions`}
                                 type="number"
                                 as={TextField}
                                 label="Repetitions"
                                 sx={{ width: "100%" }}
                               />
                               <FieldArray
-                                name={`excerpts.${excerptIndex}.timeToSpend`}
+                                name={`piece.excerpts.${excerptIndex}.timeToSpend`}
                               >
                                 {() => (
                                   <Box
@@ -240,7 +241,7 @@ export const PracticeSessionForm = ({
                                     <Grid container>
                                       <Grid item xs={12} md={4}>
                                         <Field
-                                          name={`excerpts.${excerptIndex}.timeToSpend.hours`}
+                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.hours`}
                                           as={TextField}
                                           type="number"
                                           label="hr"
@@ -249,7 +250,7 @@ export const PracticeSessionForm = ({
                                       </Grid>
                                       <Grid item xs={12} md={4}>
                                         <Field
-                                          name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
+                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.minutes`}
                                           as={TextField}
                                           type="number"
                                           label="min"
@@ -258,7 +259,7 @@ export const PracticeSessionForm = ({
                                       </Grid>
                                       <Grid item xs={12} md={4}>
                                         <Field
-                                          name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
+                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.seconds`}
                                           as={TextField}
                                           type="number"
                                           label="sec"

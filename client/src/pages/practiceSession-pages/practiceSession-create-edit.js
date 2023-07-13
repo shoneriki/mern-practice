@@ -247,7 +247,7 @@ useEffect(() => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: "50%",
+        width: "80%",
       }}
     >
       <PracticeSessionForm
