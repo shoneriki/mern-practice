@@ -299,7 +299,14 @@ export const PracticeSessionForm = ({
                       <Button
                         color="primary"
                         variant="contained"
-                        onClick={() => push({ excerpt: "", repetitions: 0 })}
+                        onClick={() =>
+                          push({
+                            location: "",
+                            notes: "",
+                            repetitions: 0,
+                            timeToSpend: { hours: 0, minutes: 0, seconds: 0 },
+                          })
+                        }
                         sx={{ margin: "1rem 0" }}
                       >
                         Add excerpt
