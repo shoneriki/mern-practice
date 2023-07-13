@@ -51,6 +51,12 @@ export const PracticeSessionForm = ({
               alignItems: "center",
             }}
           >
+            <Field
+              name="name"
+              as={TextField}
+              label="Name of session"
+              sx={{ width: "100%" }}
+            />
             <Autocomplete
               id="autocomplete"
               value={selectedPiece || {}}
@@ -76,12 +82,12 @@ export const PracticeSessionForm = ({
                   setFieldValue("length", pieceData.length);
                   setFieldValue("excerpts", pieceData.excerpts);
                   setFieldValue("composer", pieceData.composer);
-                  setFieldValue("piece", pieceData._id)
+                  setFieldValue("piece", pieceData._id);
                 } else {
                   setFieldValue("length", "");
                   setFieldValue("excerpts", []);
                   setFieldValue("composer", "");
-                  setFieldValue("piece", {})
+                  setFieldValue("piece", {});
                 }
               }}
               renderInput={(params) => (
@@ -111,7 +117,6 @@ export const PracticeSessionForm = ({
                         !isNaN(new Date(field.value))
                       );
 
-
                       form.setFieldValue(field.name, value);
                     }}
                     sx={{ width: "100%" }}
@@ -120,12 +125,6 @@ export const PracticeSessionForm = ({
                 </LocalizationProvider>
               )}
             </Field>
-            <Field
-              name="name"
-              as={TextField}
-              label="Name of session"
-              sx={{ width: "100%" }}
-            />
             <InputLabel>Total Session Length:</InputLabel>
             <Box>
               <Grid container>

@@ -14,7 +14,6 @@ const practiceSessionSchema = new mongoose.Schema(
     piece: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Pieces",
-      required: true,
     },
     excerpts: [
       {
