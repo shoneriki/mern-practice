@@ -94,7 +94,7 @@ export const PracticeSessionList = () => {
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
       >
-        Impending Practice Sessions
+        Practice Session
       </Typography>
       <Grid container spacing={3}>
         {practiceSessions.map((practiceSession, practiceSessionIndex) => {
@@ -102,7 +102,7 @@ export const PracticeSessionList = () => {
             <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
               <Box sx={{ border: "1px solid black", padding: "1rem" }}>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  Session name: {practiceSession.name}
+                  Title: {practiceSession.name}
                 </Typography>
                 <Box
                   sx={{
@@ -121,26 +121,26 @@ export const PracticeSessionList = () => {
                         {practiceSession.piece.composer}
                       </Typography>
                     </Grid>
-                    <Grid item sx={12}>
+                    <Box sx={{width: "60%"}}>
                       <Typography variant={"h6"}>Length of Piece:</Typography>
-                    </Grid>
-                    <Grid container >
-                      <Grid item sx={12} sm={4}>
-                        <Typography>
-                          {practiceSession.piece.length.hours}
-                        </Typography>
+                      <Grid container sx={{width: "50%"}} >
+                        <Grid item sx={4} sm={4}>
+                          <Typography>
+                            {practiceSession.piece.length.hours} hr
+                          </Typography>
+                        </Grid>
+                        <Grid item sx={4} sm={4}>
+                          <Typography>
+                            {practiceSession.piece.length.minutes} min
+                          </Typography>
+                        </Grid>
+                        <Grid item sx={4} sm={4}>
+                          <Typography>
+                            {practiceSession.piece.length.seconds} sec
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item sx={12} sm={4}>
-                        <Typography>
-                          {practiceSession.piece.length.minutes}
-                        </Typography>
-                      </Grid>
-                      <Grid item sx={12} sm={4}>
-                        <Typography>
-                          {practiceSession.piece.length.seconds}
-                        </Typography>
-                      </Grid>
-                    </Grid>
+                    </Box>
                   </Grid>
                 </Box>
 
