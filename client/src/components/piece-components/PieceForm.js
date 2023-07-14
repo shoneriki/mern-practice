@@ -271,6 +271,17 @@ export const PieceForm = ({
                                       </Typography>
                                       <Grid item xs={12} key={tempoIndex}>
                                         <Field
+                                          name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
+                                        >
+                                          {({ field }) => (
+                                            <TextField
+                                              {...field}
+                                              label="Notes"
+                                              fullWidth
+                                            />
+                                          )}
+                                        </Field>
+                                        <Field
                                           name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.bpm`}
                                         >
                                           {({ field }) => (
@@ -282,17 +293,7 @@ export const PieceForm = ({
                                             />
                                           )}
                                         </Field>
-                                        <Field
-                                          name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
-                                        >
-                                          {({ field }) => (
-                                            <TextField
-                                              {...field}
-                                              label="Notes"
-                                              fullWidth
-                                            />
-                                          )}
-                                        </Field>
+
                                         <Button
                                           variant="contained"
                                           color="error"
@@ -349,11 +350,12 @@ export const PieceForm = ({
                           </Button>
                         </Grid>
                       ))}
-                      <Box  sx={{
+                      <Box
+                        sx={{
                           width: "100%",
                           display: "flex",
                           justifyContent: "center",
-                          margin: "1rem 0"
+                          margin: "1rem 0",
                         }}
                       >
                         <Grid item xs={12} sm={4}>
@@ -406,7 +408,12 @@ export const PieceForm = ({
                       />
                     )}
                   />
-                  <Button type="submit" variant="contained" color="primary" sx={{width: "60%"}}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: "60%" }}
+                  >
                     Submit
                   </Button>
                 </Box>
