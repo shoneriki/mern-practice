@@ -210,17 +210,72 @@ export const PracticeSessionForm = ({
                                   label="Repetitions"
                                   sx={{ width: "100%" }}
                                 />
-                                <Grid container name="tempi-grid" centered>
-                                  {excerpt.tempi?.map((tempo, tempoIndex) => (
-                                    <Grid item sx={12} key={tempoIndex}>
-                                      <InputLabel>
-                                        Tempo Info {tempoIndex + 1}:
-                                      </InputLabel>
-                                      <Typography>{tempo.notes}</Typography>
-                                      <Typography>{tempo.bpm}</Typography>
-                                    </Grid>
-                                  ))}
-                                </Grid>
+                                <FieldArray
+                                  name={`piece.excerpts.${excerptIndex}.tempi`}
+                                >
+                                  {({ push, remove }) => (
+                                    <Box
+                                      id="tempi-box"
+                                      sx={{
+                                        width: "100%",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        margin: "2rem auto",
+                                      }}
+                                    >
+                                      <Grid container id="grid-outside-tempi">
+                                        {excerpt.tempi?.map(
+                                          (tempo, tempoIndex) => (
+                                            <Grid item sx={12} key={tempoIndex}>
+                                              <InputLabel>
+                                                Tempo Info {tempoIndex + 1}:
+                                              </InputLabel>
+                                              <Field
+                                                name={`piece.excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
+                                                type="text"
+                                                as={TextField}
+                                                label="notes"
+                                                multiline
+                                              />
+                                              <Field
+                                                name={`piece.excerpts.${excerptIndex}.tempi.${tempoIndex}.bpm`}
+                                                type="number"
+                                                as={TextField}
+                                                label="bpm"
+                                                multiline
+                                              />
+                                              <Button
+                                                variant="contained"
+                                                color="warning"
+                                                onClick={() =>
+                                                  remove(tempoIndex)
+                                                }
+                                              >
+                                                Remove Tempo
+                                              </Button>
+
+                                            </Grid>
+                                          )
+                                        )}
+                                      <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={() =>
+                                          push({
+                                            notes: "",
+                                            bpm: 60,
+                                          })
+                                        }
+                                        sx={{ margin: "1rem 0" }}
+                                      >
+                                        Add Tempo
+                                      </Button>
+                                      </Grid>
+                                    </Box>
+                                  )}
+                                </FieldArray>
+
                                 <FieldArray
                                   name={`piece.excerpts.${excerptIndex}.timeToSpend`}
                                 >
