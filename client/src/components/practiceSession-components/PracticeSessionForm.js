@@ -61,46 +61,6 @@ export const PracticeSessionForm = ({
               label="Name of session"
               sx={{ width: "100%" }}
             />
-            <Box sx={{ width: "60%", margin: "1rem auto" }}>
-              <InputLabel sx={{ textAlign: "center" }}>
-                Total Session Length:
-              </InputLabel>
-              <Grid
-                container
-                sx={{ justifyContent: "center", margin: "auto 1rem" }}
-              >
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Field
-                      name="totalSessionLength.hours"
-                      as={TextField}
-                      type="number"
-                      label="hr"
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Field
-                      name="totalSessionLength.minutes"
-                      as={TextField}
-                      type="number"
-                      label="min"
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Field
-                      name="totalSessionLength.seconds"
-                      as={TextField}
-                      type="number"
-                      label="sec"
-                    />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
 
             <Autocomplete
               id="autocomplete"
@@ -148,6 +108,47 @@ export const PracticeSessionForm = ({
                 </LocalizationProvider>
               )}
             </Field>
+
+            <Box sx={{ width: "60%", margin: "1rem auto" }}>
+              <InputLabel sx={{ textAlign: "center" }}>
+                Total Session Length:
+              </InputLabel>
+              <Grid
+                container
+                sx={{ justifyContent: "center", margin: "auto 1rem" }}
+              >
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Field
+                      name="totalSessionLength.hours"
+                      as={TextField}
+                      type="number"
+                      label="hr"
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Field
+                      name="totalSessionLength.minutes"
+                      as={TextField}
+                      type="number"
+                      label="min"
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Field
+                      name="totalSessionLength.seconds"
+                      as={TextField}
+                      type="number"
+                      label="sec"
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
 
             <FieldArray name="piece.excerpts">
               {({ push, remove }) => (
@@ -212,7 +213,9 @@ export const PracticeSessionForm = ({
                                 <Grid container name="tempi-grid" centered>
                                   {excerpt.tempi?.map((tempo, tempoIndex) => (
                                     <Grid item sx={12} key={tempoIndex}>
-                                      <InputLabel>Tempo Info {tempoIndex + 1}:</InputLabel>
+                                      <InputLabel>
+                                        Tempo Info {tempoIndex + 1}:
+                                      </InputLabel>
                                       <Typography>{tempo.notes}</Typography>
                                       <Typography>{tempo.bpm}</Typography>
                                     </Grid>
