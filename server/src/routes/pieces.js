@@ -18,7 +18,6 @@ router.get("/suggestions", async (req, res) => {
     })
 
     res.json(pieces);
-    console.log("all pieces related to search", pieces)
   } catch (error) {
     console.error("Error while fetching piece suggestions:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -72,6 +71,7 @@ router.post("/", async (req, res) => {
 router.put(`/piece/:id`, async (req, res) => {
   try {
     const id = req.params.id;
+    console.log("req.body from put request in piece router", req.body )
     const updates = req.body;
     const updatedPiece = await PiecesModel.findByIdAndUpdate(id, updates, {
       new: true,

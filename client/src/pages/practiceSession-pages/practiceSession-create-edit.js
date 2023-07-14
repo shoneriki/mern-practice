@@ -36,26 +36,6 @@ export const PracticeSessionCreateEdit = (props) => {
       seconds: 0,
     },
     piece: selectedPiece,
-    excerpts: [
-      {
-        location: "",
-        repetitions: 1,
-        timeToSpend: {
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        },
-        tempi: [
-          {
-            notes: "",
-            bpm: 60,
-          },
-        ],
-        mastered: false,
-        untilDate: new Date(),
-        notes: "",
-      },
-    ],
     runThrough: false,
     pieceLength: {
       hours: 0,
@@ -74,26 +54,6 @@ export const PracticeSessionCreateEdit = (props) => {
       seconds: Yup.number().min(0).max(59),
     }),
     piece: Yup.object().nullable(),
-    excerpts: Yup.array(
-      Yup.object({
-        location: Yup.string(),
-        notes: Yup.string(),
-        repetitions: Yup.number().min(1).max(100),
-        timeToSpend: Yup.object({
-          hours: Yup.number().min(0).max(10),
-          minutes: Yup.number().min(0).max(59),
-          seconds: Yup.number().min(0).max(59),
-        }),
-        tempi: Yup.array(
-          Yup.object({
-            notes: Yup.string(),
-            bpm: Yup.number().min(10).max(300),
-          })
-        ),
-        mastered: Yup.boolean(),
-        untilDate: Yup.date(),
-      })
-    ),
     runThrough: Yup.boolean(),
     runThroughLength: Yup.object({
       hours: Yup.number().min(0).max(10),
@@ -257,12 +217,21 @@ useEffect(() => {
         console.log("inside the else... for submitting");
         await axios.post(
           `http://localhost:3001/practiceSessions`,
-          practiceSessionData ,
+          practiceSessionData,
           {
             headers: { authorization: cookies.access_token },
           }
         );
-        alert("Practice Session created");
+        alert("practiceSession created")
+        // Update the piece information whether it's a new practice session or an update
+        await axios.put(
+          `http://localhost:3001/pieces/piece/${values.piece._id}`,
+          { ...values.piece },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+
         navigate("/practiceSessions");
       }
     } catch (error) {

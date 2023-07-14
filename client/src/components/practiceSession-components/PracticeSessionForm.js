@@ -149,7 +149,7 @@ export const PracticeSessionForm = ({
               )}
             </Field>
 
-            <FieldArray name="excerpts">
+            <FieldArray name="piece.excerpts">
               {({ push, remove }) => (
                 <Box
                   id="excerpts-box"

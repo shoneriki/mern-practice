@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { PracticeSessionsModel } from "../models/PracticeSessions.js";
+import { PiecesModel } from "../models/Pieces.js";
 import { UserModel } from "../models/Users.js";
 // import { verifyToken } from "../controllers/UserController.js";
 
@@ -44,8 +45,8 @@ router.post("/", async (req, res) => {
     ...req.body,
   });
 
-  const piece = await Piecesmodel.findById(req.body.piece._id);
-  piece.excerpts = req.body.pieces.excerpts;
+  const piece = await PiecesModel.findById(req.body.piece._id);
+  piece.excerpts = req.body.piece.excerpts;
   await piece.save
 
   try {
@@ -75,10 +76,10 @@ router.put(`/practiceSession/:id`, async (req, res) => {
   const id = req.params.id;
   const updates = req.body;
 
-  const piece = awaitPiecesModel.findById(req.body.piece._id);
+  const piece = await PiecesModel.findById(req.body.piece._id);
   piece.excerpts = req.body.piece.excerpts;
   await piece.save();
-  
+
   try {
     const updatedPracticeSession =
       await PracticeSessionsModel.findByIdAndUpdate(id, updates, {
