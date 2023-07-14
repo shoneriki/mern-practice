@@ -7,7 +7,7 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
-//get specific practicePlan
+//get specific practice session
 router.get(`/practiceSession/:id`, async (req, res) => {
   try {
     const id = req.params.id;
@@ -32,6 +32,7 @@ router.get("/user/:userID", async (req, res) => {
     // populate the piece field
 
     res.json(result);
+    console.log("all practice sessions", result )
   } catch (err) {
     res.json(err);
   }

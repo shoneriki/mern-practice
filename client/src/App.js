@@ -56,6 +56,7 @@ function App() {
           <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
 
           <Route path="/workspace" element={<Workspace />} />
+          <Route path="/workspace/:id" element={<Workspace />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Router>

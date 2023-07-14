@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 
 import {
@@ -19,6 +19,8 @@ export const PracticeSessionList = () => {
   const userID = useGetUserID();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const [practiceSessions, setPracticeSessions] = useState([]);
 
@@ -98,6 +100,7 @@ export const PracticeSessionList = () => {
       </Typography>
       <Grid container spacing={3}>
         {practiceSessions.map((practiceSession, practiceSessionIndex) => {
+
           return (
             <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
               <Box sx={{ border: "1px solid black", padding: "1rem" }}>
@@ -107,7 +110,7 @@ export const PracticeSessionList = () => {
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "column"
+                    flexDirection: "column",
                   }}
                 >
                   <Grid id="piece" container>
@@ -121,23 +124,31 @@ export const PracticeSessionList = () => {
                         {practiceSession.piece.composer}
                       </Typography>
                     </Grid>
-                    <Box sx={{width: "60%"}}>
+                    <Box sx={{ width: "60%" }}>
                       <Typography variant={"h6"}>Length of Piece:</Typography>
-                      <Grid container sx={{width: "50%"}} >
+                      <Grid container sx={{ width: "50%" }}>
                         <Grid item sx={4} sm={4}>
                           <Typography>
-                            {practiceSession.piece.length.hours > 0 ? practiceSession.piece.length.hours : 0}
-                              hr
+                            {practiceSession.piece.length.hours > 0
+                              ? practiceSession.piece.length.hours
+                              : 0}
+                            hr
                           </Typography>
                         </Grid>
                         <Grid item sx={4} sm={4}>
                           <Typography>
-                            {practiceSession.piece.length.minutes > 0 ? practiceSession.piece.length.minutes : 0} min
+                            {practiceSession.piece.length.minutes > 0
+                              ? practiceSession.piece.length.minutes
+                              : 0}{" "}
+                            min
                           </Typography>
                         </Grid>
                         <Grid item sx={4} sm={4}>
                           <Typography>
-                            {practiceSession.piece.length.seconds > 0 ? practiceSession.piece.length.seconds : 0} sec
+                            {practiceSession.piece.length.seconds > 0
+                              ? practiceSession.piece.length.seconds
+                              : 0}
+                            sec
                           </Typography>
                         </Grid>
                       </Grid>
@@ -160,6 +171,15 @@ export const PracticeSessionList = () => {
                     onClick={() => handleEdit(practiceSession._id)}
                   >
                     Edit?
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    onClick={() =>
+                      navigate(`/workspace/${practiceSession._id}`)
+                    }
+                  >
+                    Go to Workspace
                   </Button>
                   <Button
                     name="delete-btn"
