@@ -153,6 +153,10 @@ useEffect(() => {
   fetchEditData();
 }, [id]);
 
+useEffect(() => {
+  console.log("Updated formValues: ", formValues);
+}, [formValues])
+
 
   const handlePieceSearch = async (searchValue) => {
     if (searchValue) {
@@ -172,8 +176,8 @@ useEffect(() => {
     setSelectedPiece(value);
   };
 
-  const handleAutocompleteChange = (setFieldValue) =>
-    async (event, newValue) => {
+  const handleAutocompleteChange =
+    (setFieldValue) => async (event, newValue) => {
       handlePieceSelection(event, newValue);
       if (newValue) {
         const response = await axios.get(
@@ -192,12 +196,32 @@ useEffect(() => {
           _id: pieceData._id,
           excerpts: pieceData.excerpts,
         });
+
+        // Update the formValues state
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          length: pieceData.length,
+          composer: pieceData.composer,
+          piece: {
+            _id: pieceData._id,
+            excerpts: pieceData.excerpts,
+          },
+        }));
       } else {
         setFieldValue("length", "");
         setFieldValue("composer", "");
         setFieldValue("piece", {});
+
+        // Update the formValues state
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          length: "",
+          composer: "",
+          piece: {},
+        }));
       }
     };
+
 
   // submitting the practiceSession form; new or edited
   const onSubmit= async (values, { setSubmitting }) => {

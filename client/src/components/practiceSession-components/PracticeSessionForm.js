@@ -26,7 +26,7 @@ export const PracticeSessionForm = ({
   initialValues,
   validationSchema,
   id,
-  practicePlan,
+  practiceSession,
   cookies,
   navigate,
   selectedPiece,
@@ -162,131 +162,130 @@ export const PracticeSessionForm = ({
                   }}
                 >
                   <Grid container id="grid-outside-excerpts">
-                    {values.excerpts.map((excerpt, excerptIndex) => (
-                      <Grid item xs={12} sm={4} key={excerptIndex}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            margin: "1rem auto",
-                            width: "100%",
-                          }}
-                        >
-                          <Grid item xs={12} sm={6} key={excerptIndex} sx={{}}>
-                            <Grid item xs={12}>
-                              <Typography
-                                variant={"h6"}
-                                sx={{ textAlign: "center" }}
-                              >
-                                Excerpt {excerptIndex + 1}:
-                              </Typography>
-                              <Field
-                                name={`piece.excerpts.${excerptIndex}.location`}
-                                as={TextField}
-                                multiline
-                                label="location"
-                                sx={{ width: "100%" }}
-                              />
-                              <Field
-                                name={`piece.excerpts.${excerptIndex}.notes`}
-                                as={TextField}
-                                multiline
-                                label="notes"
-                                sx={{ width: "100%" }}
-                              />
-                              <Field
-                                name={`piece.excerpts.${excerptIndex}.repetitions`}
-                                type="number"
-                                as={TextField}
-                                label="Repetitions"
-                                sx={{ width: "100%" }}
-                              />
-                              <Grid container
-                                name="tempi-grid"
-                                centered
-                              >
-                                {values.excerpts[excerptIndex].tempi.map(
-                                  (tempo, tempoIndex) => (
-                                    <Grid item sx={12} key={tempoIndex}>
-                                      <InputLabel>Tempo Info:</InputLabel>
-                                      <Typography>
-                                        {tempo.notes}
-                                      </Typography>
-                                      <Typography>
-                                        {tempo.bpm}
-                                      </Typography>
-                                    </Grid>
-                                  )
-                                )}
-                              </Grid>
-                              <FieldArray
-                                name={`piece.excerpts.${excerptIndex}.timeToSpend`}
-                              >
-                                {() => (
-                                  <Box
-                                    name="timeToSpend-box"
-                                    sx={{
-                                      width: "100%",
-                                      margin: "1rem auto",
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <InputLabel>Time to Spend:</InputLabel>
-                                    <Grid container>
-                                      <Grid item xs={12} md={4}>
-                                        <Field
-                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.hours`}
-                                          as={TextField}
-                                          type="number"
-                                          label="hr"
-                                          fullWidth
-                                        />
-                                      </Grid>
-                                      <Grid item xs={12} md={4}>
-                                        <Field
-                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.minutes`}
-                                          as={TextField}
-                                          type="number"
-                                          label="min"
-                                          fullWidth
-                                        />
-                                      </Grid>
-                                      <Grid item xs={12} md={4}>
-                                        <Field
-                                          name={`piece.excerpts.${excerptIndex}.timeToSpend.seconds`}
-                                          as={TextField}
-                                          type="number"
-                                          label="sec"
-                                          fullWidth
-                                        />
-                                      </Grid>
-                                    </Grid>
-                                  </Box>
-                                )}
-                              </FieldArray>
-                              <Box
-                                sx={{
-                                  width: "100%",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <Button
-                                  variant="contained"
-                                  color="error"
-                                  onClick={() => remove(excerptIndex)}
-                                  sx={{ margin: "1rem 0" }}
+                    {values.piece &&
+                      values.piece.excerpts &&
+                      values.piece.excerpts.map((excerpt, excerptIndex) => (
+                        <Grid item xs={12} sm={4} key={excerptIndex}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              margin: "1rem auto",
+                              width: "100%",
+                            }}
+                          >
+                            <Grid
+                              item
+                              xs={12}
+                              sm={6}
+                              key={excerptIndex}
+                              sx={{}}
+                            >
+                              <Grid item xs={12}>
+                                <Typography
+                                  variant={"h6"}
+                                  sx={{ textAlign: "center" }}
                                 >
-                                  Remove excerpt
-                                </Button>
-                              </Box>
+                                  Excerpt {excerptIndex + 1}:
+                                </Typography>
+                                <Field
+                                  name={`piece.excerpts.${excerptIndex}.location`}
+                                  as={TextField}
+                                  multiline
+                                  label="location"
+                                  sx={{ width: "100%" }}
+                                />
+                                <Field
+                                  name={`piece.excerpts.${excerptIndex}.notes`}
+                                  as={TextField}
+                                  multiline
+                                  label="notes"
+                                  sx={{ width: "100%" }}
+                                />
+                                <Field
+                                  name={`piece.excerpts.${excerptIndex}.repetitions`}
+                                  type="number"
+                                  as={TextField}
+                                  label="Repetitions"
+                                  sx={{ width: "100%" }}
+                                />
+                                <Grid container name="tempi-grid" centered>
+                                  {excerpt.tempi?.map((tempo, tempoIndex) => (
+                                    <Grid item sx={12} key={tempoIndex}>
+                                      <InputLabel>Tempo Info {tempoIndex + 1}:</InputLabel>
+                                      <Typography>{tempo.notes}</Typography>
+                                      <Typography>{tempo.bpm}</Typography>
+                                    </Grid>
+                                  ))}
+                                </Grid>
+                                <FieldArray
+                                  name={`piece.excerpts.${excerptIndex}.timeToSpend`}
+                                >
+                                  {() => (
+                                    <Box
+                                      name="timeToSpend-box"
+                                      sx={{
+                                        width: "100%",
+                                        margin: "1rem auto",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <InputLabel>Time to Spend:</InputLabel>
+                                      <Grid container>
+                                        <Grid item xs={12} md={4}>
+                                          <Field
+                                            name={`piece.excerpts.${excerptIndex}.timeToSpend.hours`}
+                                            as={TextField}
+                                            type="number"
+                                            label="hr"
+                                            fullWidth
+                                          />
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                          <Field
+                                            name={`piece.excerpts.${excerptIndex}.timeToSpend.minutes`}
+                                            as={TextField}
+                                            type="number"
+                                            label="min"
+                                            fullWidth
+                                          />
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                          <Field
+                                            name={`piece.excerpts.${excerptIndex}.timeToSpend.seconds`}
+                                            as={TextField}
+                                            type="number"
+                                            label="sec"
+                                            fullWidth
+                                          />
+                                        </Grid>
+                                      </Grid>
+                                    </Box>
+                                  )}
+                                </FieldArray>
+                                <Box
+                                  sx={{
+                                    width: "100%",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Button
+                                    variant="contained"
+                                    color="error"
+                                    onClick={() => remove(excerptIndex)}
+                                    sx={{ margin: "1rem 0" }}
+                                  >
+                                    Remove excerpt
+                                  </Button>
+                                </Box>
+                              </Grid>
                             </Grid>
-                          </Grid>
-                        </Box>
-                      </Grid>
-                    ))}
+                          </Box>
+                        </Grid>
+                      ))}
                     <Grid
                       item
                       xs={12}
