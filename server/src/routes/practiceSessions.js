@@ -44,10 +44,13 @@ router.post("/", async (req, res) => {
     ...req.body,
   });
 
+  const piece = await Piecesmodel.findById(req.body.piece._id);
+  piece.excerpts = req.body.pieces.excerpts;
+  await piece.save
+
   try {
     const savedPracticeSession = await practiceSession.save();
     res.status(201).json(savedPracticeSession);
-    console.log("SUBMITTED... YAY!");
   } catch (err) {
     console.log("oh no, something is wrong");
     console.log(err);
@@ -69,13 +72,19 @@ router.get("/single/:id", async (req, res) => {
 
 //edit a practice plan
 router.put(`/practiceSession/:id`, async (req, res) => {
+  const id = req.params.id;
+  const updates = req.body;
+
+  const piece = awaitPiecesModel.findById(req.body.piece._id);
+  piece.excerpts = req.body.piece.excerpts;
+  await piece.save();
+  
   try {
-    const id = req.params.id;
-    const updates = req.body;
     const updatedPracticeSession =
       await PracticeSessionsModel.findByIdAndUpdate(id, updates, {
         new: true,
       });
+
     console.log(
       "updatedPracticeSession from server side put for updated practice session: ",
       updatedPracticeSession

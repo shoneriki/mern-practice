@@ -34,6 +34,7 @@ export const PracticeSessionForm = ({
   handlePieceSearch,
   handlePieceSelection,
   onSubmit,
+  handleAutocompleteChange,
 }) => {
   return (
     <Formik
@@ -111,30 +112,7 @@ export const PracticeSessionForm = ({
               getOptionLabel={(option) => option.name || ""}
               isOptionEqualToValue={(option, value) => option._id === value._id}
               onInputChange={(event, value) => handlePieceSearch(value)}
-              onChange={async (event, newValue) => {
-                handlePieceSelection(event, newValue);
-                if (newValue) {
-                  const response = await axios.get(
-                    `http://localhost:3001/pieces/piece/${newValue._id}`,
-                    {
-                      headers: { authorization: cookies.access_token },
-                    }
-                  );
-
-                  const pieceData = response.data;
-
-                  setFieldValue("length", pieceData.length);
-                  setFieldValue("composer", pieceData.composer);
-                  setFieldValue("piece", {
-                    _id: pieceData._id,
-                    excerpts: pieceData.excerpts,
-                  });
-                } else {
-                  setFieldValue("length", "");
-                  setFieldValue("composer", "");
-                  setFieldValue("piece", {});
-                }
-              }}
+              onChange={handleAutocompleteChange(setFieldValue)}
               renderInput={(params) => (
                 <TextField {...params} label="Piece" variant="outlined" />
               )}
@@ -184,7 +162,7 @@ export const PracticeSessionForm = ({
                   }}
                 >
                   <Grid container id="grid-outside-excerpts">
-                    {values.piece.excerpts.map((excerpt, excerptIndex) => (
+                    {values.excerpts.map((excerpt, excerptIndex) => (
                       <Grid item xs={12} sm={4} key={excerptIndex}>
                         <Box
                           sx={{
@@ -223,6 +201,24 @@ export const PracticeSessionForm = ({
                                 label="Repetitions"
                                 sx={{ width: "100%" }}
                               />
+                              <Grid container
+                                name="tempi-grid"
+                                centered
+                              >
+                                {values.excerpts[excerptIndex].tempi.map(
+                                  (tempo, tempoIndex) => (
+                                    <Grid item sx={12} key={tempoIndex}>
+                                      <InputLabel>Tempo Info:</InputLabel>
+                                      <Typography>
+                                        {tempo.notes}
+                                      </Typography>
+                                      <Typography>
+                                        {tempo.bpm}
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                )}
+                              </Grid>
                               <FieldArray
                                 name={`piece.excerpts.${excerptIndex}.timeToSpend`}
                               >

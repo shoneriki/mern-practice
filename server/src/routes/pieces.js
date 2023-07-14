@@ -15,9 +15,10 @@ router.get("/suggestions", async (req, res) => {
         { name: { $regex: search, $options: "i" } }, // Match by name
         { composer: { $regex: search, $options: "i" } }, // Match by composer
       ],
-    }).limit(10); // Limit the number of suggestions returned
+    })
 
     res.json(pieces);
+    console.log("all pieces related to search", pieces)
   } catch (error) {
     console.error("Error while fetching piece suggestions:", error);
     res.status(500).json({ error: "Internal Server Error" });

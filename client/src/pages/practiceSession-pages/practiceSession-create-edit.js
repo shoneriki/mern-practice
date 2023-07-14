@@ -172,13 +172,43 @@ useEffect(() => {
     setSelectedPiece(value);
   };
 
+  const handleAutocompleteChange = (setFieldValue) =>
+    async (event, newValue) => {
+      handlePieceSelection(event, newValue);
+      if (newValue) {
+        const response = await axios.get(
+          `http://localhost:3001/pieces/piece/${newValue._id}`,
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+
+        const pieceData = response.data;
+        console.log("pieceData from onChange", pieceData);
+
+        setFieldValue("length", pieceData.length);
+        setFieldValue("composer", pieceData.composer);
+        setFieldValue("piece", {
+          _id: pieceData._id,
+          excerpts: pieceData.excerpts,
+        });
+      } else {
+        setFieldValue("length", "");
+        setFieldValue("composer", "");
+        setFieldValue("piece", {});
+      }
+    };
+
   // submitting the practiceSession form; new or edited
   const onSubmit= async (values, { setSubmitting }) => {
     console.log("entering the submit?");
     try {
       const practiceSessionData = {
         ...values,
-        piece: values.piece._id,
+        piece: {
+          _id: values.piece._id,
+          excerpts: values.piece.excerpts,
+        },
         dateOfExecution: new Date(values.dateOfExecution),
       };
 
@@ -262,6 +292,7 @@ useEffect(() => {
         handlePieceSearch={handlePieceSearch}
         handlePieceSelection={handlePieceSelection}
         onSubmit={onSubmit}
+        handleAutocompleteChange={handleAutocompleteChange}
       />
     </Box>
   );
