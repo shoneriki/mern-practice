@@ -126,17 +126,18 @@ export const PracticeSessionList = () => {
                       <Grid container sx={{width: "50%"}} >
                         <Grid item sx={4} sm={4}>
                           <Typography>
-                            {practiceSession.piece.length.hours} hr
+                            {practiceSession.piece.length.hours > 0 ? practiceSession.piece.length.hours : 0}
+                              hr
                           </Typography>
                         </Grid>
                         <Grid item sx={4} sm={4}>
                           <Typography>
-                            {practiceSession.piece.length.minutes} min
+                            {practiceSession.piece.length.minutes > 0 ? practiceSession.piece.length.minutes : 0} min
                           </Typography>
                         </Grid>
                         <Grid item sx={4} sm={4}>
                           <Typography>
-                            {practiceSession.piece.length.seconds} sec
+                            {practiceSession.piece.length.seconds > 0 ? practiceSession.piece.length.seconds : 0} sec
                           </Typography>
                         </Grid>
                       </Grid>

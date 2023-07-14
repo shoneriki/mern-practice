@@ -355,10 +355,10 @@ export const PieceForm = ({
                           width: "100%",
                           display: "flex",
                           justifyContent: "center",
-                          margin: "1rem 0",
+                          margin: "1rem auto",
                         }}
                       >
-                        <Grid item xs={12} sm={4}>
+                        <Box>
                           <Button
                             type="button"
                             variant="contained"
@@ -384,7 +384,7 @@ export const PieceForm = ({
                           >
                             Add an Excerpt
                           </Button>
-                        </Grid>
+                        </Box>
                       </Box>
                     </Grid>
                   )}
@@ -396,6 +396,7 @@ export const PieceForm = ({
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    margin: "2rem auto"
                   }}
                 >
                   <Field
@@ -408,14 +409,28 @@ export const PieceForm = ({
                       />
                     )}
                   />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    sx={{ width: "60%" }}
-                  >
-                    Submit
-                  </Button>
+                  {
+                    id ? (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="warning"
+                        sx={{ width: "50%"}}
+                      >
+                        Edit Piece?
+                      </Button>
+                    ):
+                    (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        sx={{ width: "60%" }}
+                      >
+                        Add Piece?
+                      </Button>
+                    )
+                  }
                 </Box>
               </Form>
             </Box>
