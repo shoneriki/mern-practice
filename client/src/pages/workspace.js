@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {Metronome} from "../components/workspace-components/Metronome"
 // import {MetronomeE6} from "../components/MetronomeE6"
 import {Counter} from "../components/workspace-components/Counter"
-import { Box, Grid, Typography, Button } from "@mui/material";
+import { Box, Grid, Typography, Button,TextField } from "@mui/material";
 import {useLocation, useNavigate} from "react-router-dom"
 
 import { useParams } from "react-router-dom";
@@ -12,6 +12,8 @@ import axios from "axios";
   export const TempoControls = ({ tempoInfo, setTempo }) => {
     const [baseTempo, setBaseTempo] = useState(0);
     const [displayPercentage, setDisplayPercentage] = useState(50);
+    const [startPercentage, setStartPercentage] = useState(50);
+    const [incrementPercentage, setIncrementPercentage] = useState(10);
 
     const calculateStartTempo = (baseTempo) => {
       return (baseTempo * displayPercentage) / 100;
@@ -31,8 +33,44 @@ import axios from "axios";
       setDisplayPercentage(newPercentage);
     };
 
+    useEffect(() => {
+      setDisplayPercentage(startPercentage);
+    }, [startPercentage]);
+
+    useEffect(() => {
+      setDisplayPercentage(displayPercentage + incrementPercentage);
+    }, [incrementPercentage]);
+
+    const prevIncrementPercentage = useRef(incrementPercentage);
+
+    useEffect(() => {
+      if (incrementPercentage > prevIncrementPercentage.current) {
+        setDisplayPercentage(displayPercentage + incrementPercentage);
+      } else if (incrementPercentage < prevIncrementPercentage.current) {
+        setDisplayPercentage(displayPercentage - incrementPercentage);
+      }
+      prevIncrementPercentage.current = incrementPercentage;
+    }, [incrementPercentage]);
+
+
     return (
       <>
+        <Box>
+          <TextField
+            type="number"
+            label="Start Percentage"
+            value={startPercentage}
+            onChange={(event) => setStartPercentage(Number(event.target.value))}
+          />
+          <TextField
+            type="number"
+            label="Increment Percentage"
+            value={incrementPercentage}
+            onChange={(event) =>
+              setIncrementPercentage(Number(event.target.value))
+            }
+          />
+        </Box>
         <Button
           variant="contained"
           color="primary"
@@ -64,12 +102,6 @@ export const Workspace = () => {
 
   const [loading, setLoading] = useState(true);
   const [tempo, setTempo] = useState(0);
-
-  const [baseTempo, setBaseTempo] = useState(0);
-  const [incrementPercentage, setIncrementPercentage] = useState(10);
-  const [startPercentage, setStartPercentage] = useState(50);
-
-  const [displayPercentage, setDisplayPercentage] = useState(50);
 
   const [rep, setRep] = useState(10);
 
