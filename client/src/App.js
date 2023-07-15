@@ -49,7 +49,12 @@ function App() {
             path="/practiceSession/create"
             element={<PracticeSessionCreateEdit />}
           />
+          <Route
+            path="/practiceSessions/practiceSession/create"
+            element={<PracticeSessionCreateEdit />}
+          />
           <Route path="/practiceSession/edit/:id" element={<PracticeSessionCreateEdit/>}/>
+          <Route path="/practiceSessions/practiceSession/edit/:id" element={<PracticeSessionCreateEdit/>}/>
 
           <Route path="/programs" element={<ProgramList />} />
           <Route path="/program/create" element={<ProgramCreateEdit />} />
