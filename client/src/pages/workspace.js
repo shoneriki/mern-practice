@@ -8,6 +8,53 @@ import {useLocation, useNavigate} from "react-router-dom"
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+// TempoControls.js
+  export const TempoControls = ({ tempoInfo, setTempo }) => {
+    const [baseTempo, setBaseTempo] = useState(0);
+    const [displayPercentage, setDisplayPercentage] = useState(50);
+
+    const calculateStartTempo = (baseTempo) => {
+      return (baseTempo * displayPercentage) / 100;
+    };
+
+    const incrementTempo = () => {
+      const newPercentage = displayPercentage + 10;
+      const newTempo = Math.round((baseTempo * newPercentage) / 100);
+      setTempo(newTempo);
+      setDisplayPercentage(newPercentage);
+    };
+
+    const decrementTempo = () => {
+      const newPercentage = displayPercentage - 10;
+      const newTempo = Math.round((baseTempo * newPercentage) / 100);
+      setTempo(newTempo);
+      setDisplayPercentage(newPercentage);
+    };
+
+    return (
+      <>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            const startTempo = calculateStartTempo(tempoInfo.bpm);
+            setTempo(startTempo);
+            setBaseTempo(tempoInfo.bpm);
+            setDisplayPercentage(50);
+          }}
+        >
+          Start at 50% of {tempoInfo.bpm}?
+        </Button>
+        <Button variant="contained" color="primary" onClick={incrementTempo}>
+          Increase tempo to {displayPercentage + 10}%?
+        </Button>
+        <Button variant="contained" color="warning" onClick={decrementTempo}>
+          Decrease tempo to {displayPercentage - 10}%?
+        </Button>
+      </>
+    );
+  };
+
 export const Workspace = () => {
   const { id } = useParams();
   const [practiceSession, setPracticeSession] = useState({});
@@ -18,8 +65,11 @@ export const Workspace = () => {
   const [loading, setLoading] = useState(true);
   const [tempo, setTempo] = useState(0);
 
-  const [incrementPercentage, setIncrementPercentage] = useState(10); // default increment percentage is 10%
-  const [startPercentage, setStartPercentage] = useState(50); // default start percentage is 50%
+  const [baseTempo, setBaseTempo] = useState(0);
+  const [incrementPercentage, setIncrementPercentage] = useState(10);
+  const [startPercentage, setStartPercentage] = useState(50);
+
+  const [displayPercentage, setDisplayPercentage] = useState(50);
 
   const [rep, setRep] = useState(10);
 
@@ -58,17 +108,7 @@ export const Workspace = () => {
     console.log("response data for piece", piece);
   }, [id]);
 
-  const incrementTempo = () => {
-    setTempo(
-      (prevTempo) =>
-    Math.round(prevTempo + (prevTempo * incrementPercentage) / 100)
 
-    );
-  };
-
-  const calculateStartTempo = (baseTempo) => {
-    return (baseTempo * startPercentage) / 100;
-  };
 
   return (
     <Box
@@ -199,35 +239,8 @@ export const Workspace = () => {
                           width: "100%",
                         }}
                       >
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => {
-                            setTempo(tempoInfo.bpm);
-                            console.log("tempo bpm: ", tempo);
-                          }}
-                        >
-                          Add {tempoInfo.bpm} to Metronome?
-                        </Button>
+                        <TempoControls tempoInfo={tempoInfo} setTempo={setTempo} />
                       </Box>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        const startTempo = calculateStartTempo(tempoInfo.bpm);
-                        setTempo(startTempo);
-                        console.log("start tempo: ", startTempo);
-                      }}
-                    >
-                      Start at {startPercentage}% of {tempoInfo.bpm}?
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={incrementTempo}
-                    >
-                      Increase tempo by {incrementPercentage}%?
-                    </Button>
                     </Grid>
                   ))}
                 </Grid>
