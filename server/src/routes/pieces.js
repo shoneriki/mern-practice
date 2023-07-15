@@ -24,12 +24,13 @@ router.get("/suggestions", async (req, res) => {
   }
 });
 
-//get specific program
+//get specific piece
 router.get(`/piece/:id`, async (req, res) => {
   try {
     const id = req.params.id;
     const piece = await PiecesModel.findById(id);
     if (piece) {
+      console.log("piece from the get? ", piece)
       res.json(piece);
     } else {
       res.status(404).json({ message: "Piece not found" });

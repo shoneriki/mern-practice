@@ -73,7 +73,7 @@ function AddPieceForm() {
     name: Yup.string(),
     composer: Yup.string(),
     length: Yup.object({
-      hours: Yup.number().min(1).max(10),
+      hours: Yup.number().min(0).max(10),
       minutes: Yup.number().min(0).max(59),
       seconds: Yup.number().min(0).max(59),
     }),
