@@ -41,15 +41,17 @@ export const Home = () => {
       <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         <Button
           onClick={() => navigate("/programs")}
-          sx={{
-            color: "white",
-            backgroundColor: "green",
-            textAlign: "center",
-            margin: "1rem auto",
-            "&:hover": {
-              backgroundColor: "yellow",
-            },
-          }}
+          // sx={{
+          //   color: "white",
+          //   backgroundColor: "green",
+          //   textAlign: "center",
+          //   margin: "1rem auto",
+          //   "&:hover": {
+          //     backgroundColor: "yellow",
+          //   },
+          // }}
+          color='secondary'
+          variant="contained"
         >
           All Programs?
         </Button>
