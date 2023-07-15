@@ -71,12 +71,19 @@ export const Workspace = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            margin: "auto 2rem",
+            justifyContent: "center",
+            margin: "2rem auto",
+            width: "80%",
           }}
         >
           <Grid
             container
-            centered
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              margin: "auto 2rem",
+            }}
           >
             <Grid item xs={12}>
               <Typography>Name: {practiceSession.name}</Typography>
@@ -86,7 +93,7 @@ export const Workspace = () => {
                 Piece name: {piece.name}
               </Typography>
             </Grid>
-            <Grid>
+            <Grid item xs={12}>
               <Button
                 color="warning"
                 variant="contained"
@@ -94,6 +101,36 @@ export const Workspace = () => {
               >
                 Edit Practice Session?
               </Button>
+            </Grid>
+            <Grid
+              id="excerpt-grid"
+              container
+            >
+                {
+                  piece.excerpts.map((excerpt, excerptIndex) => (
+                    <Grid container spacing={4} centered>
+                      <Grid item xs={12} sx={{margin: "2rem auto"}}>
+                        <Typography variant={'h6'}>
+                          Excerpt {excerptIndex + 1}:
+                        </Typography>
+                        <Typography>
+                          Location: {excerpt.location}
+                        </Typography>
+                        <Typography>
+                          Notes: {excerpt.notes}
+                        </Typography>
+                        <Typography>
+                          Repetitions: {excerpt.repetitions}
+                        </Typography>
+                        <Button>
+                          Add repetitions to counter
+                        </Button>
+                      </Grid>
+
+                    </Grid>
+
+                  ))
+                }
             </Grid>
 
           </Grid>
