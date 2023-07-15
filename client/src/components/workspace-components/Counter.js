@@ -1,8 +1,10 @@
 import React, {useState} from "react"
 import {Box, Button, TextField, Grid} from "@mui/material"
 
-export const Counter = () => {
+export const Counter = ({rep}) => {
   const [count, setCount] = useState(0)
+
+
 
   const reset = () => {
     setCount(0)
@@ -37,6 +39,11 @@ export const Counter = () => {
           margin: "1rem auto",
           width: "40%",
         }}
+      />
+      <TextField
+        type="text"
+        value={`/ ${rep}`}
+
       />
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4} fullWidth>

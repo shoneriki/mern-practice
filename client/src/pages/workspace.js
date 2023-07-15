@@ -9,43 +9,66 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export const Workspace = () => {
-  const {id} = useParams();
-  const [practiceSession, setPracticeSession] = useState({})
-  const [piece, setPiece] = useState({})
+  const { id } = useParams();
+  const [practiceSession, setPracticeSession] = useState({});
+  const [piece, setPiece] = useState({});
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true)
-  const [tempo, setTempo] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const [tempo, setTempo] = useState(0);
+
+  const [incrementPercentage, setIncrementPercentage] = useState(10); // default increment percentage is 10%
+  const [startPercentage, setStartPercentage] = useState(50); // default start percentage is 50%
+
+  const [rep, setRep] = useState(10);
 
   const handleEdit = (id) => {
     console.log("id from handleEdit: ", id);
     navigate(`/practiceSessions/practiceSession/edit/${id}`);
   };
 
-
-
   useEffect(() => {
-    const fetchPracticeSession = async() => {
+    const fetchPracticeSession = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/practiceSessions/practiceSession/${id}`);
-        setPracticeSession(response.data)
-        console.log("response.data from useEffect in workspace for practiceSession", response.data)
+        const response = await axios.get(
+          `http://localhost:3001/practiceSessions/practiceSession/${id}`
+        );
+        setPracticeSession(response.data);
+        console.log(
+          "response.data from useEffect in workspace for practiceSession",
+          response.data
+        );
 
         const pieceResponse = await axios.get(
           `http://localhost:3001/pieces/piece/${response.data.piece}`
         );
         setPiece(pieceResponse.data);
-        console.log("response data for piece", piece)
-        console.log("response data for piece", pieceResponse.data)
-        setLoading(false)
+        console.log("response data for piece", piece);
+        console.log("response data for piece", pieceResponse.data);
+        setLoading(false);
       } catch (error) {
-        console.error("I'm sorry, there was a problem when fetching the practice session: ", error)
+        console.error(
+          "I'm sorry, there was a problem when fetching the practice session: ",
+          error
+        );
       }
-    }
+    };
     fetchPracticeSession();
-    console.log("response data for piece", piece)
-  }, [id])
+    console.log("response data for piece", piece);
+  }, [id]);
+
+  const incrementTempo = () => {
+    setTempo(
+      (prevTempo) =>
+    Math.round(prevTempo + (prevTempo * incrementPercentage) / 100)
+
+    );
+  };
+
+  const calculateStartTempo = (baseTempo) => {
+    return (baseTempo * startPercentage) / 100;
+  };
 
   return (
     <Box
@@ -101,72 +124,118 @@ export const Workspace = () => {
                 Edit Practice Session?
               </Button>
             </Grid>
-            <Grid id="excerpt-grid" container>
+            <Grid
+              container
+              id={"grid-outside-excerpts"}
+              spacing={4}
+              justifyContent="center"
+              sx={{
+                border: "1px solid black",
+                display: "flex",
+              }}
+            >
               {piece.excerpts.map((excerpt, excerptIndex) => (
-                <Grid container spacing={4} centered>
-                  <Grid item xs={12} sx={{ margin: "2rem auto" }}>
-                    <Typography variant={"h6"}>
+                <Grid item xs={12} sm={12} md={4} sx={{ margin: "2rem auto" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Typography variant={"h6"} align="center">
                       Excerpt {excerptIndex + 1}:
                     </Typography>
-                    <Typography>Location: {excerpt.location}</Typography>
-                    <Typography>Notes: {excerpt.notes}</Typography>
-                    <Typography>Repetitions: {excerpt.repetitions}</Typography>
-                    {/* <Button
+                    <Typography align="center">
+                      Location: {excerpt.location}
+                    </Typography>
+                    <Typography align="center">
+                      Notes: {excerpt.notes}
+                    </Typography>
+                    <Typography align="center">
+                      Repetitions: {excerpt.repetitions}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        setRep(excerpt.repetitions);
+                      }}
+                    >
+                      Set Repetitions to {excerpt.repetitions}?
+                    </Button>
+                  </Box>
+
+                  {excerpt.tempi.map((tempoInfo, tempoInfoIndex) => (
+                    <Grid
+                      container
+                      sx={{
+                        border: "2px solid black",
+                        borderRadius: "1rem",
+                        padding: ".5rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Grid item xs={12}>
+                        <Typography align="center">
+                          Notes for Tempo: {tempoInfo.notes}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography align="center">
+                          bpm (beats per minute): {tempoInfo.bpm}
+                        </Typography>
+                      </Grid>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <Button
                           variant="contained"
                           color="primary"
+                          onClick={() => {
+                            setTempo(tempoInfo.bpm);
+                            console.log("tempo bpm: ", tempo);
+                          }}
                         >
-                          Add repetitions to counter
-                        </Button> */}
-                      {
-                        excerpt.tempi.map((tempoInfo, tempoInfoIndex) => (
-                          <Grid
-                            container
-                            sx={{
-                              border: "2px solid black",
-                              borderRadius: "1rem",
-                              padding: ".5rem"
-                            }}
-                          >
-                            <Grid item xs={12} sm={4}>
-                              <Typography>Notes for Tempo: {tempoInfo.notes}</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                              <Typography>bpm (beats per minute): {tempoInfo.bpm}</Typography>
-                            </Grid>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                width: "100%",
-                              }}
-                            >
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() =>  {
-                                  setTempo(tempoInfo.bpm)
-                                  console.log("tempo bpm: ", tempo)
-                                }}
-
-                              >
-                                Add {tempoInfo.bpm} to Metronome?
-                              </Button>
-                            </Box>
-                          </Grid>
-                        ))
-                      }
-                  </Grid>
+                          Add {tempoInfo.bpm} to Metronome?
+                        </Button>
+                      </Box>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        const startTempo = calculateStartTempo(tempoInfo.bpm);
+                        setTempo(startTempo);
+                        console.log("start tempo: ", startTempo);
+                      }}
+                    >
+                      Start at {startPercentage}% of {tempoInfo.bpm}?
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={incrementTempo}
+                    >
+                      Increase tempo by {incrementPercentage}%?
+                    </Button>
+                    </Grid>
+                  ))}
                 </Grid>
               ))}
             </Grid>
           </Grid>
-          <Metronome
-            tempo={tempo}
-            setTempo={setTempo}
-          />
-          <Counter />
+          <Metronome tempo={tempo} setTempo={setTempo} />
+          <Counter rep={rep} />
         </Box>
       )}
     </Box>
