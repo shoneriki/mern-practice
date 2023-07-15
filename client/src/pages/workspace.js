@@ -81,13 +81,13 @@ import axios from "axios";
             setDisplayPercentage(50);
           }}
         >
-          Start at 50% of {tempoInfo.bpm}?
+          Start at {displayPercentage}% of {tempoInfo.bpm}?
         </Button>
         <Button variant="contained" color="primary" onClick={incrementTempo}>
-          Increase tempo to {displayPercentage + 10}%?
+          Increase tempo to {displayPercentage + incrementPercentage}%?
         </Button>
         <Button variant="contained" color="warning" onClick={decrementTempo}>
-          Decrease tempo to {displayPercentage - 10}%?
+          Decrease tempo to {displayPercentage - incrementPercentage}%?
         </Button>
       </>
     );
