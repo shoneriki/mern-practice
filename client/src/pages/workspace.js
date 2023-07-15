@@ -16,6 +16,7 @@ export const Workspace = () => {
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(true)
+  const [tempo, setTempo] = useState(0)
 
   const handleEdit = (id) => {
     console.log("id from handleEdit: ", id);
@@ -65,7 +66,7 @@ export const Workspace = () => {
         >
           Loading...
         </Box>
-      ): (
+      ) : (
         <Box
           sx={{
             display: "flex",
@@ -89,9 +90,7 @@ export const Workspace = () => {
               <Typography>Name: {practiceSession.name}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography>
-                Piece name: {piece.name}
-              </Typography>
+              <Typography>Piece name: {piece.name}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Button
@@ -102,39 +101,71 @@ export const Workspace = () => {
                 Edit Practice Session?
               </Button>
             </Grid>
-            <Grid
-              id="excerpt-grid"
-              container
-            >
-                {
-                  piece.excerpts.map((excerpt, excerptIndex) => (
-                    <Grid container spacing={4} centered>
-                      <Grid item xs={12} sx={{margin: "2rem auto"}}>
-                        <Typography variant={'h6'}>
-                          Excerpt {excerptIndex + 1}:
-                        </Typography>
-                        <Typography>
-                          Location: {excerpt.location}
-                        </Typography>
-                        <Typography>
-                          Notes: {excerpt.notes}
-                        </Typography>
-                        <Typography>
-                          Repetitions: {excerpt.repetitions}
-                        </Typography>
-                        <Button>
+            <Grid id="excerpt-grid" container>
+              {piece.excerpts.map((excerpt, excerptIndex) => (
+                <Grid container spacing={4} centered>
+                  <Grid item xs={12} sx={{ margin: "2rem auto" }}>
+                    <Typography variant={"h6"}>
+                      Excerpt {excerptIndex + 1}:
+                    </Typography>
+                    <Typography>Location: {excerpt.location}</Typography>
+                    <Typography>Notes: {excerpt.notes}</Typography>
+                    <Typography>Repetitions: {excerpt.repetitions}</Typography>
+                    {/* <Button
+                          variant="contained"
+                          color="primary"
+                        >
                           Add repetitions to counter
-                        </Button>
-                      </Grid>
+                        </Button> */}
+                      {
+                        excerpt.tempi.map((tempoInfo, tempoInfoIndex) => (
+                          <Grid
+                            container
+                            sx={{
+                              border: "2px solid black",
+                              borderRadius: "1rem",
+                              padding: ".5rem"
+                            }}
+                          >
+                            <Grid item xs={12} sm={4}>
+                              <Typography>Notes for Tempo: {tempoInfo.notes}</Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                              <Typography>bpm (beats per minute): {tempoInfo.bpm}</Typography>
+                            </Grid>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                width: "100%",
+                              }}
+                            >
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>  {
+                                  setTempo(tempoInfo.bpm)
+                                  console.log("tempo bpm: ", tempo)
+                                }}
 
-                    </Grid>
-
-                  ))
-                }
+                              >
+                                Add {tempoInfo.bpm} to Metronome?
+                              </Button>
+                            </Box>
+                          </Grid>
+                        ))
+                      }
+                  </Grid>
+                </Grid>
+              ))}
             </Grid>
-
           </Grid>
-          <Metronome />
+          <Metronome
+            tempo={tempo}
+            setTempo={setTempo}
+          />
           <Counter />
         </Box>
       )}

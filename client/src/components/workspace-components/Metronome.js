@@ -9,11 +9,11 @@ import { Button, Slider, Box, TextField, Grid, InputAdornment, Typography} from 
 export class Metronome extends Component {
   constructor(props) {
     super(props);
-
+    console.log("props?", props);
     this.state = {
       isPlaying: false,
       count: 0,
-      bpm: 60,
+      bpm: props.tempo || 60,
       beatsPerMeasure: 1,
       subdivision: 1,
       lastTap: null,
@@ -36,6 +36,13 @@ export class Metronome extends Component {
     this.loadSound(drumstick).then((buffer) => {
       this.drumstickBuffer = buffer;
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.tempo !== prevProps.tempo) {
+      this.setState({ bpm: this.props.tempo });
+      alert(`metronome updated with ${this.props.tempo}`)
+    }
   }
 
   loadSound = async (url) => {
@@ -283,6 +290,13 @@ export class Metronome extends Component {
                 Tap Tempo
               </Button>
             </Box>
+              <Slider
+                type="range"
+                min={10}
+                max={300}
+                value={bpm}
+                onChange={this.handleBpmChange}
+              />
           </Grid>
           <Grid item xs={12} sm={6}>
             <IncrementInput
@@ -344,13 +358,6 @@ export class Metronome extends Component {
               }
             />
           </Grid>
-          <Slider
-            type="range"
-            min={10}
-            max={300}
-            value={bpm}
-            onChange={this.handleBpmChange}
-          />
         </Grid>
         <Box
           sx={{
