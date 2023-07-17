@@ -174,6 +174,37 @@ function AddPieceForm() {
         fetchEditData();
       }, [id]);
 
+      const onSubmit= async (values, { setSubmitting }) => {
+        try {
+          if (id) {
+            await axios.put(
+              `http://localhost:3001/pieces/piece/${id}`,
+              { ...values },
+              {
+                headers: { authorization: cookies.access_token },
+              }
+            );
+            alert("piece updated");
+            navigate("/pieces");
+          } else {
+            await axios.post(
+              `http://localhost:3001/pieces`,
+              { ...values },
+              {
+                headers: { authorization: cookies.access_token },
+              }
+            );
+            alert("piece created");
+            navigate("/pieces");
+          }
+        } catch (error) {
+          alert("I'm sorry, there's an error in submitting this form");
+          console.log("error", error);
+        } finally {
+          setSubmitting(false);
+        }
+      }
+
       if(piece === null && id) {
         return (
           <section>
@@ -198,6 +229,7 @@ function AddPieceForm() {
         validationSchema={validationSchema}
         cookies={cookies}
         navigate={navigate}
+        onSubmit={onSubmit}
       />
 
     </Box>

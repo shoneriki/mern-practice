@@ -27,6 +27,7 @@ export const PieceForm = ({
   id,
   cookies,
   navigate,
+  onSubmit,
 }) => {
   return (
     <Formik
@@ -35,36 +36,7 @@ export const PieceForm = ({
       validateOnBlur={false}
       validateOnChange={false}
       validate={debounce((values) => validationSchema.validate(values), 400)}
-      onSubmit={async (values, { setSubmitting }) => {
-        try {
-          if (id) {
-            await axios.put(
-              `http://localhost:3001/pieces/piece/${id}`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("piece updated");
-            navigate("/pieces");
-          } else {
-            await axios.post(
-              `http://localhost:3001/pieces`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("piece created");
-            navigate("/pieces");
-          }
-        } catch (error) {
-          alert("I'm sorry, there's an error in submitting this form");
-          console.log("error", error);
-        } finally {
-          setSubmitting(false);
-        }
-      }}
+      onSubmit={onSubmit}
     >
       {({ values, handleChange, errors }) => {
         console.log("errors", errors);
