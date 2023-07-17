@@ -22,6 +22,39 @@ import * as yup from 'yup';
 
 /* react hook library form */
 
+const TempoField = ({ control, excerptIndex, tempoIndex, removeTempo }) => {
+  return (
+    <>
+      <Typography variant={"h6"}>Tempo {tempoIndex + 1}</Typography>
+      <Grid item xs={12}>
+        <Controller
+          name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.notes`}
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField {...field} label="Notes" fullWidth />
+          )}
+        />
+        <Controller
+          name={`excerpts.${excerptIndex}.tempi.${tempoIndex}.bpm`}
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField {...field} type="number" label="BPM" fullWidth />
+          )}
+        />
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => removeTempo(tempoIndex)}
+        >
+          Remove Tempo
+        </Button>
+      </Grid>
+    </>
+  );
+};
+
 const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
   const {
     fields: tempoFields,
@@ -108,6 +141,28 @@ const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
           />
         </Grid>
       </Grid>
+      {tempoFields.map((tempoField, tempoIndex) => (
+        <TempoField
+          key={tempoField.id}
+          control={control}
+          excerptIndex={excerptIndex}
+          tempoIndex={tempoIndex}
+          removeTempo={removeTempo}
+        />
+      ))}
+      <Button
+        type="button"
+        variant="contained"
+        color="primary"
+        onClick={() =>
+          appendTempo({
+            notes: "",
+            bpm: 60,
+          })
+        }
+      >
+        Add a Tempo
+      </Button>
       <Grid item xs={12} sm={6} md={4}>
         <Controller
           name={`excerpts.${excerptIndex}.mastered`}
