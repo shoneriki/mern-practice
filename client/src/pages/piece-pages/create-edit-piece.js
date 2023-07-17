@@ -4,8 +4,6 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import {useParams} from "react-router-dom"
 import {PieceForm} from "../../components/piece-components/PieceForm.js"
-import {PieceFormRHL} from "../../components/piece-components/PieceFormRHL.js"
-
 
 import * as Yup from "yup";
 import axios from "axios";
@@ -109,42 +107,6 @@ function AddPieceForm() {
     ),
   });
 
-
-  // const validationSchema = Yup.object({
-  //   name: Yup.string(),
-  //   composer: Yup.string(),
-  //   length: Yup.object({
-  //     hours: Yup.number().min(0).max(10),
-  //     minutes: Yup.number().min(0).max(59),
-  //     seconds: Yup.number().min(0).max(59),
-  //   }),
-  //   excerpts: Yup.array(
-  //     Yup.object({
-  //       location: Yup.string(),
-  //       notes: Yup.string(),
-  //       repetitions: Yup.number().min(0),
-  //       timeToSpend: Yup.object({
-  //         hours: Yup.number().min(0).max(10),
-  //         minutes: Yup.number().min(0).max(59),
-  //         seconds: Yup.number().min(0).max(59),
-  //       }),
-  //       tempi: Yup.array(
-  //         Yup.object({
-  //           notes: Yup.string(),
-  //           bpm: Yup.number().min(10).max(300),
-  //         })
-  //       ),
-  //       mastered: Yup.boolean(),
-  //     })
-  //   ),
-  //   mastered: Yup.boolean(),
-  //   userOwner: Yup.string().test(
-  //     "userOwner",
-  //     "User Owner ID does not match",
-  //     (value) => value === userID
-  //   ),
-  // });
-
       useEffect(() => {
         console.log("id from useEffect", id)
         const fetchEditData = async () => {
@@ -202,7 +164,7 @@ function AddPieceForm() {
         } catch (error) {
           alert("I'm sorry, there's an error in submitting this form");
           console.log("error", error);
-        } 
+        }
       }
 
       if(piece === null && id) {
@@ -223,16 +185,8 @@ function AddPieceForm() {
         width: "80%",
       }}
     >
-      {/* <PieceForm
-        id={id}
-        initialValues={piece || seedData}
-        validationSchema={validationSchema}
-        cookies={cookies}
-        navigate={navigate}
-        onSubmit={onSubmit}
-      /> */}
 
-      <PieceFormRHL
+      <PieceForm
         id={id}
         initialValues={piece || seedData}
         validationSchema={validationSchema}
