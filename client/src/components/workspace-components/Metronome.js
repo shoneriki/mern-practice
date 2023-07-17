@@ -41,7 +41,7 @@ export class Metronome extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.tempo !== prevProps.tempo) {
       this.setState({ bpm: this.props.tempo });
-      alert(`metronome updated with ${this.props.tempo}`)
+      alert(`metronome updated with this.props.tempo: ${this.props.tempo}`);
     }
   }
 
@@ -290,13 +290,33 @@ export class Metronome extends Component {
                 Tap Tempo
               </Button>
             </Box>
-              <Slider
-                type="range"
-                min={10}
-                max={300}
-                value={bpm}
-                onChange={this.handleBpmChange}
-              />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "80%",
+              }}
+            >
+              <Button
+                sx={{
+                  boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.5),",
+                  margin: "1rem auto",
+                  width: "80%",
+                }}
+                variant="contained"
+                color="primary"
+                onClick={this.startStop}
+              >
+                {isPlaying ? "Stop" : "Start"}
+              </Button>
+            </Box>
+            <Slider
+              type="range"
+              min={10}
+              max={300}
+              value={bpm}
+              onChange={this.handleBpmChange}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <IncrementInput
@@ -359,28 +379,6 @@ export class Metronome extends Component {
             />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            sx={{
-              backgroundColor: "blue",
-              color: "white",
-              boxShadow: "0px 0px 0px 2px rgba(0,0,0,0.5),",
-              margin: "1rem auto",
-              width: "50%",
-              "&:hover": {
-                backgroundColor: "orange",
-              },
-            }}
-            onClick={this.startStop}
-          >
-            {isPlaying ? "Stop" : "Start"}
-          </Button>
-        </Box>
       </Box>
     );
   }

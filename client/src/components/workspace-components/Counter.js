@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {Box, Button, TextField, Grid} from "@mui/material"
+import {Box, Button, TextField, Grid, Typography} from "@mui/material"
 
 export const Counter = ({rep}) => {
   const [count, setCount] = useState(0)
@@ -28,6 +28,15 @@ export const Counter = ({rep}) => {
         justifyContent: "center",
       }}
     >
+      <Typography
+        variant="h5"
+        sx={{
+          fontSize: "2rem",
+          textAlign: "center",
+        }}
+      >
+        Counter
+      </Typography>
       <TextField
         type="number"
         value={count}
@@ -39,12 +48,9 @@ export const Counter = ({rep}) => {
           margin: "1rem auto",
           width: "40%",
         }}
-      />
-      <TextField
-        type="text"
-        value={`/ ${rep}`}
-
-      />
+      >
+      {`${count}/${rep}`}
+      </TextField>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4} fullWidth>
           <Button

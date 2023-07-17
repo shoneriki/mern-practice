@@ -9,65 +9,83 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 // TempoControls.js
-  export const TempoControls = ({ tempoInfo, setTempo }) => {
-    const [baseTempo, setBaseTempo] = useState(0);
-    const [displayPercentage, setDisplayPercentage] = useState(50);
-    const [startPercentage, setStartPercentage] = useState(50);
-    const [incrementPercentage, setIncrementPercentage] = useState(10);
 
-    const calculateStartTempo = (baseTempo) => {
-      return (baseTempo * displayPercentage) / 100;
-    };
+export const TempoControls = ({ tempoInfo, setTempo }) => {
+    const [tempoState, setTempoState] = useState({
+      baseTempo: 0,
+      currentPercentage: 50,
+      startPercentage: 50,
+      tempoChangePercentage: 10,
+    });
 
-    const incrementTempo = () => {
-      const newPercentage = displayPercentage + 10;
-      const newTempo = Math.round((baseTempo * newPercentage) / 100);
+  const calculateTempo = (percentage) => {
+    return Math.round((tempoState.baseTempo * percentage) / 100);
+  };
+
+  const incrementTempo = () => {
+    setTempoState((prevState) => {
+      const newPercentage =
+        prevState.currentPercentage + prevState.tempoChangePercentage;
+      const newTempo = calculateTempo(newPercentage);
       setTempo(newTempo);
-      setDisplayPercentage(newPercentage);
-    };
+      return {
+        ...prevState,
+        currentPercentage: newPercentage,
+      };
+    });
+  };
 
-    const decrementTempo = () => {
-      const newPercentage = displayPercentage - 10;
-      const newTempo = Math.round((baseTempo * newPercentage) / 100);
+  const decrementTempo = () => {
+    setTempoState((prevState) => {
+      const newPercentage =
+        prevState.currentPercentage - prevState.tempoChangePercentage;
+      const newTempo = calculateTempo(newPercentage);
       setTempo(newTempo);
-      setDisplayPercentage(newPercentage);
-    };
+      return {
+        ...prevState,
+        currentPercentage: newPercentage,
+      };
+    });
+  };
 
-    useEffect(() => {
-      setDisplayPercentage(startPercentage);
-    }, [startPercentage]);
-
-    useEffect(() => {
-      setDisplayPercentage(displayPercentage + incrementPercentage);
-    }, [incrementPercentage]);
-
-    const prevIncrementPercentage = useRef(incrementPercentage);
-
-    useEffect(() => {
-      if (incrementPercentage > prevIncrementPercentage.current) {
-        setDisplayPercentage(displayPercentage + incrementPercentage);
-      } else if (incrementPercentage < prevIncrementPercentage.current) {
-        setDisplayPercentage(displayPercentage - incrementPercentage);
-      }
-      prevIncrementPercentage.current = incrementPercentage;
-    }, [incrementPercentage]);
-
+  useEffect(() => {
+    const newTempo = calculateTempo(tempoState.currentPercentage);
+    setTempo(newTempo);
+  }, [tempoState.currentPercentage]);
 
     return (
-      <>
-        <Box>
+      <Box
+        id="tempoControl-box"
+        sx={{
+          margin: "1rem auto",
+        }}
+      >
+        <Box
+          sx={{
+            margin: "1rem auto",
+          }}
+        >
           <TextField
             type="number"
             label="Start Percentage"
-            value={startPercentage}
-            onChange={(event) => setStartPercentage(Number(event.target.value))}
+            value={tempoState.startPercentage}
+            onChange={(event) =>
+              setTempoState({
+                ...tempoState,
+                startPercentage: Number(event.target.value),
+                displayPercentage: Number(event.target.value),
+              })
+            }
           />
           <TextField
             type="number"
-            label="Increment Percentage"
-            value={incrementPercentage}
+            label="Tempo Change Percentage"
+            value={tempoState.tempoChangePercentage}
             onChange={(event) =>
-              setIncrementPercentage(Number(event.target.value))
+              setTempoState({
+                ...tempoState,
+                tempoChangePercentage: Number(event.target.value),
+              })
             }
           />
         </Box>
@@ -75,23 +93,30 @@ import axios from "axios";
           variant="contained"
           color="primary"
           onClick={() => {
-            const startTempo = calculateStartTempo(tempoInfo.bpm);
+            const newTempoState = {
+              ...tempoState,
+              baseTempo: tempoInfo.bpm,
+              currentPercentage: tempoState.startPercentage,
+            };
+            const startTempo = calculateTempo(newTempoState.startPercentage);
             setTempo(startTempo);
-            setBaseTempo(tempoInfo.bpm);
-            setDisplayPercentage(50);
+            setTempoState(newTempoState);
           }}
         >
-          Start at {displayPercentage}% of {tempoInfo.bpm}?
+          Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
         </Button>
         <Button variant="contained" color="primary" onClick={incrementTempo}>
-          Increase tempo to {displayPercentage + incrementPercentage}%?
+          Increase tempo to{" "}
+          {tempoState.currentPercentage + tempoState.tempoChangePercentage}%?
         </Button>
         <Button variant="contained" color="warning" onClick={decrementTempo}>
-          Decrease tempo to {displayPercentage - incrementPercentage}%?
+          Decrease tempo to{" "}
+          {tempoState.currentPercentage - tempoState.tempoChangePercentage}%?
         </Button>
-      </>
+      </Box>
     );
   };
+
 
 export const Workspace = () => {
   const { id } = useParams();
@@ -178,19 +203,22 @@ export const Workspace = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              margin: "auto 2rem",
+              margin: "2rem auto",
             }}
           >
             <Grid item xs={12}>
-              <Typography>Name: {practiceSession.name}</Typography>
+              <Typography align="center">
+                Name: {practiceSession.name}
+              </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography>Piece name: {piece.name}</Typography>
+              <Typography align="center">Piece name: {piece.name}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Button
                 color="warning"
                 variant="contained"
+                sx={{ margin: "2rem auto" }}
                 onClick={() => handleEdit(practiceSession._id)}
               >
                 Edit Practice Session?
@@ -203,6 +231,8 @@ export const Workspace = () => {
               justifyContent="center"
               sx={{
                 border: "1px solid black",
+                borderRadius: "1rem",
+                margin: "1rem auto",
                 display: "flex",
               }}
             >
@@ -244,12 +274,13 @@ export const Workspace = () => {
                     <Grid
                       container
                       sx={{
-                        border: "2px solid black",
+                        border: "1px solid black",
                         borderRadius: "1rem",
                         padding: ".5rem",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
+                        margin: "1rem auto",
                       }}
                     >
                       <Grid item xs={12}>
@@ -271,7 +302,10 @@ export const Workspace = () => {
                           width: "100%",
                         }}
                       >
-                        <TempoControls tempoInfo={tempoInfo} setTempo={setTempo} />
+                        <TempoControls
+                          tempoInfo={tempoInfo}
+                          setTempo={setTempo}
+                        />
                       </Box>
                     </Grid>
                   ))}
