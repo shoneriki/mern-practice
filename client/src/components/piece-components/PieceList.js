@@ -117,9 +117,28 @@ export const PieceList = () => {
         {pieces.map((piece) => {
           return (
             <Grid item xs={12} sm={6} md={4} key={piece._id}>
-              <Box sx={{ border: "1px solid black", padding: "1rem" }}>
+              <Box
+                name="piece-box"
+                sx={{
+                  border: "1px solid black",
+                  padding: "1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                  Piece Name:
+                </Typography>
+                <Typography variant={"h6"}>
                   {piece.name}
+                </Typography>
+                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                  Composer:
+                </Typography>
+                <Typography variant={"h6"}>
+                  {piece.composer}
                 </Typography>
                 <Box
                   name="delete-edit-btn-box"
@@ -127,6 +146,7 @@ export const PieceList = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    width: "100%",
                   }}
                 >
                   <Button
