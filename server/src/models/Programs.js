@@ -1,33 +1,5 @@
 import mongoose from "mongoose";
 
-const pieceSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    composer: {
-      type: String,
-    },
-    length: {
-      hours: { type: Number, default: 0 },
-      minutes: { type: Number, min: 0, max: 59, default: 0 },
-      seconds: { type: Number, min: 0, max: 59, default: 0 },
-    },
-    movements: [
-      {
-        number: {
-          type: Number,
-        },
-        name: {
-          type: String,
-        },
-      },
-    ],
-  },
-  { timestamps: true }
-);
-
 const programSchema = new mongoose.Schema(
   {
     name: {
@@ -42,7 +14,12 @@ const programSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    pieces: [pieceSchema],
+    pieces: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Pieces",
+      },
+    ],
     intermission: {
       type: Number,
     },

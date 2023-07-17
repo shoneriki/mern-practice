@@ -32,14 +32,6 @@ export const ProgramCreateEdit = () => {
           minutes: 30,
           seconds: 0,
         },
-        movements: [
-          {
-            name: "Test Movement 1",
-          },
-          {
-            name: "Test Movement 2",
-          },
-        ],
       },
       {
         name: "Test Piece 2",
@@ -49,14 +41,6 @@ export const ProgramCreateEdit = () => {
           minutes: 45,
           seconds: 0,
         },
-        movements: [
-          {
-            name: "Test Movement 1",
-          },
-          {
-            name: "Test Movement 2",
-          },
-        ],
       },
     ],
     numOfPieces: 2,
@@ -146,51 +130,6 @@ export const ProgramCreateEdit = () => {
     });
   };
 
-  const addMovement = (pieceIndex) => {
-    setProgram((prevState) => {
-      const newPieces = [...prevState.pieces];
-      const newMovements = [...newPieces[pieceIndex].movements];
-
-      newMovements.push({
-        number: newMovements.length + 1,
-        name: "",
-      });
-
-      newPieces[pieceIndex] = {
-        ...newPieces[pieceIndex],
-        movements: newMovements,
-      };
-
-      return {
-        ...prevState,
-        pieces: newPieces,
-      };
-    });
-  };
-
-  const handleChangeMovement = (event, pieceIndex, movementIndex) => {
-    const { name, value } = event.target;
-    setProgram((prevState) => {
-      const newPieces = [...prevState.pieces];
-      const newMovements = [...newPieces[pieceIndex].movements];
-
-      newMovements[movementIndex] = {
-        ...newMovements[movementIndex],
-        [name]: value,
-      };
-
-      newPieces[pieceIndex] = {
-        ...newPieces[pieceIndex],
-        movements: newMovements,
-      };
-
-      return {
-        ...prevState,
-        pieces: newPieces,
-      };
-    });
-  };
-
   const removePiece = (pieceIndex) => {
     setProgram((prevState) => {
       if (prevState.pieces.length <= 1) {
@@ -207,25 +146,6 @@ export const ProgramCreateEdit = () => {
     });
   };
 
-  const removeMovement = (pieceIndex, movementIndex) => {
-    setProgram((prevState) => {
-      const newPieces = [...prevState.pieces];
-      if (newPieces[pieceIndex].movements.length <= 1) {
-        alert("At least one movement must remain in each piece.");
-        return prevState;
-      }
-      const newMovements = [...newPieces[pieceIndex].movements];
-      newMovements.splice(movementIndex, 1);
-      newPieces[pieceIndex] = {
-        ...newPieces[pieceIndex],
-        movements: newMovements,
-      };
-      return {
-        ...prevState,
-        pieces: newPieces,
-      };
-    });
-  };
 
   const handleDateTimeChange = (datetime) => {
     console.log("dateTime?", datetime);
@@ -275,9 +195,6 @@ export const ProgramCreateEdit = () => {
         handleChangeProgram={handleChangeProgram}
         handleChangePiece={handleChangePiece}
         removePiece={removePiece}
-        handleChangeMovement={handleChangeMovement}
-        addMovement={addMovement}
-        removeMovement={removeMovement}
         addPiece={addPiece}
         handleSubmit={handleSubmit}
         id={id}

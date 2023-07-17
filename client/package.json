@@ -20,6 +20,7 @@
     "formik": "^2.4.2",
     "fullcalendar": "^6.1.8",
     "immer": "^10.0.2",
+    "lodash": "^4.17.21",
     "luxon": "^3.3.0",
     "moment": "^2.29.4",
     "node-sass": "^9.0.0",

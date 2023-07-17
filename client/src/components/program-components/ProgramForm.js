@@ -22,9 +22,6 @@ export const ProgramForm = ({
   handleChangeProgram,
   handleChangePiece,
   removePiece,
-  handleChangeMovement,
-  addMovement,
-  removeMovement,
   addPiece,
   handleSubmit,
   id,
@@ -150,66 +147,6 @@ export const ProgramForm = ({
                     </Grid>
                   </Grid>
                 </Grid>
-                {piece.movements.map((movement, movementIndex) => {
-                  return (
-                    <Grid container key={movementIndex} spacing={6}>
-                      <Grid item xs={12} sm={12}>
-                        <Typography sx={{ textAlign: "center" }} variant={"h6"}>
-                          Movement #{movementIndex + 1}
-                        </Typography>
-                        <FormControl fullWidth>
-                          <TextField
-                            id={`piece-${pieceIndex}-movement-${movementIndex}-name`}
-                            name="name"
-                            label="Movement Name"
-                            value={movement.name}
-                            onChange={(event) =>
-                              handleChangeMovement(
-                                event,
-                                pieceIndex,
-                                movementIndex
-                              )
-                            }
-                            fullWidth
-                          />
-                        </FormControl>
-                        <Button
-                          sx={{
-                            color: "white",
-                            backgroundColor: "#6ECF8B",
-                            margin: "1rem 0",
-                            "&:hover": {
-                              backgroundColor: "#66DB8E",
-                            },
-                          }}
-                          onClick={() => addMovement(pieceIndex)}
-                          fullWidth
-                        >
-                          Add Another Movement?
-                        </Button>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button
-                          sx={{
-                            color: "white",
-                            width: "100%",
-                            backgroundColor: "#FF6659",
-                            margin: "1rem 0",
-                            "&:hover": {
-                              backgroundColor: "#FF3D2E",
-                            },
-                          }}
-                          onClick={() =>
-                            removeMovement(pieceIndex, movementIndex)
-                          }
-                          fullWidth
-                        >
-                          Remove this movement
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  );
-                })}
                 <Button
                   sx={{
                     backgroundColor: "#E53935",
