@@ -4,6 +4,8 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import {useParams} from "react-router-dom"
 import {PieceForm} from "../../components/piece-components/PieceForm.js"
+import {PieceFormRHL} from "../../components/piece-components/PieceFormRHL.js"
+
 
 import * as Yup from "yup";
 import axios from "axios";
@@ -174,7 +176,7 @@ function AddPieceForm() {
         fetchEditData();
       }, [id]);
 
-      const onSubmit= async (values, { setSubmitting }) => {
+      const onSubmit= async (values) => {
         try {
           if (id) {
             await axios.put(
@@ -200,9 +202,7 @@ function AddPieceForm() {
         } catch (error) {
           alert("I'm sorry, there's an error in submitting this form");
           console.log("error", error);
-        } finally {
-          setSubmitting(false);
-        }
+        } 
       }
 
       if(piece === null && id) {
@@ -223,7 +223,16 @@ function AddPieceForm() {
         width: "80%",
       }}
     >
-      <PieceForm
+      {/* <PieceForm
+        id={id}
+        initialValues={piece || seedData}
+        validationSchema={validationSchema}
+        cookies={cookies}
+        navigate={navigate}
+        onSubmit={onSubmit}
+      /> */}
+
+      <PieceFormRHL
         id={id}
         initialValues={piece || seedData}
         validationSchema={validationSchema}
