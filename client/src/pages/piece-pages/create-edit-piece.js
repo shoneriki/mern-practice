@@ -69,33 +69,36 @@ function AddPieceForm() {
 
   const [piece, setPiece] = useState(null)
 
+  const hourValidation = Yup.number().min(0).max(10)
+  const timeValidation = Yup.number().min(0).max(59);
+
+  const tempoValidation = Yup.object({
+    notes: Yup.string(),
+    bpm: Yup.number().min(10).max(300),
+  });
+
+  const excerptValidation = Yup.object({
+    location: Yup.string(),
+    notes: Yup.string(),
+    repetitions: Yup.number().min(0),
+    timeToSpend: Yup.object({
+      hours: hourValidation,
+      minutes: timeValidation,
+      seconds: timeValidation,
+    }),
+    tempi: Yup.array(tempoValidation),
+    mastered: Yup.boolean(),
+  });
+
   const validationSchema = Yup.object({
     name: Yup.string(),
     composer: Yup.string(),
     length: Yup.object({
-      hours: Yup.number().min(0).max(10),
-      minutes: Yup.number().min(0).max(59),
-      seconds: Yup.number().min(0).max(59),
+      hours: hourValidation,
+      minutes: timeValidation,
+      seconds: timeValidation,
     }),
-    excerpts: Yup.array(
-      Yup.object({
-        location: Yup.string(),
-        notes: Yup.string(),
-        repetitions: Yup.number().min(0),
-        timeToSpend: Yup.object({
-          hours: Yup.number().min(0).max(10),
-          minutes: Yup.number().min(0).max(59),
-          seconds: Yup.number().min(0).max(59),
-        }),
-        tempi: Yup.array(
-          Yup.object({
-            notes: Yup.string(),
-            bpm: Yup.number().min(10).max(300),
-          })
-        ),
-        mastered: Yup.boolean(),
-      })
-    ),
+    excerpts: Yup.array(excerptValidation),
     mastered: Yup.boolean(),
     userOwner: Yup.string().test(
       "userOwner",
@@ -103,6 +106,42 @@ function AddPieceForm() {
       (value) => value === userID
     ),
   });
+
+
+  // const validationSchema = Yup.object({
+  //   name: Yup.string(),
+  //   composer: Yup.string(),
+  //   length: Yup.object({
+  //     hours: Yup.number().min(0).max(10),
+  //     minutes: Yup.number().min(0).max(59),
+  //     seconds: Yup.number().min(0).max(59),
+  //   }),
+  //   excerpts: Yup.array(
+  //     Yup.object({
+  //       location: Yup.string(),
+  //       notes: Yup.string(),
+  //       repetitions: Yup.number().min(0),
+  //       timeToSpend: Yup.object({
+  //         hours: Yup.number().min(0).max(10),
+  //         minutes: Yup.number().min(0).max(59),
+  //         seconds: Yup.number().min(0).max(59),
+  //       }),
+  //       tempi: Yup.array(
+  //         Yup.object({
+  //           notes: Yup.string(),
+  //           bpm: Yup.number().min(10).max(300),
+  //         })
+  //       ),
+  //       mastered: Yup.boolean(),
+  //     })
+  //   ),
+  //   mastered: Yup.boolean(),
+  //   userOwner: Yup.string().test(
+  //     "userOwner",
+  //     "User Owner ID does not match",
+  //     (value) => value === userID
+  //   ),
+  // });
 
       useEffect(() => {
         console.log("id from useEffect", id)
