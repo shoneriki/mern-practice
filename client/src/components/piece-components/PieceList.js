@@ -98,17 +98,25 @@ export const PieceList = () => {
   // end of delete functionality
 
   return (
-    <Box className="piecelist">
+    <Box
+      className="piecelist"
+      sx={{
+        width: "80%",
+      }}
+    >
       <Typography
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
       >
         List of Pieces
       </Typography>
-      <Grid container spacing={3}>
+      <Grid
+        container
+        spacing={3}
+      >
         {pieces.map((piece) => {
           return (
-            <Grid item sx={12} sm={6} md={4} key={piece._id}>
+            <Grid item xs={12} sm={6} md={4} key={piece._id}>
               <Box sx={{ border: "1px solid black", padding: "1rem" }}>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   {piece.name}
@@ -123,34 +131,16 @@ export const PieceList = () => {
                 >
                   <Button
                     name="edit-btn"
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "yellow",
-                      color: "black",
-                      border: "none",
-                      "&:hover": {
-                        backgroundColor: "orange",
-                        border: "none",
-                        cursor: "pointer",
-                      },
-                    }}
+                    variant="contained"
+                    color="warning"
                     onClick={() => handleEdit(piece._id)}
                   >
                     Edit?
                   </Button>
                   <Button
                     name="delete-btn"
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "red",
-                      color: "white",
-                      border: "none",
-                      "&:hover": {
-                        backgroundColor: "darkred",
-                        border: "none",
-                        cursor: "pointer",
-                      },
-                    }}
+                    variant="contained"
+                    color="error"
                     onClick={() => handleClickOpen(piece._id)}
                   >
                     Delete
@@ -163,7 +153,11 @@ export const PieceList = () => {
                       <Button onClick={handleClose} color="primary">
                         Cancel
                       </Button>
-                      <Button onClick={() => handleDelete(piece._id)} color="primary" autoFocus>
+                      <Button
+                        onClick={() => handleDelete(piece._id)}
+                        color="primary"
+                        autoFocus
+                      >
                         Yes, Delete
                       </Button>
                     </DialogActions>
