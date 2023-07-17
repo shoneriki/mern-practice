@@ -22,6 +22,118 @@ import * as yup from 'yup';
 
 /* react hook library form */
 
+const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
+  const {
+    fields: tempoFields,
+    append: appendTempo,
+    remove: removeTempo,
+  } = useFieldArray ({
+    control,
+    name: `excerpts.${excerptIndex}.tempi`
+  })
+  return (
+    <Grid item xs={12} sm={4}>
+      <Typography variant={"h6"}>Excerpt {excerptIndex + 1}</Typography>
+
+      <Grid item xs={12}>
+        <Controller
+          name={`excerpts.${excerptIndex}.location`}
+          control={control}
+          defaultValue=""
+          multiline
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Location"
+              placeholder="Location"
+              fullWidth
+            />
+          )}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Controller
+          name={`excerpts.${excerptIndex}.notes`}
+          control={control}
+          defaultValue=""
+          multiline
+          render={({ field }) => (
+            <TextField {...field} label="Notes" placeholder="Notes" fullWidth />
+          )}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Controller
+          name={`excerpts.${excerptIndex}.repetitions`}
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField {...field} type="number" label="Repetitions" fullWidth />
+          )}
+        />
+      </Grid>
+
+      <Box>
+        <Typography sx={{ textAlign: "center" }}>Time To Spend:</Typography>
+      </Box>
+      <Grid container name="timeToSpend-grid-container">
+        <Grid item xs={12} sm={4}>
+          <Controller
+            name={`excerpts.${excerptIndex}.timeToSpend.hours`}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField {...field} type="number" label="hours" fullWidth />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Controller
+            name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField {...field} type="number" label="minutes" fullWidth />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Controller
+            name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField {...field} type="number" label="seconds" fullWidth />
+            )}
+          />
+        </Grid>
+      </Grid>
+      <Grid item xs={12} sm={6} md={4}>
+        <Controller
+          name={`excerpts.${excerptIndex}.mastered`}
+          control={control}
+          defaultValue={false}
+          render={({ field }) => (
+            <FormControlLabel
+              control={<Switch checked={field.value} {...field} />}
+              label="Excerpt Mastered?"
+            />
+          )}
+        />
+      </Grid>
+
+      <Button
+        type="button"
+        variant="contained"
+        color="error"
+        onClick={() => removeExcerpt(excerptIndex)}
+      >
+        Remove Excerpt
+      </Button>
+    </Grid>
+  );
+}
+
 export const PieceForm = ({
   key,
   piece,
@@ -140,132 +252,12 @@ export const PieceForm = ({
             </Grid>
           </Box>
           {excerptFields.map((excerptField, excerptIndex) => (
-            <Grid item xs={12} sm={4} key={excerptField.id}>
-              <Typography variant={"h6"}>Excerpt {excerptIndex + 1}</Typography>
-
-              <Grid item xs={12}>
-                <Controller
-                  name={`excerpts.${excerptIndex}.location`}
-                  control={control}
-                  defaultValue=""
-                  multiline
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Location"
-                      placeholder="Location"
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Controller
-                  name={`excerpts.${excerptIndex}.notes`}
-                  control={control}
-                  defaultValue=""
-                  multiline
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Notes"
-                      placeholder="Notes"
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Controller
-                  name={`excerpts.${excerptIndex}.repetitions`}
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      type="number"
-                      label="Repetitions"
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Box>
-                <Typography sx={{ textAlign: "center" }}>
-                  Time To Spend:
-                </Typography>
-              </Box>
-              <Grid container name="timeToSpend-grid-container">
-                <Grid item xs={12} sm={4}>
-                  <Controller
-                    name={`excerpts.${excerptIndex}.timeToSpend.hours`}
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        type="number"
-                        label="hours"
-                        fullWidth
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Controller
-                    name={`excerpts.${excerptIndex}.timeToSpend.minutes`}
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        type="number"
-                        label="minutes"
-                        fullWidth
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Controller
-                    name={`excerpts.${excerptIndex}.timeToSpend.seconds`}
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        type="number"
-                        label="seconds"
-                        fullWidth
-                      />
-                    )}
-                  />
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <Controller
-                  name={`excerpts.${excerptIndex}.mastered`}
-                  control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <FormControlLabel
-                      control={<Switch checked={field.value} {...field} />}
-                      label="Excerpt Mastered?"
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Button
-                type="button"
-                variant="contained"
-                color="error"
-                onClick={() => removeExcerpt(excerptIndex)}
-              >
-                Remove Excerpt
-              </Button>
-            </Grid>
+            <ExcerptField
+              key={excerptField.id}
+              control={control}
+              excerptIndex={excerptIndex}
+              removeExcerpt={removeExcerpt}
+            />
           ))}
           <Box
             sx={{
