@@ -37,7 +37,9 @@ const programSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-programSchema.pre("save", function (next) {
+programSchema.pre("save", async function (next) {
+  await this.populate("pieces");
+
   let totalLengthInSeconds = 0;
   for (let i = 0; i < this.pieces.length; i++) {
     const piece = this.pieces[i];
@@ -55,6 +57,7 @@ programSchema.pre("save", function (next) {
 
   next();
 });
+
 
 export const ProgramsModel = mongoose.model(
   "Programs",

@@ -66,12 +66,13 @@ router.get("/user/:userID", async (req, res) => {
 router.post("/", async (req, res) => {
   console.log("req.body from post",req.body)
   const programPlan = new ProgramsModel({
-    _id: new mongoose.Types.ObjectId(),
     ...req.body,
   });
 
   try {
+    const userID = req.params.userID;
     const savedProgram = await programPlan.save();
+    console.log("SAVED PROGRAM?", savedProgram)
     res.status(201).json(savedProgram)
   } catch (err) {
     console.log(err);
@@ -100,7 +101,7 @@ router.put(`/program/:id`, async (req, res) => {
 router.delete("/program/:id", async (req,res) => {
   try {
     const id = req.params.id;
-    await ProgramsModel.findByIdAndRemove(id);
+    await ProgramsModel.findByIdAndDelete(id);
     res.status(200).json({message: "Program deleted successfully"})
   } catch(err) {
     console.log("error:", err)

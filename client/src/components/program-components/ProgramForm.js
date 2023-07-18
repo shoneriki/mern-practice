@@ -29,8 +29,6 @@ export const ProgramForm = ({
 }) => {
   console.log("program from ProgramForm component", program);
 
-
-
   return (
     <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
       <Typography sx={{ textAlign: "center" }} variant={"h6"}>
