@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import { Box, Grid, Typography, InputLabel, TextField, Autocomplete, avatarGroupClasses } from "@mui/material";
 
 import  {PracticeSessionForm}  from "../../components/practiceSession-components/PracticeSessionForm";
+import  {PracticeSessionFormRHL}  from "../../components/practiceSession-components/PracticeSessionFormRHL";
 
 export const PracticeSessionCreateEdit = (props) => {
   const userID = useGetUserID();
@@ -273,7 +274,21 @@ useEffect(() => {
         width: "80%",
       }}
     >
-      <PracticeSessionForm
+      {/* <PracticeSessionForm
+        initialValues={formValues}
+        validationSchema={validationSchema}
+        id={id}
+        practiceSession={practiceSession}
+        cookies={cookies}
+        navigate={navigate}
+        selectedPiece={selectedPiece}
+        suggestions={suggestions}
+        handlePieceSearch={handlePieceSearch}
+        handlePieceSelection={handlePieceSelection}
+        onSubmit={onSubmit}
+        handleAutocompleteChange={handleAutocompleteChange}
+      /> */}
+      <PracticeSessionFormRHL
         initialValues={formValues}
         validationSchema={validationSchema}
         id={id}
