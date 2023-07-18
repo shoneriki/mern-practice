@@ -91,7 +91,9 @@ export const PracticeSessionList = () => {
   // end of delete functionality
 
   return (
-    <Box className="practiceSessionsList">
+    <Box
+      className="practiceSessionsList"
+    >
       <Typography
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
@@ -103,56 +105,87 @@ export const PracticeSessionList = () => {
 
           return (
             <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
-              <Box sx={{ border: "1px solid black", padding: "1rem" }}>
-                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  Title: {practiceSession.name}
+              <Box
+                sx={{
+                  border: "1px solid black",
+                  borderRadius: "1rem",
+                  padding: "1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant={"h6"} sx={{ fontWeight: "bold" }} align="center">
+                  Title:
                 </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Grid id="piece" container>
+                <Typography variant={"h6"} align="center">
+                  {practiceSession.name}
+                </Typography>
+                <Box>
+                  <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                    Length Of Session:
+                  </Typography>
+                  <Grid container sx={{ width: "50%" }}>
+                    <Grid item sx={4} sm={4}>
+                      <Typography>
+                        {practiceSession.totalSessionLength.hours > 0
+                          ? practiceSession.totalSessionLength.hours
+                          : 0}
+                        hr
+                      </Typography>
+                    </Grid>
+                    <Grid item sx={4} sm={4}>
+                      <Typography>
+                        {practiceSession.totalSessionLength.minutes > 0
+                          ? practiceSession.totalSessionLength.minutes
+                          : 0}{" "}
+                        min
+                      </Typography>
+                    </Grid>
+                    <Grid item sx={4} sm={4}>
+                      <Typography>
+                        {practiceSession.totalSessionLength.seconds > 0
+                          ? practiceSession.totalSessionLength.seconds
+                          : 0}
+                        sec
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Box>
+                  <Grid
+                    id="piece"
+                    container
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
                     <Grid item sx={12}>
-                      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                      <Typography
+                        variant={"h6"}
+                        sx={{ fontWeight: "bold" }}
+                        align="center"
+                      >
+                        Piece Name:
+                      </Typography>
+                      <Typography variant={"h6"} align="center">
                         {practiceSession.piece.name}
                       </Typography>
                     </Grid>
                     <Grid item sx={12}>
-                      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                      <Typography
+                        variant={"h6"}
+                        sx={{ fontWeight: "bold" }}
+                        align="center"
+                      >
+                        Composer:
+                      </Typography>
+                      <Typography variant={"h6"} align="center">
                         {practiceSession.piece.composer}
                       </Typography>
                     </Grid>
-                    <Box sx={{ width: "60%" }}>
-                      <Typography variant={"h6"}>Length of Piece:</Typography>
-                      <Grid container sx={{ width: "50%" }}>
-                        <Grid item sx={4} sm={4}>
-                          <Typography>
-                            {practiceSession.piece.length.hours > 0
-                              ? practiceSession.piece.length.hours
-                              : 0}
-                            hr
-                          </Typography>
-                        </Grid>
-                        <Grid item sx={4} sm={4}>
-                          <Typography>
-                            {practiceSession.piece.length.minutes > 0
-                              ? practiceSession.piece.length.minutes
-                              : 0}{" "}
-                            min
-                          </Typography>
-                        </Grid>
-                        <Grid item sx={4} sm={4}>
-                          <Typography>
-                            {practiceSession.piece.length.seconds > 0
-                              ? practiceSession.piece.length.seconds
-                              : 0}
-                            sec
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </Box>
                   </Grid>
                 </Box>
 

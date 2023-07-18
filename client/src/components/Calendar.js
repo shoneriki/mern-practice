@@ -3,12 +3,16 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "../css/calendar.scss";
 import { useFetchProgramsForCalendar } from "../services/useFetchProgramsForCalendar.js";
+import { useFetchPracticeSessionsForCalendar } from "../services/useFetchPracticeSessionsForCalendar.js";
 
 const localizer = momentLocalizer(moment);
 
 export const ScheduledCalendar = (props) => {
   const programs = useFetchProgramsForCalendar();
+  const practiceSessions = useFetchPracticeSessionsForCalendar();
   const [events, setEvents] = useState([]);
+
+  const [practiceSessionEvents, setPracticeSessionEvents] = useState([])
 
   // Transform programs into events
   useEffect(() => {
@@ -29,6 +33,24 @@ export const ScheduledCalendar = (props) => {
     setEvents(programEvents);
   }, [programs]);
 
+  // useEffect(() => {
+  //   const updatedPracticeSessionEvents = practiceSessions.map((practiceSession) => {
+  //     const practiceSessionDate = new Date(practiceSession.dateOfExecution);
+  //     return {
+  //       start: practiceSessionDate,
+  //       end: new Date(
+  //         practiceSession.getTime() +
+  //           practiceSession.totalSessionLength.hours * 3600 * 1000 +
+  //           practiceSession.totalSessionLength.minutes * 60 * 1000 +
+  //           practiceSession.totalSessionLength.seconds * 1000
+  //       ),
+  //       title: practiceSession.name,
+  //       practiceSessionId: practiceSession._id,
+  //     }
+  //   })
+  //   setPracticeSessionEvents(updatedPracticeSessionEvents)
+  // }, [practiceSessions])
+
   const handleEventClick = (event) => {
     // Find the clicked program
     const program = programs.find((program) => program._id === event.programId);
@@ -45,6 +67,7 @@ export const ScheduledCalendar = (props) => {
       <Calendar
         localizer={localizer}
         events={events}
+        // practiceSessionEvents={practiceSessionEvents}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}

@@ -13,8 +13,6 @@ import {
 import {ProgramList} from "../components/program-components/ProgramList"
 
 export const Home = () => {
-  // const [recipes, setRecipes] = useState([]);
-  // const [savedRecipes, setSavedRecipes] = useState([]);
 
   const userID = useGetUserID();
 
@@ -36,24 +34,24 @@ export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <Box className="container">
+    <Box className="container"
+      sx={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}}
+    >
       <ProgramList />
-      <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+      <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", margin: "1rem auto", width: "40%"}}>
         <Button
           onClick={() => navigate("/programs")}
-          // sx={{
-          //   color: "white",
-          //   backgroundColor: "green",
-          //   textAlign: "center",
-          //   margin: "1rem auto",
-          //   "&:hover": {
-          //     backgroundColor: "yellow",
-          //   },
-          // }}
           color='secondary'
           variant="contained"
         >
           All Programs?
+        </Button>
+        <Button
+          onClick={() => navigate("/practiceSessions")}
+          color='secondary'
+          variant="contained"
+        >
+          All Practice Sessions?
         </Button>
       </Box>
       <Box id="calendar">

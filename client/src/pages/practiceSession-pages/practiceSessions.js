@@ -6,6 +6,7 @@ import { useCookies } from "react-cookie";
 import { format } from "date-fns";
 import { Button, Box } from "@mui/material";
 import { PracticeSessionList } from "../../components/practiceSession-components/PracticeSessionList";
+import { ScheduledCalendar } from "../../components/Calendar";
 
 export const PracticeSessions = () => {
   return (
@@ -15,6 +16,7 @@ export const PracticeSessions = () => {
       }}
     >
       <PracticeSessionList />;
+      <ScheduledCalendar/>;
     </Box>
   )
 };
