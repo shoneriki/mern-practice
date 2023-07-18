@@ -185,7 +185,7 @@ useEffect(() => {
 
 
   // submitting the practiceSession form; new or edited
-  const onSubmit= async (values, { setSubmitting }) => {
+  const onSubmit= async (values) => {
     console.log("entering the submit?");
     try {
       const practiceSessionData = {
@@ -238,8 +238,6 @@ useEffect(() => {
     } catch (error) {
       alert("I'm sorry, there's an error in submitting this form");
       console.log("error", error);
-    } finally {
-      setSubmitting(false);
     }
   }
 

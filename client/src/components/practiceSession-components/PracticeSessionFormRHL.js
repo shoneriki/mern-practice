@@ -63,7 +63,7 @@ const TimeToSpendField = ({ control, excerptIndex, key }) => {
     >
       <InputLabel>Time to Spend:</InputLabel>
       <Grid container>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={4}>
           <TextField
             {...hoursInputProps}
             inputRef={hoursRef}
@@ -74,7 +74,7 @@ const TimeToSpendField = ({ control, excerptIndex, key }) => {
             helperText={hoursError?.message}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={4}>
           <TextField
             {...minutesInputProps}
             inputRef={minutesRef}
@@ -85,7 +85,7 @@ const TimeToSpendField = ({ control, excerptIndex, key }) => {
             helperText={minutesError?.message}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={4}>
           <TextField
             {...secondsInputProps}
             inputRef={secondsRef}
@@ -143,13 +143,22 @@ const TempoField = ({ control, excerptIndex, tempoIndex, removeTempo }) => {
           error={bpmInvalid}
           helperText={bpmError?.message}
         />
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => removeTempo(tempoIndex)}
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            margin: "1rem auto"
+          }}
         >
-          Remove Tempo
-        </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => removeTempo(tempoIndex)}
+          >
+            Remove Tempo
+          </Button>
+        </Box>
       </Grid>
     </>
   );
@@ -171,7 +180,7 @@ const ExcerptField = ({
   });
 
   return (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4} centered>
         <Typography variant={"h6"} sx={{ textAlign: "center" }}>
           Excerpt {excerptIndex + 1}:
         </Typography>
@@ -212,27 +221,45 @@ const ExcerptField = ({
           )}
         />
         {tempoFields.map((tempoField, tempoIndex) => (
-          <TempoField
-            key={tempoField.id}
-            control={control}
-            excerptIndex={excerptIndex}
-            tempoIndex={tempoIndex}
-            removeTempo={removeTempo}
-          />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TempoField
+              key={tempoField.id}
+              control={control}
+              excerptIndex={excerptIndex}
+              tempoIndex={tempoIndex}
+              removeTempo={removeTempo}
+            />
+          </Box>
         ))}
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
-          onClick={() =>
-            appendTempo({
-              notes: "",
-              bpm: 60,
-            })
-          }
+        <Box
+          sx={{
+            width: "100%",
+            margin: "1rem auto",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          Add a Tempo
-        </Button>
+          <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            onClick={() =>
+              appendTempo({
+                notes: "",
+                bpm: 60,
+              })
+            }
+          >
+            Add a Tempo
+          </Button>
+        </Box>
         <TimeToSpendField control={control} excerptIndex={excerptIndex} />
         <Box
           sx={{
@@ -412,10 +439,23 @@ export const PracticeSessionFormRHL = ({
             </Grid>
           </Grid>
         </Box>
-        <Grid container>
-          {values.piece &&
-            values.piece.excerpts &&
-            values.piece.excerpts.map((excerpt, excerptIndex) => (
+        <Box
+          name="box-outside-grid-for-margin"
+          sx={{
+            margin: "2rem auto"
+          }}
+        >
+          <Grid
+            container
+            spacing={4} name="grid-outside-excerpts"
+            sx={{
+              border: "1px solid black",
+              borderRadius: "1rem",
+            }}
+          >
+            {values.piece &&
+              values.piece.excerpts &&
+              values.piece.excerpts.map((excerpt, excerptIndex) => (
                 <ExcerptField
                   key={excerptIndex}
                   excerptIndex={excerptIndex}
@@ -423,8 +463,10 @@ export const PracticeSessionFormRHL = ({
                   appendExcerpt={appendExcerpt}
                   removeExcerpt={removeExcerpt}
                 />
-            ))}
-        </Grid>
+              ))}
+          </Grid>
+
+        </Box>
 
 
         <Grid
