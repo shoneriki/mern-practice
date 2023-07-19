@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Button,
@@ -13,25 +13,40 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import axios from "axios"
 import dayjs from "dayjs";
 
-export const ProgramFormRHL = ({ onSubmit, userID }) => {
-  const { register, control, handleSubmit, setValue, watch } = useForm({
-    defaultValues: {
-      name: "Test Program",
-      date: dayjs(),
-      pieces: [
-        {
-          name: "Test Piece",
-          composer: "Test Composer",
-          length: { hours: 0, minutes: 30, seconds: 0 },
-        },
-      ],
-      numOfPieces: 1,
-      intermission: 0,
-      userOwner: userID,
-    },
-  });
+export const ProgramFormRHL = ({ onSubmit, userID, id, program, setProgram }) => {
+
+
+  const { register, control, handleSubmit, setValue, watch, reset } = useForm({
+    defaultValues: program
+  })
+
+  useEffect(() => {
+    if (
+      program &&
+      program.pieces &&
+      program.pieces.length > 0 &&
+      !program.pieces[0]._id
+    ) {
+      // Fetch each piece and set its data
+      const fetchPieces = async () => {
+        const piecePromises = program.pieces.map((pieceId) =>
+          axios.get(`http://localhost:3001/pieces/${pieceId}`)
+        );
+        const pieceResponses = await Promise.all(piecePromises);
+        const pieces = pieceResponses.map((response) => response.data);
+
+        // Set the program data with the pieces data
+        setProgram({ ...program, pieces });
+      };
+      fetchPieces();
+    }
+  }, [program]);
+
+
+
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -192,6 +207,7 @@ export const ProgramFormRHL = ({ onSubmit, userID }) => {
                 id="numOfPieces"
                 label="Number of Pieces"
                 name="numOfPieces"
+                disabled
                 fullWidth
               />
             </FormControl>

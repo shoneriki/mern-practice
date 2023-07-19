@@ -41,6 +41,7 @@ router.get(`/program/:id`, async (req, res) => {
   try {
     const id = req.params.id;
     const program = await ProgramsModel.findById(id);
+    console.log("PROGRAM from GET?", program)
     if (program) {
       res.json(program);
     } else {

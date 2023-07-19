@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,25 +18,38 @@ export const ProgramCreateEdit = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
+  const [program, setProgram] = useState({pieces: []})
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchEditData = async () => {
       if (id) {
+        setIsLoading(true);
         try {
           const response = await axios.get(
             `http://localhost:3001/programs/program/${id}`
           );
           let programData = response.data;
+          console.log("programData: ", programData)
 
           // Converting 'dayjs' instances to strings
           programData.date = dayjs(programData.date);
           programData.time = dayjs(programData.time);
+
+          if (!Array.isArray(programData.pieces)) {
+            programData.pieces=[];
+          }
+          setProgram(programData)
+          setIsLoading(false)
         } catch (error) {
           console.error(
             "an error occurred while fetching the program: ",
             error
           );
+          setIsLoading(false);
         }
+      } else {
+        setIsLoading(false)
       }
     };
     fetchEditData();
@@ -73,6 +86,7 @@ export const ProgramCreateEdit = () => {
 
 
   const onSubmit = async (data) => {
+    console.log("is there data in this program form submission? Data: ", data)
     const dateTime = dayjs(data.date).format("YYYY-MM-DDTHH:mm:ss");
     console.log("userID:", userID);
 
@@ -80,7 +94,7 @@ export const ProgramCreateEdit = () => {
       const piecePromises = data.pieces.map((piece, pieceIndex) => {
         if (piece._id) {
           // If the piece has an ID, update the existing piece
-          return axios.put(`http://localhost:3001/pieces/${piece._id}`, piece, {
+          return axios.put(`http://localhost:3001/pieces/${piece._id}`, {...piece, userOwner: userID}, {
             headers: { authorization: cookies.access_token },
           });
         } else {
@@ -131,6 +145,7 @@ export const ProgramCreateEdit = () => {
       const programData = {
         ...data,
         date: dateTime,
+        length: length,
         pieces: updatedPieces.map((piece) => {
           if (!piece || !piece._id) {
             console.error("Invalid piece:", piece);
@@ -138,6 +153,7 @@ export const ProgramCreateEdit = () => {
           }
           return piece._id;
         }),
+        userOwner: userID,
       };
 
       if (id) {
@@ -162,6 +178,10 @@ export const ProgramCreateEdit = () => {
     }
   };
 
+  if (isLoading) {
+    return <section>Loading...</section>
+  }
+
 
 
 
@@ -169,7 +189,13 @@ export const ProgramCreateEdit = () => {
   return (
     <Box className="create-program">
       {/* <ProgramForm onSubmit={onSubmit} /> */}
-      <ProgramFormRHL onSubmit={onSubmit} userID={userID}/>
+      <ProgramFormRHL
+        onSubmit={onSubmit}
+        userID={userID}
+        id={id}
+        program={program}
+        setProgram={setProgram}
+      />
     </Box>
   );
 };

@@ -4,7 +4,6 @@ const programSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     date: {
       type: Date,
@@ -12,7 +11,6 @@ const programSchema = new mongoose.Schema(
     },
     numOfPieces: {
       type: Number,
-      required: true,
     },
     pieces: [
       {
