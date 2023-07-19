@@ -109,6 +109,12 @@ export const ProgramCreateEdit = () => {
             .put(`http://localhost:3001/pieces/piece/${piece._id}`, pieceData, {
               headers: { authorization: cookies.access_token },
             })
+            .then((response) => {
+              if (!response || !response.data) {
+                console.error("Invalid response:", response);
+              }
+              return response;
+            })
             .catch((error) => {
               console.error("Error updating piece:", error);
               return null;
@@ -123,7 +129,7 @@ export const ProgramCreateEdit = () => {
               if (!response || !response.data) {
                 console.error("Invalid response:", response);
               }
-              return response.data;
+              return response;
             })
             .catch((error) => {
               alert("an error occurred");
@@ -143,7 +149,7 @@ export const ProgramCreateEdit = () => {
       let totalLengthInSeconds = 0;
       for (let i = 0; i < updatedPieces.length; i++) {
         const piece = updatedPieces[i];
-        if (piece) {
+        if (piece && piece.data) {
           totalLengthInSeconds +=
             piece.data.length.hours * 3600 +
             piece.data.length.minutes * 60 +
@@ -194,6 +200,7 @@ export const ProgramCreateEdit = () => {
       console.error(error.response.data);
     }
   };
+
 
 
   if (isLoading) {
