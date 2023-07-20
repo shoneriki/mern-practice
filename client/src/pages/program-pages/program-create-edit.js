@@ -39,16 +39,38 @@ export const ProgramCreateEdit = () => {
           if (Array.isArray(programData.pieces)) {
             // Fetch the full data for each piece
             const piecePromises = programData.pieces.map((pieceId) =>
-              axios.get(`http://localhost:3001/pieces/piece/${pieceId}`)
+              axios
+                .get(`http://localhost:3001/pieces/piece/${pieceId}`)
+                .then((response) => response.data)
+                .catch((error) => {
+                  if (
+                    axios.isAxiosError(error) &&
+                    error.response?.status === 404
+                  ) {
+                    // If the piece was not found, return null
+                    return null;
+                  } else {
+                    // If it was another error, throw it to be caught by the outer catch block
+                    throw error;
+                  }
+                })
             );
-            const pieceResponses = await Promise.all(piecePromises);
-            programData.pieces = pieceResponses.map(
-              (response) => response.data
+            let pieceResponses = await Promise.all(piecePromises);
+            // Filter out any pieces that could not be fetched
+            pieceResponses = pieceResponses.filter((piece) => piece !== null);
+            // Update the program data with the fetched pieces
+            programData.pieces = pieceResponses;
+            await axios.put(
+              `http://localhost:3001/programs/program/${programData._id}`,
+              programData
             );
-          } else {
-            programData.pieces = [];
           }
+
+
+          console.log("programData: ", programData)
+
           setProgram(programData)
+
           setIsLoading(false)
         } catch (error) {
           console.error(

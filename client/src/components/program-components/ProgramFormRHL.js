@@ -33,7 +33,7 @@ export const ProgramFormRHL = ({ onSubmit, userID, id, program, setProgram }) =>
       // Fetch each piece and set its data
       const fetchPieces = async () => {
         const piecePromises = program.pieces.map((pieceId) =>
-          axios.get(`http://localhost:3001/pieces/${pieceId}`)
+          axios.get(`http://localhost:3001/pieces/piece/${pieceId}`)
         );
         const pieceResponses = await Promise.all(piecePromises);
         const pieces = pieceResponses.map((response) => response.data);
