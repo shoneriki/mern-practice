@@ -102,7 +102,6 @@ export const ProgramCreateEdit = () => {
     try {
       const piecePromises = data.pieces.map((piece, pieceIndex) => {
         const pieceData = { ...piece, userOwner: userID };
-        console.log("pieceData? ", pieceData);
         if (piece._id) {
           // If the piece has an ID, update the existing piece
           return axios
@@ -201,15 +200,9 @@ export const ProgramCreateEdit = () => {
     }
   };
 
-
-
   if (isLoading) {
     return <section>Loading...</section>
   }
-
-
-
-
 
   return (
     <Box className="create-program">
