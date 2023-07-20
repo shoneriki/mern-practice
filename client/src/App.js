@@ -28,42 +28,55 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import { ProgramsProvider } from "./contexts/ProgramsContext";
+import { PiecesProvider } from "./contexts/PiecesContext";
+
 function App() {
   return (
     <div className="App">
       <Router>
         <Navbar />
         <Spacer />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/auth/register" element={<Register />} />
-          <Route path="/auth/login" element={<Login />} />
+          <ProgramsProvider>
+            <PiecesProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/auth/register" element={<Register />} />
+                <Route path="/auth/login" element={<Login />} />
 
-          <Route path="/pieces" element={<PieceList />} />
-          <Route path="/piece/create" element={<AddPieceForm />}/>
-          <Route path="/piece/edit/:id" element={<AddPieceForm/>}/>
+                <Route path="/pieces" element={<PieceList />} />
+                <Route path="/piece/create" element={<AddPieceForm />} />
+                <Route path="/piece/edit/:id" element={<AddPieceForm />} />
 
-          <Route path="/practiceSessions" element={<PracticeSessions />}/>
-          <Route
-            path="/practiceSession/create"
-            element={<PracticeSessionCreateEdit />}
-          />
-          <Route
-            path="/practiceSessions/practiceSession/create"
-            element={<PracticeSessionCreateEdit />}
-          />
-          <Route path="/practiceSession/edit/:id" element={<PracticeSessionCreateEdit/>}/>
-          <Route path="/practiceSessions/practiceSession/edit/:id" element={<PracticeSessionCreateEdit/>}/>
+                <Route path="/practiceSessions" element={<PracticeSessions />} />
+                <Route
+                  path="/practiceSession/create"
+                  element={<PracticeSessionCreateEdit />}
+                />
+                <Route
+                  path="/practiceSessions/practiceSession/create"
+                  element={<PracticeSessionCreateEdit />}
+                />
+                <Route
+                  path="/practiceSession/edit/:id"
+                  element={<PracticeSessionCreateEdit />}
+                />
+                <Route
+                  path="/practiceSessions/practiceSession/edit/:id"
+                  element={<PracticeSessionCreateEdit />}
+                />
 
-          <Route path="/programs" element={<ProgramList />} />
-          <Route path="/program/create" element={<ProgramCreateEdit />} />
-          <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
+                <Route path="/programs" element={<ProgramList />} />
+                <Route path="/program/create" element={<ProgramCreateEdit />} />
+                <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
 
-          <Route path="/workspace" element={<Workspace />} />
-          <Route path="/workspace/:id" element={<Workspace />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
+                <Route path="/workspace" element={<Workspace />} />
+                <Route path="/workspace/:id" element={<Workspace />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
+            </PiecesProvider>
+          </ProgramsProvider>
       </Router>
     </div>
   );

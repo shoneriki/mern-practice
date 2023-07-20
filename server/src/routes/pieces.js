@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { PiecesModel } from "../models/Pieces.js";
+import {ProgramsModel} from "../models/Programs.js"
 import { UserModel } from "../models/Users.js";
 // import { verifyToken } from "../controllers/UserController.js";
 
@@ -68,7 +69,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-//edit a program
+//edit a piece
 router.put(`/piece/:id`, async (req, res) => {
   try {
     const id = req.params.id;
@@ -85,12 +86,25 @@ router.put(`/piece/:id`, async (req, res) => {
   }
 });
 
-//delete a program
+//delete a piece
 router.delete("/piece/:id", async (req, res) => {
   try {
     const id = req.params.id;
     console.log("req.params ", req.params);
     const deletedPiece = await PiecesModel.findByIdAndRemove(id);
+
+    // Find all programs that contain the deleted piece
+    const programs = await ProgramsModel.find({ pieces: id });
+
+    // For each program, remove the deleted piece
+    for (let program of programs) {
+      const pieceIndex = program.pieces.indexOf(id);
+      if (pieceIndex > -1) {
+        program.pieces.splice(pieceIndex, 1);
+        await program.save();
+      }
+    }
+
     if (deletedPiece) {
       res.status(200).json({ message: "Piece deleted successfully" });
     } else {

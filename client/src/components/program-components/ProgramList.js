@@ -1,57 +1,71 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
-import {useNavigate} from "react-router-dom"
-import dayjs from "dayjs"
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
-import {Box, Typography, Grid, Button, Dialog, DialogTitle, DialogActions} from "@mui/material"
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@mui/material";
+
+import { ProgramsContext } from "../../contexts/ProgramsContext";
 
 export const ProgramList = () => {
-   const userID = useGetUserID();
+  const userID = useGetUserID();
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-   const [programs, setPrograms] = useState([]);
+  const { programs, setPrograms, refreshKey, setRefreshKey } =
+    useContext(ProgramsContext);
 
-   useEffect(() => {
-     const fetchPrograms = async (id) => {
-       try {
-         const response = await axios.get(
-           `http://localhost:3001/programs/user/${userID}`
-         );
-          console.log("response.data from the program list component", response.data)
-         response.data && response.data.length > 0
-           ? setPrograms(
+  useEffect(() => {
+    const fetchPrograms = async (id) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/programs/user/${userID}`
+        );
+        console.log(
+          "response.data from the program list component",
+          response.data
+        );
+        response.data && response.data.length > 0
+          ? setPrograms(
               response.data.map((program) => ({
                 ...program,
                 dateTime: new Date(program.date),
               }))
             )
-           : setPrograms([]);
-       } catch (error) {
-         if (error.response) {
-           // The request was made and the server responded with a status code that falls out of the range of 2xx
-           console.log("Data:", error.response.data);
-           console.log("Status:", error.response.status);
-           console.log("Headers:", error.response.headers);
-         } else if (error.request) {
-           // The request was made but no response was received
-           console.log("Request:", error.request);
-         } else {
-           // Something happened in setting up the request that triggered an Error
-           console.log("Error:", error.message);
-         }
-       }
-     };
-     fetchPrograms();
-   }, [userID]);
+          : setPrograms([]);
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          console.log("Data:", error.response.data);
+          console.log("Status:", error.response.status);
+          console.log("Headers:", error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log("Request:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error:", error.message);
+        }
+      }
+    };
+    fetchPrograms();
+  }, [userID, setPrograms, refreshKey]);
 
-   // edit functionality
+  // edit functionality
 
-   const handleEdit = (id) => {
-      navigate(`/program/edit/${id}`)
-   }
+  const handleEdit = (id) => {
+    navigate(`/program/edit/${id}`);
+  };
 
   // end edit functionality
 
@@ -74,7 +88,7 @@ export const ProgramList = () => {
       await axios.delete(`http://localhost:3001/programs/program/${id}`);
       console.log("Deleted");
       setOpen(false);
-      setPrograms(programs.filter(program => program._id !== id));
+      setPrograms(programs.filter((program) => program._id !== id));
     } catch (err) {
       console.log("error: ", err);
     }

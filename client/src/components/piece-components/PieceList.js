@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import {PieceForm} from "./PieceForm"
+import {PiecesContext} from "../../contexts/PiecesContext"
+import {ProgramsContext} from "../../contexts/ProgramsContext"
 
 import {
   Box,
@@ -16,12 +18,17 @@ import {
   DialogActions,
 } from "@mui/material";
 
+
 export const PieceList = () => {
   const userID = useGetUserID();
 
   const navigate = useNavigate();
 
   const [pieces, setPieces] = useState([]);
+
+  const {setRefreshKey} = useContext(PiecesContext)
+
+  const {updatePrograms} = useContext(ProgramsContext)
 
   useEffect(() => {
     const fetchPieces = async () => {
@@ -80,12 +87,32 @@ export const PieceList = () => {
     setOpen(false);
   };
 
+  // when a piece is deleted, we fetch the updated programs (if the deleted piece was inside of the program)
+  const fetchUpdatedPrograms = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/programs/user/${userID}`
+      );
+      console.log(
+        "response.data from the updated programs fetch",
+        response.data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching updated programs:", error);
+    }
+  };
+
   const handleDelete = async (id) => {
     console.log("id in toDelete", toDelete)
     try {
       await axios.delete(`http://localhost:3001/pieces/piece/${toDelete}`);
       setOpen(false);
       setPieces(pieces.filter((piece) => piece._id !== toDelete));
+      setRefreshKey(Date.now())
+      const updatedPrograms = await fetchUpdatedPrograms();
+      updatePrograms(updatedPrograms)
+      console.log("updated Programs?", updatedPrograms)
     } catch (err) {
       console.log("error: ", err);
     }
@@ -163,7 +190,7 @@ export const PieceList = () => {
                   </Button>
                   <Dialog name="dialog" open={open} onClose={handleClose}>
                     <DialogTitle>
-                      {"Are you sure you want to delete this program?"}
+                      {"Are you sure you want to delete this piece?"}
                     </DialogTitle>
                     <DialogActions>
                       <Button onClick={handleClose} color="primary">
