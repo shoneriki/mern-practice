@@ -61,7 +61,6 @@ export const PieceList = () => {
   // edit functionality
 
   const handleEdit = (id) => {
-    console.log("id from handleEdit", id)
     navigate(`/piece/edit/${id}`);
   };
 
@@ -73,7 +72,6 @@ export const PieceList = () => {
   const [toDelete, setToDelete] = useState(null);
 
   const handleClickOpen = (id) => {
-    console.log("id from handleClickOpen", id)
     setOpen(true);
     setToDelete(id);
   };
@@ -83,11 +81,9 @@ export const PieceList = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log("id", toDelete)
+    console.log("id in toDelete", toDelete)
     try {
-      await axios.delete(`http://localhost:3001/pieces/piece/${id}`);
-      console.log("Deleted");
-      alert("deleted")
+      await axios.delete(`http://localhost:3001/pieces/piece/${toDelete}`);
       setOpen(false);
       setPieces(pieces.filter((piece) => piece._id !== toDelete));
     } catch (err) {

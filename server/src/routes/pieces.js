@@ -89,13 +89,18 @@ router.put(`/piece/:id`, async (req, res) => {
 router.delete("/piece/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("req.params ", req.params)
-    await PiecesModel.findByIdAndRemove(id);
-    res.status(200).json({ message: "Piece deleted successfully" });
+    console.log("req.params ", req.params);
+    const deletedPiece = await PiecesModel.findByIdAndRemove(id);
+    if (deletedPiece) {
+      res.status(200).json({ message: "Piece deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Piece not found" });
+    }
   } catch (err) {
     console.log("error:", err);
     res.status(500).json(err);
   }
 });
+
 
 export { router as piecesRouter };
