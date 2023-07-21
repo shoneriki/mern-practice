@@ -20,18 +20,18 @@ function AddPieceForm() {
 
 
   const seedData = {
-    name: "Symphony No. 5",
-    composer: "Ludwig van Beethoven",
+    name: "Piece",
+    composer: "Composer",
     length: {
-      hours: 1,
-      minutes: 7,
-      seconds: 30,
+      hours: 0,
+      minutes: 30,
+      seconds: 0,
     },
     excerpts: [
       {
-        location: "Allegro con brio",
-        notes: "The piece begins with a four-note motif.",
-        repetitions: 5,
+        location: "Spot 1, bars 20-50",
+        notes: "needs attention in coordination",
+        repetitions: 10,
         timeToSpend: {
           hours: 0,
           minutes: 15,
@@ -39,16 +39,20 @@ function AddPieceForm() {
         },
         tempi: [
           {
-            notes: "Medium pace",
+            notes: "speed for first part",
             bpm: 108,
+          },
+          {
+            notes: "speed for second part",
+            bpm: 120
           },
         ],
         mastered: false,
       },
       {
-        location: "Andante con moto",
-        notes: "This movement is in double variation form.",
-        repetitions: 3,
+        location: "Spot 2, bars 80-100",
+        notes: "familiarize with passage",
+        repetitions: 5,
         timeToSpend: {
           hours: 0,
           minutes: 10,
@@ -56,7 +60,7 @@ function AddPieceForm() {
         },
         tempi: [
           {
-            notes: "Slow pace",
+            notes: "Goal Tempo",
             bpm: 72,
           },
         ],

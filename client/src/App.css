@@ -80,23 +80,6 @@ a {
   font-size: 25px;
 }
 
-.create-recipe {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  width: 400px;
-}
-.create-recipe form {
-  display: flex;
-  flex-direction: column;
-}
-
 .create-program {
   display: flex;
   flex-direction: column;
