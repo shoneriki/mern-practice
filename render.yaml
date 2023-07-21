@@ -2,7 +2,7 @@ services:
 - type: web
   name: practice-planner-frontend
   env: node
-  buildCommand: cd client && yarn install && yarn build
+  buildCommand: cd client && yarn install
   startCommand: cd client && yarn start
   envVars:
   - key: REACT_APP_API_URL
