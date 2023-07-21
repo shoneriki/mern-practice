@@ -1,0 +1,15 @@
+services:
+- type: web
+  name: practice-planner
+  env: static
+  buildCommand: cd client && yarn install && yarn build
+  staticPublishPath: ./client/build
+
+- type: web
+  name: database
+  env: node
+  buildCommand: cd server && yarn install && yarn build
+  startCommand: cd server && yarn start
+  envVars:
+  - key: NODE_ENV
+    value: production
