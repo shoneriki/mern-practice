@@ -1,15 +1,23 @@
 services:
 - type: web
-  name: practice-planner
-  env: static
+  name: practice-planner-frontend
+  env: node
   buildCommand: cd client && yarn install && yarn build
-  staticPublishPath: ./client/build
+  startCommand: cd client && yarn start
+  envVars:
+  - key: REACT_APP_API_URL
+    fromService:
+      name: database
+      type: web
+      property: url
 
 - type: web
-  name: database
+  name: practice-planner-backend
   env: node
-  buildCommand: cd server && yarn install && yarn build
+  buildCommand: cd server && yarn install
   startCommand: cd server && yarn start
   envVars:
-  - key: NODE_ENV
-    value: production
+  - key: MONGO_URI
+    fromDatabase:
+      name: Database-For-Practice-Planner
+      property: connectionString
