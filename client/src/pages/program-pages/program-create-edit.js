@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 import { Box } from "@mui/material";
 
 import { ProgramForm } from "../../components/program-components/ProgramForm";
-import  {ProgramFormRHL} from "../../components/program-components/ProgramFormRHL";
+import { ProgramFormRHL } from "../../components/program-components/ProgramFormRHL";
 
 import dayjs from "dayjs";
 
@@ -18,8 +18,8 @@ export const ProgramCreateEdit = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
-  const [program, setProgram] = useState({pieces: []})
-  const [isLoading, setIsLoading] = useState(true)
+  const [program, setProgram] = useState({ pieces: [] });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchEditData = async () => {
@@ -27,10 +27,10 @@ export const ProgramCreateEdit = () => {
         setIsLoading(true);
         try {
           const response = await axios.get(
-            `http://localhost:3001/programs/program/${id}`
+            `${process.env.REACT_APP_API_URL}/programs/program/${id}`
           );
           let programData = response.data;
-          console.log("programData: ", programData)
+          console.log("programData: ", programData);
 
           // Converting 'dayjs' instances to strings
           programData.date = dayjs(programData.date);
@@ -40,7 +40,7 @@ export const ProgramCreateEdit = () => {
             // Fetch the full data for each piece
             const piecePromises = programData.pieces.map((pieceId) =>
               axios
-                .get(`http://localhost:3001/pieces/piece/${pieceId}`)
+                .get(`${process.env.REACT_APP_API_URL}/pieces/piece/${pieceId}`)
                 .then((response) => response.data)
                 .catch((error) => {
                   if (
@@ -61,17 +61,16 @@ export const ProgramCreateEdit = () => {
             // Update the program data with the fetched pieces
             programData.pieces = pieceResponses;
             await axios.put(
-              `http://localhost:3001/programs/program/${programData._id}`,
+              `${process.env.REACT_APP_API_URL}/programs/program/${programData._id}`,
               programData
             );
           }
 
+          console.log("programData: ", programData);
 
-          console.log("programData: ", programData)
+          setProgram(programData);
 
-          setProgram(programData)
-
-          setIsLoading(false)
+          setIsLoading(false);
         } catch (error) {
           console.error(
             "an error occurred while fetching the program: ",
@@ -80,7 +79,7 @@ export const ProgramCreateEdit = () => {
           setIsLoading(false);
         }
       } else {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
     fetchEditData();
@@ -92,7 +91,7 @@ export const ProgramCreateEdit = () => {
   //   try {
   //     if (id) {
   //       await axios.put(
-  //         `http://localhost:3001/programs/program/${id}`,
+  //         `${process.env.REACT_APP_API_URL}/programs/program/${id}`,
   //         { ...data, date: dateTime },
   //         {
   //           headers: { authorization: cookies.access_token },
@@ -101,7 +100,7 @@ export const ProgramCreateEdit = () => {
   //       alert("program updated");
   //     } else {
   //       await axios.post(
-  //         "http://localhost:3001/programs",
+  //         "${process.env.REACT_APP_API_URL}/programs",
   //         { ...data, date: dateTime },
   //         {
   //           headers: { authorization: cookies.access_token },
@@ -115,7 +114,6 @@ export const ProgramCreateEdit = () => {
   //   }
   // };
 
-
   const onSubmit = async (data) => {
     console.log("is there data in this program form submission? Data: ", data);
     const dateTime = dayjs(data.date).format("YYYY-MM-DDTHH:mm:ss");
@@ -127,9 +125,13 @@ export const ProgramCreateEdit = () => {
         if (piece._id) {
           // If the piece has an ID, update the existing piece
           return axios
-            .put(`http://localhost:3001/pieces/piece/${piece._id}`, pieceData, {
-              headers: { authorization: cookies.access_token },
-            })
+            .put(
+              `${process.env.REACT_APP_API_URL}/pieces/piece/${piece._id}`,
+              pieceData,
+              {
+                headers: { authorization: cookies.access_token },
+              }
+            )
             .then((response) => {
               if (!response || !response.data) {
                 console.error("Invalid response:", response);
@@ -143,7 +145,7 @@ export const ProgramCreateEdit = () => {
         } else {
           // If the piece doesn't have an ID, create a new piece
           return axios
-            .post(`http://localhost:3001/pieces`, pieceData, {
+            .post(`${process.env.REACT_APP_API_URL}/pieces`, pieceData, {
               headers: { authorization: cookies.access_token },
             })
             .then((response) => {
@@ -202,7 +204,7 @@ export const ProgramCreateEdit = () => {
 
       if (id) {
         await axios.put(
-          `http://localhost:3001/programs/program/${id}`,
+          `${process.env.REACT_APP_API_URL}/programs/program/${id}`,
           programData,
           {
             headers: { authorization: cookies.access_token },
@@ -210,9 +212,13 @@ export const ProgramCreateEdit = () => {
         );
         alert("program updated");
       } else {
-        await axios.post(`http://localhost:3001/programs`, programData, {
-          headers: { authorization: cookies.access_token },
-        });
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/programs`,
+          programData,
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
         alert("New Program Added!");
       }
       navigate("/programs");
@@ -223,7 +229,7 @@ export const ProgramCreateEdit = () => {
   };
 
   if (isLoading) {
-    return <section>Loading...</section>
+    return <section>Loading...</section>;
   }
 
   return (

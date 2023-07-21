@@ -4,9 +4,9 @@ import axios from "axios";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import {PieceForm} from "./PieceForm"
-import {PiecesContext} from "../../contexts/PiecesContext"
-import {ProgramsContext} from "../../contexts/ProgramsContext"
+import { PieceForm } from "./PieceForm";
+import { PiecesContext } from "../../contexts/PiecesContext";
+import { ProgramsContext } from "../../contexts/ProgramsContext";
 
 import {
   Box,
@@ -18,7 +18,6 @@ import {
   DialogActions,
 } from "@mui/material";
 
-
 export const PieceList = () => {
   const userID = useGetUserID();
 
@@ -26,15 +25,15 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
-  const {setRefreshKey} = useContext(PiecesContext)
+  const { setRefreshKey } = useContext(PiecesContext);
 
-  const {updatePrograms} = useContext(ProgramsContext)
+  const { updatePrograms } = useContext(ProgramsContext);
 
   useEffect(() => {
     const fetchPieces = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/pieces/user/${userID}`
+          `${process.env.REACT_APP_API_URL}/pieces/user/${userID}`
         );
         console.log(
           "response.data from the pieces list component",
@@ -43,7 +42,7 @@ export const PieceList = () => {
         response.data && response.data.length > 0
           ? setPieces(
               response.data.map((piece) => ({
-                ...piece
+                ...piece,
               }))
             )
           : setPieces([]);
@@ -91,7 +90,7 @@ export const PieceList = () => {
   const fetchUpdatedPrograms = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/programs/user/${userID}`
+        `${process.env.REACT_APP_API_URL}/programs/user/${userID}`
       );
       console.log(
         "response.data from the updated programs fetch",
@@ -104,15 +103,17 @@ export const PieceList = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log("id in toDelete", toDelete)
+    console.log("id in toDelete", toDelete);
     try {
-      await axios.delete(`http://localhost:3001/pieces/piece/${toDelete}`);
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/pieces/piece/${toDelete}`
+      );
       setOpen(false);
       setPieces(pieces.filter((piece) => piece._id !== toDelete));
-      setRefreshKey(Date.now())
+      setRefreshKey(Date.now());
       const updatedPrograms = await fetchUpdatedPrograms();
-      updatePrograms(updatedPrograms)
-      console.log("updated Programs?", updatedPrograms)
+      updatePrograms(updatedPrograms);
+      console.log("updated Programs?", updatedPrograms);
     } catch (err) {
       console.log("error: ", err);
     }
@@ -133,10 +134,7 @@ export const PieceList = () => {
       >
         List of Pieces
       </Typography>
-      <Grid
-        container
-        spacing={3}
-      >
+      <Grid container spacing={3}>
         {pieces.map((piece) => {
           return (
             <Grid item xs={12} sm={6} md={4} key={piece._id}>
@@ -154,15 +152,11 @@ export const PieceList = () => {
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   Piece Name:
                 </Typography>
-                <Typography variant={"h6"}>
-                  {piece.name}
-                </Typography>
+                <Typography variant={"h6"}>{piece.name}</Typography>
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   Composer:
                 </Typography>
-                <Typography variant={"h6"}>
-                  {piece.composer}
-                </Typography>
+                <Typography variant={"h6"}>{piece.composer}</Typography>
                 <Box
                   name="delete-edit-btn-box"
                   sx={{

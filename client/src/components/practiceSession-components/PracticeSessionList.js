@@ -24,24 +24,24 @@ export const PracticeSessionList = () => {
 
   const [practiceSessions, setPracticeSessions] = useState([]);
 
-    const fetchPracticeSessions = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/practiceSessions/user/${userID}`
-        );
-        console.log("response, ", response)
-        response.data && response.data.length > 0
-          ? setPracticeSessions(
-              response.data.map((practiceSession) => ({
-                ...practiceSession,
-              }))
-            )
-          : setPracticeSessions([]);
-          console.log("",practiceSessions)
-      } catch (error) {
-        console.error("Error fetching practice plans:", error);
-      }
-    };
+  const fetchPracticeSessions = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/practiceSessions/user/${userID}`
+      );
+      console.log("response, ", response);
+      response.data && response.data.length > 0
+        ? setPracticeSessions(
+            response.data.map((practiceSession) => ({
+              ...practiceSession,
+            }))
+          )
+        : setPracticeSessions([]);
+      console.log("", practiceSessions);
+    } catch (error) {
+      console.error("Error fetching practice plans:", error);
+    }
+  };
 
   useEffect(() => {
     fetchPracticeSessions();
@@ -75,14 +75,14 @@ export const PracticeSessionList = () => {
     console.log("Deleting practice plan with ID:", toDelete);
     try {
       await axios.delete(
-        `http://localhost:3001/practiceSessions/practiceSession/${toDelete}`
+        `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${toDelete}`
       );
       console.log("Deleted");
       setOpen(false);
       // setPracticePlans(
       //   practicePlans.filter((practicePlan) => practicePlan._id !== id)
       // );
-      fetchPracticeSessions()
+      fetchPracticeSessions();
     } catch (err) {
       console.log("error: ", err);
     }
@@ -91,9 +91,7 @@ export const PracticeSessionList = () => {
   // end of delete functionality
 
   return (
-    <Box
-      className="practiceSessionsList"
-    >
+    <Box className="practiceSessionsList">
       <Typography
         variant={"h4"}
         sx={{ textAlign: "center", margin: "1rem auto" }}
@@ -102,7 +100,6 @@ export const PracticeSessionList = () => {
       </Typography>
       <Grid container spacing={3}>
         {practiceSessions.map((practiceSession, practiceSessionIndex) => {
-
           return (
             <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
               <Box
@@ -115,7 +112,11 @@ export const PracticeSessionList = () => {
                   alignItems: "center",
                 }}
               >
-                <Typography variant={"h6"} sx={{ fontWeight: "bold" }} align="center">
+                <Typography
+                  variant={"h6"}
+                  sx={{ fontWeight: "bold" }}
+                  align="center"
+                >
                   Title:
                 </Typography>
                 <Typography variant={"h6"} align="center">

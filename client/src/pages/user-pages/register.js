@@ -15,10 +15,13 @@ export const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const result = await axios.post("http://localhost:3001/auth/register", {
-        username,
-        password,
-      });
+      const result = await axios.post(
+        "${process.env.REACT_APP_API_URL}/auth/register",
+        {
+          username,
+          password,
+        }
+      );
       alert("Registration Completed!");
       setCookies("access_token", result.data.token);
       window.localStorage.setItem("userID", result.data.userID);

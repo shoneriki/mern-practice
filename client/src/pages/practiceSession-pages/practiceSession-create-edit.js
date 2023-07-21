@@ -8,10 +8,18 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-import { Box, Grid, Typography, InputLabel, TextField, Autocomplete, avatarGroupClasses } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  InputLabel,
+  TextField,
+  Autocomplete,
+  avatarGroupClasses,
+} from "@mui/material";
 
-import  {PracticeSessionForm}  from "../../components/practiceSession-components/PracticeSessionForm";
-import  {PracticeSessionFormRHL}  from "../../components/practiceSession-components/PracticeSessionFormRHL";
+import { PracticeSessionForm } from "../../components/practiceSession-components/PracticeSessionForm";
+import { PracticeSessionFormRHL } from "../../components/practiceSession-components/PracticeSessionFormRHL";
 
 export const PracticeSessionCreateEdit = (props) => {
   const userID = useGetUserID();
@@ -22,14 +30,14 @@ export const PracticeSessionCreateEdit = (props) => {
   const [practiceSession, setPracticeSession] = useState({});
   const [selectedPiece, setSelectedPiece] = useState({});
   const [suggestions, setSuggestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("selectedPiece updated", selectedPiece);
   }, [selectedPiece]);
 
   const initialValues = {
-    dateOfExecution:  new Date(),
+    dateOfExecution: new Date(),
     name: "",
     totalSessionLength: {
       hours: 0,
@@ -64,66 +72,67 @@ export const PracticeSessionCreateEdit = (props) => {
     userOwner: Yup.string(),
   });
 
-const [formValues, setFormValues] = useState(initialValues);
-const [dataLoaded, setDataLoaded] = useState(false);
+  const [formValues, setFormValues] = useState(initialValues);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-useEffect(() => {
-  setIsLoading(true)
-  const fetchEditData = async () => {
-    if (id) {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/practiceSessions/practiceSession/${id}`
-        );
-        const practiceSessionData = response.data;
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchEditData = async () => {
+      if (id) {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
+          );
+          const practiceSessionData = response.data;
 
-        // Fetch the piece data
-        const pieceResponse = await axios.get(
-          `http://localhost:3001/pieces/piece/${practiceSessionData.piece}`,
-          {
-            headers: { authorization: cookies.access_token },
-          }
-        );
-        const pieceData = pieceResponse.data;
+          // Fetch the piece data
+          const pieceResponse = await axios.get(
+            `${process.env.REACT_APP_API_URL}/pieces/piece/${practiceSessionData.piece}`,
+            {
+              headers: { authorization: cookies.access_token },
+            }
+          );
+          const pieceData = pieceResponse.data;
 
-        setPracticeSession(practiceSessionData);
-        setSelectedPiece(pieceData); // Set the selected piece to the fetched piece data
+          setPracticeSession(practiceSessionData);
+          setSelectedPiece(pieceData); // Set the selected piece to the fetched piece data
 
-
-        setFormValues({
-          ...practiceSessionData,
-          piece: pieceData,
-          composer: pieceData.composer,
-          excerpts: pieceData.excerpts,
-          dateOfExecution: new Date(practiceSessionData.dateOfExecution),
-        });
-        console.log(
-          "formValues from useEffect inside if with id: ",
-          formValues
-        );
-        setIsLoading(false)
-        setDataLoaded(true)
-      } catch (error) {
-        console.error("an error occurred while fetching the program: ", error);
+          setFormValues({
+            ...practiceSessionData,
+            piece: pieceData,
+            composer: pieceData.composer,
+            excerpts: pieceData.excerpts,
+            dateOfExecution: new Date(practiceSessionData.dateOfExecution),
+          });
+          console.log(
+            "formValues from useEffect inside if with id: ",
+            formValues
+          );
+          setIsLoading(false);
+          setDataLoaded(true);
+        } catch (error) {
+          console.error(
+            "an error occurred while fetching the program: ",
+            error
+          );
+        }
+      } else {
+        setIsLoading(false);
+        setDataLoaded(true);
       }
-    } else {
-      setIsLoading(false)
-      setDataLoaded(true);
-    }
-  };
-  fetchEditData();
-}, [id]);
+    };
+    fetchEditData();
+  }, [id]);
 
-useEffect(() => {
-  console.log("Updated formValues: ", formValues);
-}, [formValues])
-
+  useEffect(() => {
+    console.log("Updated formValues: ", formValues);
+  }, [formValues]);
 
   const handlePieceSearch = async (searchValue) => {
     if (searchValue) {
       try {
         const response = await axios.get(
-          `http://localhost:3001/pieces/suggestions?search=${searchValue}`
+          `${process.env.REACT_APP_API_URL}/pieces/suggestions?search=${searchValue}`
         );
         const pieceSuggestions = response.data;
         setSuggestions(pieceSuggestions);
@@ -142,7 +151,7 @@ useEffect(() => {
       handlePieceSelection(event, newValue);
       if (newValue) {
         const response = await axios.get(
-          `http://localhost:3001/pieces/piece/${newValue._id}`,
+          `${process.env.REACT_APP_API_URL}/pieces/piece/${newValue._id}`,
           {
             headers: { authorization: cookies.access_token },
           }
@@ -183,9 +192,8 @@ useEffect(() => {
       }
     };
 
-
   // submitting the practiceSession form; new or edited
-  const onSubmit= async (values) => {
+  const onSubmit = async (values) => {
     console.log("entering the submit?");
     try {
       const practiceSessionData = {
@@ -199,14 +207,14 @@ useEffect(() => {
 
       if (id) {
         await axios.put(
-          `http://localhost:3001/practiceSessions/practiceSession/${id}`,
+          `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`,
           practiceSessionData,
           {
             headers: { authorization: cookies.access_token },
           }
         );
         await axios.put(
-          `http://localhost:3001/pieces/piece/${values.piece._id}`,
+          `${process.env.REACT_APP_API_URL}/pieces/piece/${values.piece._id}`,
           { ...values.piece },
           {
             headers: { authorization: cookies.access_token },
@@ -217,16 +225,16 @@ useEffect(() => {
       } else {
         console.log("inside the else... for submitting");
         await axios.post(
-          `http://localhost:3001/practiceSessions`,
+          `${process.env.REACT_APP_API_URL}/practiceSessions`,
           practiceSessionData,
           {
             headers: { authorization: cookies.access_token },
           }
         );
-        alert("practiceSession created")
+        alert("practiceSession created");
         // Update the piece information whether it's a new practice session or an update
         await axios.put(
-          `http://localhost:3001/pieces/piece/${values.piece._id}`,
+          `${process.env.REACT_APP_API_URL}/pieces/piece/${values.piece._id}`,
           { ...values.piece },
           {
             headers: { authorization: cookies.access_token },
@@ -239,7 +247,7 @@ useEffect(() => {
       alert("I'm sorry, there's an error in submitting this form");
       console.log("error", error);
     }
-  }
+  };
 
   const errors = {};
   try {
@@ -256,7 +264,6 @@ useEffect(() => {
     console.log("Validation errors:");
     console.log(errors);
   }
-
 
   if (isLoading || !dataLoaded) {
     return <section>Loading...</section>;

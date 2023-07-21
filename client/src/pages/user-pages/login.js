@@ -17,10 +17,13 @@ export const Login = () => {
     event.preventDefault();
 
     try {
-      const result = await axios.post("http://localhost:3001/auth/login", {
-        username,
-        password,
-      });
+      const result = await axios.post(
+        "${process.env.REACT_APP_API_URL}/auth/login",
+        {
+          username,
+          password,
+        }
+      );
 
       if (result.data.message) {
         alert(result.data.message);

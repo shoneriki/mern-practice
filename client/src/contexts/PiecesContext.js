@@ -7,7 +7,7 @@ export const PiecesContext = createContext();
 
 export const PiecesProvider = ({ children }) => {
   const [pieces, setPieces] = useState([]);
-  const [refreshKey, setRefreshKey] = useState(Date.now())
+  const [refreshKey, setRefreshKey] = useState(Date.now());
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
 
@@ -15,7 +15,7 @@ export const PiecesProvider = ({ children }) => {
     const fetchPieces = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/pieces/user/${userID}`
+          `${process.env.REACT_APP_API_URL}/pieces/user/${userID}`
         );
         setPieces(response.data);
       } catch (error) {
@@ -27,7 +27,9 @@ export const PiecesProvider = ({ children }) => {
   }, [userID]);
 
   return (
-    <PiecesContext.Provider value={{ pieces, setPieces, refreshKey, setRefreshKey }}>
+    <PiecesContext.Provider
+      value={{ pieces, setPieces, refreshKey, setRefreshKey }}
+    >
       {children}
     </PiecesContext.Provider>
   );

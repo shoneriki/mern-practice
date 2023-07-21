@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useRef} from "react";
-import {Metronome} from "../components/workspace-components/Metronome"
+import React, { useEffect, useState, useRef } from "react";
+import { Metronome } from "../components/workspace-components/Metronome";
 // import {MetronomeE6} from "../components/MetronomeE6"
-import {Counter} from "../components/workspace-components/Counter"
-import { Box, Grid, Typography, Button,TextField } from "@mui/material";
-import {useLocation, useNavigate} from "react-router-dom"
+import { Counter } from "../components/workspace-components/Counter";
+import { Box, Grid, Typography, Button, TextField } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -11,12 +11,12 @@ import axios from "axios";
 // TempoControls.js
 
 export const TempoControls = ({ tempoInfo, setTempo }) => {
-    const [tempoState, setTempoState] = useState({
-      baseTempo: 0,
-      currentPercentage: 50,
-      startPercentage: 50,
-      tempoChangePercentage: 10,
-    });
+  const [tempoState, setTempoState] = useState({
+    baseTempo: 0,
+    currentPercentage: 50,
+    startPercentage: 50,
+    tempoChangePercentage: 10,
+  });
 
   const calculateTempo = (percentage) => {
     return Math.round((tempoState.baseTempo * percentage) / 100);
@@ -53,80 +53,84 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
     setTempo(newTempo);
   }, [tempoState.currentPercentage]);
 
-    return (
+  return (
+    <Box
+      id="tempoControl-box"
+      sx={{
+        margin: "1rem auto",
+      }}
+    >
       <Box
-        id="tempoControl-box"
         sx={{
           margin: "1rem auto",
+          display: "flex",
         }}
       >
-        <Box
-          sx={{
-            margin: "1rem auto",
-            display: "flex",
-          }}
-        >
-          <TextField
-            type="number"
-            label="Start Percentage"
-            value={tempoState.startPercentage}
-            centered
-            onChange={(event) =>
-              setTempoState({
-                ...tempoState,
-                startPercentage: Number(event.target.value),
-                displayPercentage: Number(event.target.value),
-              })
-            }
-          />
-          <TextField
-            type="number"
-            label="Tempo Change Percentage"
-            value={tempoState.tempoChangePercentage}
-            onChange={(event) =>
-              setTempoState({
-                ...tempoState,
-                tempoChangePercentage: Number(event.target.value),
-              })
-            }
-          />
-        </Box>
-        <Box
-          name="three-btn-box"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              const newTempoState = {
-                ...tempoState,
-                baseTempo: tempoInfo.bpm,
-                currentPercentage: tempoState.startPercentage,
-              };
-              const startTempo = calculateTempo(newTempoState.startPercentage);
-              setTempo(startTempo);
-              setTempoState(newTempoState);
-            }}
-          >
-            Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
-          </Button>
-          <Button variant="contained" color="primary" onClick={incrementTempo} sx={{margin: "1rem 0"}}>
-            Increase tempo to{" "}
-            {tempoState.currentPercentage + tempoState.tempoChangePercentage}%?
-          </Button>
-          <Button variant="contained" color="warning" onClick={decrementTempo}>
-            Decrease tempo to{" "}
-            {tempoState.currentPercentage - tempoState.tempoChangePercentage}%?
-          </Button>
-        </Box>
+        <TextField
+          type="number"
+          label="Start Percentage"
+          value={tempoState.startPercentage}
+          centered
+          onChange={(event) =>
+            setTempoState({
+              ...tempoState,
+              startPercentage: Number(event.target.value),
+              displayPercentage: Number(event.target.value),
+            })
+          }
+        />
+        <TextField
+          type="number"
+          label="Tempo Change Percentage"
+          value={tempoState.tempoChangePercentage}
+          onChange={(event) =>
+            setTempoState({
+              ...tempoState,
+              tempoChangePercentage: Number(event.target.value),
+            })
+          }
+        />
       </Box>
-    );
-  };
-
+      <Box
+        name="three-btn-box"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            const newTempoState = {
+              ...tempoState,
+              baseTempo: tempoInfo.bpm,
+              currentPercentage: tempoState.startPercentage,
+            };
+            const startTempo = calculateTempo(newTempoState.startPercentage);
+            setTempo(startTempo);
+            setTempoState(newTempoState);
+          }}
+        >
+          Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={incrementTempo}
+          sx={{ margin: "1rem 0" }}
+        >
+          Increase tempo to{" "}
+          {tempoState.currentPercentage + tempoState.tempoChangePercentage}%?
+        </Button>
+        <Button variant="contained" color="warning" onClick={decrementTempo}>
+          Decrease tempo to{" "}
+          {tempoState.currentPercentage - tempoState.tempoChangePercentage}%?
+        </Button>
+      </Box>
+    </Box>
+  );
+};
 
 export const Workspace = () => {
   const { id } = useParams();
@@ -149,7 +153,7 @@ export const Workspace = () => {
     const fetchPracticeSession = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/practiceSessions/practiceSession/${id}`
+          `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
         );
         setPracticeSession(response.data);
         console.log(
@@ -158,7 +162,7 @@ export const Workspace = () => {
         );
 
         const pieceResponse = await axios.get(
-          `http://localhost:3001/pieces/piece/${response.data.piece}`
+          `${process.env.REACT_APP_API_URL}/pieces/piece/${response.data.piece}`
         );
         setPiece(pieceResponse.data);
         console.log("response data for piece", piece);
@@ -174,8 +178,6 @@ export const Workspace = () => {
     fetchPracticeSession();
     console.log("response data for piece", piece);
   }, [id]);
-
-
 
   return (
     <Box

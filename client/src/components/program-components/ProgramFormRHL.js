@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Button,
@@ -13,15 +13,19 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import axios from "axios"
+import axios from "axios";
 import dayjs from "dayjs";
 
-export const ProgramFormRHL = ({ onSubmit, userID, id, program, setProgram }) => {
-
-
+export const ProgramFormRHL = ({
+  onSubmit,
+  userID,
+  id,
+  program,
+  setProgram,
+}) => {
   const { register, control, handleSubmit, setValue, watch, reset } = useForm({
-    defaultValues: program
-  })
+    defaultValues: program,
+  });
 
   useEffect(() => {
     if (
@@ -33,7 +37,7 @@ export const ProgramFormRHL = ({ onSubmit, userID, id, program, setProgram }) =>
       // Fetch each piece and set its data
       const fetchPieces = async () => {
         const piecePromises = program.pieces.map((pieceId) =>
-          axios.get(`http://localhost:3001/pieces/piece/${pieceId}`)
+          axios.get(`${process.env.REACT_APP_API_URL}/pieces/piece/${pieceId}`)
         );
         const pieceResponses = await Promise.all(piecePromises);
         const pieces = pieceResponses.map((response) => response.data);
@@ -44,9 +48,6 @@ export const ProgramFormRHL = ({ onSubmit, userID, id, program, setProgram }) =>
       fetchPieces();
     }
   }, [program]);
-
-
-
 
   const { fields, append, remove } = useFieldArray({
     control,

@@ -1,23 +1,20 @@
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import {useParams} from "react-router-dom"
-import {PieceForm} from "../../components/piece-components/PieceForm.js"
+import { useParams } from "react-router-dom";
+import { PieceForm } from "../../components/piece-components/PieceForm.js";
 
 import * as Yup from "yup";
 import axios from "axios";
 
-import {
-  Box,
-} from "@mui/material";
+import { Box } from "@mui/material";
 
 function AddPieceForm() {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
   const navigate = useNavigate();
   const { id } = useParams();
-
 
   const seedData = {
     name: "Piece",
@@ -44,7 +41,7 @@ function AddPieceForm() {
           },
           {
             notes: "speed for second part",
-            bpm: 120
+            bpm: 120,
           },
         ],
         mastered: false,
@@ -71,9 +68,9 @@ function AddPieceForm() {
     userOwner: userID,
   };
 
-  const [piece, setPiece] = useState(null)
+  const [piece, setPiece] = useState(null);
 
-  const hourValidation = Yup.number().min(0).max(10)
+  const hourValidation = Yup.number().min(0).max(10);
   const timeValidation = Yup.number().min(0).max(59);
 
   const tempoValidation = Yup.object({
@@ -111,73 +108,68 @@ function AddPieceForm() {
     ),
   });
 
-      useEffect(() => {
-        console.log("id from useEffect", id)
-        const fetchEditData = async () => {
-          if (id) {
-            console.log("ID EXISTS!");
-            console.log("id in fetch", id);
-            try {
-              console.log(
-                "from inside try of fetchEditData from create-piece page"
-              );
-              const response = await axios.get(
-                `http://localhost:3001/pieces/piece/${id}`
-              );
-              const pieceData = response.data;
-              console.log("pieceData: ", pieceData)
-              setPiece(pieceData)
-
-              console.log("PIECE DATA? From fetch", pieceData);
-
-            } catch (error) {
-              console.log("Inside the fetchEditData catch");
-              console.error(
-                "an error occurred while fetching the program: ",
-                error
-              );
-            }
-          }
-        };
-        fetchEditData();
-      }, [id]);
-
-      const onSubmit= async (values) => {
+  useEffect(() => {
+    console.log("id from useEffect", id);
+    const fetchEditData = async () => {
+      if (id) {
+        console.log("ID EXISTS!");
+        console.log("id in fetch", id);
         try {
-          if (id) {
-            await axios.put(
-              `http://localhost:3001/pieces/piece/${id}`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("piece updated");
-            navigate("/pieces");
-          } else {
-            await axios.post(
-              `http://localhost:3001/pieces`,
-              { ...values },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-            alert("piece created");
-            navigate("/pieces");
-          }
+          console.log(
+            "from inside try of fetchEditData from create-piece page"
+          );
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/pieces/piece/${id}`
+          );
+          const pieceData = response.data;
+          console.log("pieceData: ", pieceData);
+          setPiece(pieceData);
+
+          console.log("PIECE DATA? From fetch", pieceData);
         } catch (error) {
-          alert("I'm sorry, there's an error in submitting this form");
-          console.log("error", error);
+          console.log("Inside the fetchEditData catch");
+          console.error(
+            "an error occurred while fetching the program: ",
+            error
+          );
         }
       }
+    };
+    fetchEditData();
+  }, [id]);
 
-      if(piece === null && id) {
-        return (
-          <section>
-            Loading...
-          </section>
-        )
+  const onSubmit = async (values) => {
+    try {
+      if (id) {
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/pieces/piece/${id}`,
+          { ...values },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        alert("piece updated");
+        navigate("/pieces");
+      } else {
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/pieces`,
+          { ...values },
+          {
+            headers: { authorization: cookies.access_token },
+          }
+        );
+        alert("piece created");
+        navigate("/pieces");
       }
+    } catch (error) {
+      alert("I'm sorry, there's an error in submitting this form");
+      console.log("error", error);
+    }
+  };
+
+  if (piece === null && id) {
+    return <section>Loading...</section>;
+  }
 
   return (
     <Box
@@ -189,7 +181,6 @@ function AddPieceForm() {
         width: "80%",
       }}
     >
-
       <PieceForm
         id={id}
         initialValues={piece || seedData}
@@ -198,7 +189,6 @@ function AddPieceForm() {
         navigate={navigate}
         onSubmit={onSubmit}
       />
-
     </Box>
   );
 }

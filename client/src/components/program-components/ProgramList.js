@@ -28,13 +28,13 @@ export const ProgramList = () => {
   const { programs, setPrograms, refreshKey, setRefreshKey } =
     useContext(ProgramsContext);
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPrograms = async (id) => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/programs/user/${userID}`
+          `${process.env.REACT_APP_API_URL}/programs/user/${userID}`
         );
         console.log(
           "response.data from the program list component",
@@ -47,7 +47,7 @@ export const ProgramList = () => {
                 program.pieces.map(async (pieceId) => {
                   try {
                     const pieceResponse = await axios.get(
-                      `http://localhost:3001/pieces/piece/${pieceId}`
+                      `${process.env.REACT_APP_API_URL}/pieces/piece/${pieceId}`
                     );
                     console.log("Piece response data: ", pieceResponse.data);
                     return pieceResponse.data;
@@ -70,14 +70,14 @@ export const ProgramList = () => {
           );
 
           setPrograms(programs);
-          console.log("programs after setPrograms?", programs)
+          console.log("programs after setPrograms?", programs);
           setLoading(false); // Set loading to false once all data has been fetched
         } else {
           setPrograms([]);
           setLoading(false); // Set loading to false if there are no programs
         }
       } catch (error) {
-        console.error("error: ", error)
+        console.error("error: ", error);
         setLoading(false);
       }
     };
@@ -109,7 +109,9 @@ export const ProgramList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/programs/program/${id}`);
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/programs/program/${id}`
+      );
       console.log("Deleted");
       setOpen(false);
       setPrograms(programs.filter((program) => program._id !== id));
@@ -125,14 +127,14 @@ export const ProgramList = () => {
       {loading ? (
         <section>Loading...</section>
       ) : (
-        <Box className="programList" sx={{width: "80%", margin: "2rem auto"}}>
+        <Box className="programList" sx={{ width: "80%", margin: "2rem auto" }}>
           <Typography
             variant={"h4"}
             sx={{ textAlign: "center", margin: "1rem auto", width: "80%" }}
           >
             Programs
           </Typography>
-          <Grid container spacing={3} >
+          <Grid container spacing={3}>
             {programs.map((program, programIndex) => {
               return (
                 <Grid item xs={12} sm={6} md={4} key={program._id}>
@@ -148,13 +150,11 @@ export const ProgramList = () => {
                       <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                         Program No. {programIndex + 1}:
                       </Typography>
-                      <Typography variant={"h6"} >
-                        {program.name}
-                      </Typography>
-                      <Typography variant={"h6"} sx={{fontWeight: "bold"}}>
+                      <Typography variant={"h6"}>{program.name}</Typography>
+                      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                         Date:
                       </Typography>
-                      <Typography variant={"h6"} >
+                      <Typography variant={"h6"}>
                         {format(
                           new Date(program.date),
                           "MMMM do, yyyy 'at' H:mm"

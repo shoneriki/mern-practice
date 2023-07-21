@@ -9,7 +9,9 @@ export function useFetchProgramsForCalendar() {
   useEffect(() => {
     const fetchProgramsForCalendar = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/programs/user/${userID}`);
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/programs/user/${userID}`
+        );
         const programs = res.data;
 
         console.log("HTTP status: ", res.status);

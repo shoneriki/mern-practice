@@ -10,38 +10,42 @@ export function useFetchPracticeSessionsForCalendar() {
     const fetchPracticeSessionsForCalendar = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3001/practiceSessions/user/${userID}`
+          `${process.env.REACT_APP_API_URL}/practiceSessions/user/${userID}`
         );
         const practiceSessions = res.data;
 
-        console.log("practiceSessions res.data: ", res.data)
+        console.log("practiceSessions res.data: ", res.data);
 
         if (practiceSessions && practiceSessions.length > 0) {
-          const updatedPracticeSessions = practiceSessions.map((practiceSession) => {
-            let currentStartTime = new Date(practiceSession.dateOfExecution);
-            let currentEndTime = new Date(practiceSession.dateOfExecution);
-            const events = [];
+          const updatedPracticeSessions = practiceSessions.map(
+            (practiceSession) => {
+              let currentStartTime = new Date(practiceSession.dateOfExecution);
+              let currentEndTime = new Date(practiceSession.dateOfExecution);
+              const events = [];
 
-            for(let i = 0; i < practiceSession.totalSessionLength; i++) {
-              if(practiceSession.totalSessionLength) {
-                const practiceSessionLengthInSeconds =
-                  practiceSession.totalSessionLength.hours * 3600 +
-                  practiceSession.totalSessionLength.minutes * 60 +
-                  practiceSession.totalSessionLength.seconds;
+              for (let i = 0; i < practiceSession.totalSessionLength; i++) {
+                if (practiceSession.totalSessionLength) {
+                  const practiceSessionLengthInSeconds =
+                    practiceSession.totalSessionLength.hours * 3600 +
+                    practiceSession.totalSessionLength.minutes * 60 +
+                    practiceSession.totalSessionLength.seconds;
 
                   currentEndTime = new Date(
-                    currentEndTime.getTime() + practiceSessionLengthInSeconds + 1000
-                  )
+                    currentEndTime.getTime() +
+                      practiceSessionLengthInSeconds +
+                      1000
+                  );
 
                   events.push({
                     start: new Date(currentStartTime),
                     end: new Date(currentEndTime),
-                    title: `${practiceSession.name}`
-                  })
+                    title: `${practiceSession.name}`,
+                  });
+                }
               }
+              return { ...practiceSession, events };
             }
-            return { ...practiceSession, events };
-          });
+          );
 
           setPracticeSessions(updatedPracticeSessions);
         } else {

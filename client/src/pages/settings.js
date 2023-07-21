@@ -48,15 +48,19 @@ export const Settings = () => {
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/settings" ,{...defaultSettings}, {
-        headers: {authorization: cookies.access_token},
-      });
+      await axios.post(
+        "${process.env.REACT_APP_API_URL}/settings",
+        { ...defaultSettings },
+        {
+          headers: { authorization: cookies.access_token },
+        }
+      );
       alert("Settings updated");
-      navigate("/")
-    } catch (error)  {
+      navigate("/");
+    } catch (error) {
       console.error(error);
     }
   };
