@@ -13,6 +13,9 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Card,
+  CardContent,
+  CardActions,
 } from "@mui/material";
 
 import { ProgramsContext } from "../../contexts/ProgramsContext";
@@ -122,58 +125,83 @@ export const ProgramList = () => {
       {loading ? (
         <section>Loading...</section>
       ) : (
-        <Box className="programList">
+        <Box className="programList" sx={{width: "80%", margin: "2rem auto"}}>
           <Typography
             variant={"h4"}
-            sx={{ textAlign: "center", margin: "1rem auto" }}
+            sx={{ textAlign: "center", margin: "1rem auto", width: "80%" }}
           >
             Programs
           </Typography>
           <Grid container spacing={3} >
-            {programs.map((program) => {
+            {programs.map((program, programIndex) => {
               return (
-                <Grid item sx={12} sm={6} md={4} key={program._id}>
-                  <Box sx={{ border: "1px solid black", padding: "1rem" }}>
-                    <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                      {program.name}
-                    </Typography>
-                    <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                      {format(
-                        new Date(program.date),
-                        "MMMM do, yyyy 'at' H:mm"
-                      )}
-                    </Typography>
-                    <Box>
-                      {program.pieces.map((piece, index) => {
-                        const {
-                          hours: pieceHours,
-                          minutes: pieceMinutes,
-                          seconds: pieceSeconds,
-                        } = piece.length;
-                        return (
-                          <Box className="piece-display" key={piece._id}>
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              Piece {index + 1}: {piece.name}
-                            </Typography>
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              Composer: {piece.composer}
-                            </Typography>
-                            <Typography>
-                              Length: {pieceHours}hr: {pieceMinutes}min:{" "}
-                              {pieceSeconds}sec
-                            </Typography>
-                          </Box>
-                        );
-                      })}
-                    </Box>
-                    <Typography>
-                      Intermission: {program.intermission} minutes
-                    </Typography>
-                    <Typography>
-                      Length: {program.length.hours}hr: {program.length.minutes}
-                      min: {program.length.seconds}sec
-                    </Typography>
-                    <Box
+                <Grid item xs={12} sm={6} md={4} key={program._id}>
+                  <Card
+                    sx={{
+                      border: "1px solid black",
+                      borderRadius: "1rem",
+                      padding: "1rem",
+                      width: "80%",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                        Program No. {programIndex + 1}:
+                      </Typography>
+                      <Typography variant={"h6"} >
+                        {program.name}
+                      </Typography>
+                      <Typography variant={"h6"} sx={{fontWeight: "bold"}}>
+                        Date:
+                      </Typography>
+                      <Typography variant={"h6"} >
+                        {format(
+                          new Date(program.date),
+                          "MMMM do, yyyy 'at' H:mm"
+                        )}
+                      </Typography>
+                      <Box>
+                        {program.pieces.map((piece, index) => {
+                          const {
+                            hours: pieceHours,
+                            minutes: pieceMinutes,
+                            seconds: pieceSeconds,
+                          } = piece.length;
+                          return (
+                            <Box className="piece-display" key={piece._id}>
+                              <Typography sx={{ fontWeight: "bold" }}>
+                                Piece {index + 1}:
+                              </Typography>
+                              <Typography>{piece.name}</Typography>
+                              <Typography sx={{ fontWeight: "bold" }}>
+                                Composer:
+                              </Typography>
+                              <Typography>{piece.composer}</Typography>
+                              <Typography sx={{ fontWeight: "bold" }}>
+                                Length Of Piece:
+                              </Typography>
+                              <Typography>
+                                {pieceHours}hr: {pieceMinutes}min:{" "}
+                                {pieceSeconds}
+                                sec
+                              </Typography>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                      <Typography>
+                        Intermission: {program.intermission} minutes
+                      </Typography>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Program Length:
+                      </Typography>
+                      <Typography>
+                        {program.length.hours}hr: {program.length.minutes}
+                        min: {program.length.seconds}sec
+                      </Typography>
+                    </CardContent>
+
+                    <CardActions
                       name="delete-edit-btn-box"
                       sx={{
                         display: "flex",
@@ -232,8 +260,8 @@ export const ProgramList = () => {
                           </Button>
                         </DialogActions>
                       </Dialog>
-                    </Box>
-                  </Box>
+                    </CardActions>
+                  </Card>
                 </Grid>
               );
             })}
