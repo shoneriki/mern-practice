@@ -63,12 +63,14 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
         <Box
           sx={{
             margin: "1rem auto",
+            display: "flex",
           }}
         >
           <TextField
             type="number"
             label="Start Percentage"
             value={tempoState.startPercentage}
+            centered
             onChange={(event) =>
               setTempoState({
                 ...tempoState,
@@ -89,30 +91,38 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
             }
           />
         </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            const newTempoState = {
-              ...tempoState,
-              baseTempo: tempoInfo.bpm,
-              currentPercentage: tempoState.startPercentage,
-            };
-            const startTempo = calculateTempo(newTempoState.startPercentage);
-            setTempo(startTempo);
-            setTempoState(newTempoState);
+        <Box
+          name="three-btn-box"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
-        </Button>
-        <Button variant="contained" color="primary" onClick={incrementTempo}>
-          Increase tempo to{" "}
-          {tempoState.currentPercentage + tempoState.tempoChangePercentage}%?
-        </Button>
-        <Button variant="contained" color="warning" onClick={decrementTempo}>
-          Decrease tempo to{" "}
-          {tempoState.currentPercentage - tempoState.tempoChangePercentage}%?
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              const newTempoState = {
+                ...tempoState,
+                baseTempo: tempoInfo.bpm,
+                currentPercentage: tempoState.startPercentage,
+              };
+              const startTempo = calculateTempo(newTempoState.startPercentage);
+              setTempo(startTempo);
+              setTempoState(newTempoState);
+            }}
+          >
+            Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
+          </Button>
+          <Button variant="contained" color="primary" onClick={incrementTempo} sx={{margin: "1rem 0"}}>
+            Increase tempo to{" "}
+            {tempoState.currentPercentage + tempoState.tempoChangePercentage}%?
+          </Button>
+          <Button variant="contained" color="warning" onClick={decrementTempo}>
+            Decrease tempo to{" "}
+            {tempoState.currentPercentage - tempoState.tempoChangePercentage}%?
+          </Button>
+        </Box>
       </Box>
     );
   };
@@ -203,7 +213,6 @@ export const Workspace = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              margin: "2rem auto",
             }}
           >
             <Grid item xs={12}>
@@ -227,7 +236,6 @@ export const Workspace = () => {
             <Grid
               container
               id={"grid-outside-excerpts"}
-              spacing={4}
               justifyContent="center"
               sx={{
                 border: "1px solid black",
