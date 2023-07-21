@@ -501,7 +501,7 @@ export const PracticeSessionFormRHL = ({
           }}
         >
           <Button type="submit" variant="contained" color="success">
-            Submit
+            {id ? `Save?` : `Submit`}
           </Button>
         </Grid>
       </Box>
