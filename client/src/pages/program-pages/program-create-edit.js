@@ -7,7 +7,6 @@ import { useCookies } from "react-cookie";
 import { Box } from "@mui/material";
 
 import { ProgramForm } from "../../components/program-components/ProgramForm";
-import { ProgramFormRHL } from "../../components/program-components/ProgramFormRHL";
 
 import dayjs from "dayjs";
 
@@ -84,35 +83,6 @@ export const ProgramCreateEdit = () => {
     };
     fetchEditData();
   }, [id]);
-
-  // const onSubmit = async (data) => {
-  //   const dateTime = dayjs(data.date).format("YYYY-MM-DDTHH:mm:ss");
-
-  //   try {
-  //     if (id) {
-  //       await axios.put(
-  //         `${process.env.REACT_APP_API_URL}/programs/program/${id}`,
-  //         { ...data, date: dateTime },
-  //         {
-  //           headers: { authorization: cookies.access_token },
-  //         }
-  //       );
-  //       alert("program updated");
-  //     } else {
-  //       await axios.post(
-  //         "${process.env.REACT_APP_API_URL}/programs",
-  //         { ...data, date: dateTime },
-  //         {
-  //           headers: { authorization: cookies.access_token },
-  //         }
-  //       );
-  //       alert("New Program Added");
-  //     }
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const onSubmit = async (data) => {
     console.log("is there data in this program form submission? Data: ", data);
@@ -234,8 +204,7 @@ export const ProgramCreateEdit = () => {
 
   return (
     <Box className="create-program">
-      {/* <ProgramForm onSubmit={onSubmit} /> */}
-      <ProgramFormRHL
+      <ProgramForm
         onSubmit={onSubmit}
         userID={userID}
         id={id}
