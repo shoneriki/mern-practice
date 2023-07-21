@@ -224,19 +224,33 @@ export const ProgramFormRHL = ({
               />
             </FormControl>
           </Grid>
-          <Button
-            sx={{
-              backgroundColor: "#0074D9",
-              color: "white",
-              margin: "1rem auto",
-              "&:hover": {
-                backgroundColor: "#005CBF",
-              },
-            }}
-            type="submit"
-          >
-            Create Program
-          </Button>
+          {id ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                margin: "1rem auto",
+              }}
+            >
+              <Button variant="contained" color="warning" type="submit">
+                Save?
+              </Button>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                margin: "1rem auto",
+              }}
+            >
+              <Button variant="contained" color="success" type="submit">
+                Create Program
+              </Button>
+            </Box>
+          )}
         </Grid>
       </form>
     </Box>
