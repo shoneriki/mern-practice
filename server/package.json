@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "start:prod": "node src/index.js"
   },
     "engines": {
     "node": "16.15.1"
