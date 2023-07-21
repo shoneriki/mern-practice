@@ -25,6 +25,8 @@ export const ProgramList = () => {
   const { programs, setPrograms, refreshKey, setRefreshKey } =
     useContext(ProgramsContext);
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     const fetchPrograms = async (id) => {
       try {
@@ -35,29 +37,48 @@ export const ProgramList = () => {
           "response.data from the program list component",
           response.data
         );
-        response.data && response.data.length > 0
-          ? setPrograms(
-              response.data.map((program) => ({
+        if (response.data && response.data.length > 0) {
+          const programs = await Promise.all(
+            response.data.map(async (program) => {
+              const pieces = await Promise.all(
+                program.pieces.map(async (pieceId) => {
+                  try {
+                    const pieceResponse = await axios.get(
+                      `http://localhost:3001/pieces/piece/${pieceId}`
+                    );
+                    console.log("Piece response data: ", pieceResponse.data);
+                    return pieceResponse.data;
+                  } catch (error) {
+                    console.error(
+                      `Failed to fetch piece with id ${pieceId}: `,
+                      error
+                    );
+                    return null;
+                  }
+                })
+              ).then((pieces) => pieces.filter((piece) => piece !== null)); // Filter out any null pieces
+
+              return {
                 ...program,
                 dateTime: new Date(program.date),
-              }))
-            )
-          : setPrograms([]);
-      } catch (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code that falls out of the range of 2xx
-          console.log("Data:", error.response.data);
-          console.log("Status:", error.response.status);
-          console.log("Headers:", error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log("Request:", error.request);
+                pieces,
+              };
+            })
+          );
+
+          setPrograms(programs);
+          console.log("programs after setPrograms?", programs)
+          setLoading(false); // Set loading to false once all data has been fetched
         } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error:", error.message);
+          setPrograms([]);
+          setLoading(false); // Set loading to false if there are no programs
         }
+      } catch (error) {
+        console.error("error: ", error)
+        setLoading(false);
       }
     };
+
     fetchPrograms();
   }, [userID, setPrograms, refreshKey]);
 
@@ -97,119 +118,128 @@ export const ProgramList = () => {
   // end of delete functionality
 
   return (
-    <Box className="programList">
-      <Typography
-        variant={"h4"}
-        sx={{ textAlign: "center", margin: "1rem auto" }}
-      >
-        Impending Programs
-      </Typography>
-      <Grid container spacing={3}>
-        {programs.map((program) => {
-          return (
-            <Grid item sx={12} sm={6} md={4} key={program._id}>
-              <Box sx={{ border: "1px solid black", padding: "1rem" }}>
-                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  {program.name}
-                </Typography>
-                <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
-                  {format(new Date(program.date), "MMMM do, yyyy 'at' H:mm")}
-                </Typography>
-                <Box>
-                  {program.pieces.map((piece, index) => {
-                    const {
-                      hours: pieceHours,
-                      minutes: pieceMinutes,
-                      seconds: pieceSeconds,
-                    } = piece.length;
-                    return (
-                      <Box className="piece-display" key={piece._id}>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Piece {index + 1}: {piece.name}
-                        </Typography>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Composer: {piece.composer}
-                        </Typography>
-                        <Typography>
-                          Length: {pieceHours}hr: {pieceMinutes}min:{" "}
-                          {pieceSeconds}sec
-                        </Typography>
-                      </Box>
-                    );
-                  })}
-                </Box>
-                <Typography>
-                  Intermission: {program.intermission} minutes
-                </Typography>
-                <Typography>
-                  Length: {program.length.hours}hr: {program.length.minutes}min:{" "}
-                  {program.length.seconds}sec
-                </Typography>
-                <Box
-                  name="delete-edit-btn-box"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    name="edit-btn"
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "yellow",
-                      color: "black",
-                      border: "none",
-                      "&:hover": {
-                        backgroundColor: "orange",
-                        border: "none",
-                        cursor: "pointer",
-                      },
-                    }}
-                    onClick={() => handleEdit(program._id)}
-                  >
-                    Edit?
-                  </Button>
-                  <Button
-                    name="delete-btn"
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "red",
-                      color: "white",
-                      border: "none",
-                      "&:hover": {
-                        backgroundColor: "darkred",
-                        border: "none",
-                        cursor: "pointer",
-                      },
-                    }}
-                    onClick={() => handleClickOpen(program._id)}
-                  >
-                    Delete
-                  </Button>
-                  <Dialog name="dialog" open={open} onClose={handleClose}>
-                    <DialogTitle>
-                      {"Are you sure you want to delete this program?"}
-                    </DialogTitle>
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary">
-                        Cancel
+    <>
+      {loading ? (
+        <section>Loading...</section>
+      ) : (
+        <Box className="programList">
+          <Typography
+            variant={"h4"}
+            sx={{ textAlign: "center", margin: "1rem auto" }}
+          >
+            Programs
+          </Typography>
+          <Grid container spacing={3} >
+            {programs.map((program) => {
+              return (
+                <Grid item sx={12} sm={6} md={4} key={program._id}>
+                  <Box sx={{ border: "1px solid black", padding: "1rem" }}>
+                    <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                      {program.name}
+                    </Typography>
+                    <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
+                      {format(
+                        new Date(program.date),
+                        "MMMM do, yyyy 'at' H:mm"
+                      )}
+                    </Typography>
+                    <Box>
+                      {program.pieces.map((piece, index) => {
+                        const {
+                          hours: pieceHours,
+                          minutes: pieceMinutes,
+                          seconds: pieceSeconds,
+                        } = piece.length;
+                        return (
+                          <Box className="piece-display" key={piece._id}>
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              Piece {index + 1}: {piece.name}
+                            </Typography>
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              Composer: {piece.composer}
+                            </Typography>
+                            <Typography>
+                              Length: {pieceHours}hr: {pieceMinutes}min:{" "}
+                              {pieceSeconds}sec
+                            </Typography>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                    <Typography>
+                      Intermission: {program.intermission} minutes
+                    </Typography>
+                    <Typography>
+                      Length: {program.length.hours}hr: {program.length.minutes}
+                      min: {program.length.seconds}sec
+                    </Typography>
+                    <Box
+                      name="delete-edit-btn-box"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Button
+                        name="edit-btn"
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "yellow",
+                          color: "black",
+                          border: "none",
+                          "&:hover": {
+                            backgroundColor: "orange",
+                            border: "none",
+                            cursor: "pointer",
+                          },
+                        }}
+                        onClick={() => handleEdit(program._id)}
+                      >
+                        Edit?
                       </Button>
                       <Button
-                        onClick={() => handleDelete(program._id)}
-                        color="primary"
-                        autoFocus
+                        name="delete-btn"
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "red",
+                          color: "white",
+                          border: "none",
+                          "&:hover": {
+                            backgroundColor: "darkred",
+                            border: "none",
+                            cursor: "pointer",
+                          },
+                        }}
+                        onClick={() => handleClickOpen(program._id)}
                       >
-                        Yes, Delete
+                        Delete
                       </Button>
-                    </DialogActions>
-                  </Dialog>
-                </Box>
-              </Box>
-            </Grid>
-          );
-        })}
-      </Grid>
-    </Box>
+                      <Dialog name="dialog" open={open} onClose={handleClose}>
+                        <DialogTitle>
+                          {"Are you sure you want to delete this program?"}
+                        </DialogTitle>
+                        <DialogActions>
+                          <Button onClick={handleClose} color="primary">
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={() => handleDelete(program._id)}
+                            color="primary"
+                            autoFocus
+                          >
+                            Yes, Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </Box>
+                  </Box>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Box>
+      )}
+    </>
   );
 };
