@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Navbar } from "./components/Navbar";
@@ -67,7 +67,7 @@ function App() {
                   element={<PracticeSessionCreateEdit />}
                 />
 
-                <Route path="/programs" element={<ProgramList />} />
+                <Route path="/programs" element={<Programs />} />
                 <Route path="/program/create" element={<ProgramCreateEdit />} />
                 <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
 
