@@ -11,7 +11,12 @@ import {piecesRouter} from "./routes/pieces.js"
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://practice-planner.onrender.com"],
+    credentials: true,
+  })
+);
 app.use("/auth", userRouter)
 app.use("/programs", programsRouter)
 app.use("/practiceSessions", practiceSessionsRouter)

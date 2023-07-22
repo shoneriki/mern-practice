@@ -9,7 +9,7 @@ export const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [_, setCookies] = useCookies(["access_token"]);
+  const [cookies, setCookies] = useCookies(["access_token"]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -19,7 +19,7 @@ export const Register = () => {
         `Sending request to ${process.env.REACT_APP_API_URL}/auth/register`
       );
       const result = await axios.post(
-        "${process.env.REACT_APP_API_URL}/auth/register",
+        `${process.env.REACT_APP_API_URL}/auth/register`,
         {
           username,
           password,
@@ -27,6 +27,7 @@ export const Register = () => {
       );
       alert("Registration Completed!");
       setCookies("access_token", result.data.token);
+      console.log("results.data.token: ",result.data.token)
       window.localStorage.setItem("userID", result.data.userID);
       navigate("/");
     } catch (error) {
