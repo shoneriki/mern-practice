@@ -15,6 +15,9 @@ export const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log(
+        `Sending request to ${process.env.REACT_APP_API_URL}/auth/register`
+      );
       const result = await axios.post(
         "${process.env.REACT_APP_API_URL}/auth/register",
         {

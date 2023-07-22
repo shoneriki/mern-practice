@@ -68,7 +68,7 @@ export const ProgramList = () => {
               };
             })
           );
-
+          console.log("Programs:", programs);
           setPrograms(programs);
           console.log("programs after setPrograms?", programs);
           setLoading(false); // Set loading to false once all data has been fetched
@@ -135,7 +135,7 @@ export const ProgramList = () => {
             Programs
           </Typography>
           <Grid container spacing={3}>
-            {programs.map((program, programIndex) => {
+            {Array.isArray(programs) && programs.map((program, programIndex) => {
               return (
                 <Grid item xs={12} sm={6} md={4} key={program._id}>
                   <Card
