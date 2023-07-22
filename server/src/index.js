@@ -24,8 +24,16 @@ app.use("/settings", settingsRouter)
 
 app.use("/pieces", piecesRouter)
 
+let mongoUri;
 
-mongoose.connect(process.env.MONGO_URI, {
+if (process.env.NODE_ENV === "production") {
+  mongoUri = process.env.MONGO_URI_PROD;
+} else {
+  mongoUri = process.env.MONGO_URI_DEV;
+}
+
+
+mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
