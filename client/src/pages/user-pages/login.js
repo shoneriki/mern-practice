@@ -18,7 +18,7 @@ export const Login = () => {
 
     try {
       const result = await axios.post(
-        "${process.env.REACT_APP_API_URL}/auth/login",
+        `${process.env.REACT_APP_API_URL}/auth/login`,
         {
           username,
           password,
