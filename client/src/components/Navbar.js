@@ -37,6 +37,7 @@ const CssContainer = styled("div")(({ theme }) => ({
 export const Navbar = () => {
   const [cookies, setCookies] = useCookies(["access_token", "username"]);
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token)
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -44,6 +45,7 @@ const logout = () => {
   setCookies("access_token", "", { expires: new Date(0) });
   setCookies("username", "", { expires: new Date(0) });
   window.localStorage.clear();
+  setIsLoggedIn(false);
   navigate("/auth");
 };
 
@@ -69,12 +71,27 @@ const logout = () => {
               onClose={() => setOpenDrawer(false)}
               logout={logout}
               cookies={cookies}
+              isLoggedIn={isLoggedIn}
             />
           </>
         ) : (
           <CssContainer>
-            {cookies.username && (
-              <Typography variant="h6">Welcome, {cookies.username}</Typography>
+            {isLoggedIn && cookies.username && (
+              <Typography
+                variant="h6"
+                sx={{
+                  color: "white",
+                  fontSize: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  "&:hover": {
+                    color: "yellow",
+                    borderBottom: "1px solid white",
+                  },
+                }}
+              >
+                Welcome, {cookies.username}
+              </Typography>
             )}
             <LinkStyled to="/">Home</LinkStyled>
             <LinkStyled to="/programs">Programs</LinkStyled>
@@ -87,11 +104,11 @@ const logout = () => {
             </LinkStyled>
             <LinkStyled to="/workspace">Workspace</LinkStyled>
             <LinkStyled to="/settings">Settings</LinkStyled>
-            {!cookies.access_token ? (
-              <>
+            {!isLoggedIn ? (
+              <LinkStyled>
                 <Link to="/auth">Login</Link>
                 <Link to="/auth">Register</Link>
-              </>
+              </LinkStyled>
             ) : (
               <Button
                 id="logout-btn"

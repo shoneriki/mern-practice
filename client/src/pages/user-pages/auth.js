@@ -9,19 +9,19 @@ import { AuthForm } from "../../components/AuthForm";
 import { useControlledValueWithTimezone } from "@mui/x-date-pickers/internals";
 
 export const Auth = () => {
-  const [isRegistering, setIsRegistering] = useState(true)
+  const [login, setLogin] = useState(true)
   return (
     <Box>
-      {isRegistering ? (
-        <Register setIsRegistering={setIsRegistering} />
+      {login ? (
+        <Login setLogin={setLogin} />
       ) : (
-        <Login setIsRegistering={setIsRegistering} />
+        <Register setLogin={setLogin} />
       )}
     </Box>
   );
 };
 
-const Register = ({setIsRegistering}) => {
+const Register = ({setLogin}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -63,14 +63,14 @@ const Register = ({setIsRegistering}) => {
         handleSubmit={handleSubmit}
         label="Register"
       />
-      <Button variant="contained" color="success" onClick={() => setIsRegistering(false)}>
+      <Button variant="contained" color="success" onClick={() => setLogin(true)}>
         Already have an account? Log in
       </Button>
     </Box>
   );
 };
 
-const Login = ({setIsRegistering}) => {
+const Login = ({setLogin}) => {
   const [_, setCookies] = useCookies(["access_token"]);
 
   const [username, setUsername] = useState("");
@@ -114,7 +114,7 @@ const Login = ({setIsRegistering}) => {
         handleSubmit={handleSubmit}
         label="Login"
       />
-      <Button variant="contained" color="success" onClick={() => setIsRegistering(true)}>
+      <Button variant="contained" color="success" onClick={() => setLogin(false)}>
         Don't have an account? Register
       </Button>
     </Box>

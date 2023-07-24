@@ -38,7 +38,7 @@ const LogoutBtn = styled("btn")({
   },
 });
 
-function DrawerComponent({ open, onClose, logout, cookies }) {
+function DrawerComponent({ open, onClose, logout, cookies, isLoggedIn  }) {
   const classes = useStyles();
   return (
     <Drawer open={open} onClose={onClose}>
@@ -109,7 +109,7 @@ function DrawerComponent({ open, onClose, logout, cookies }) {
           </MyLink>
         </ListItemText>
       </MyListItem>
-      {!cookies.access_token ? (
+      {!isLoggedIn ? (
         <>
           <MyListItem className={classes.listItem} onClick={onClose}>
             <ListItemText>
