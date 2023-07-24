@@ -2,6 +2,7 @@ import React from "react";
 import {
   Drawer,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/system";
@@ -41,6 +42,9 @@ function DrawerComponent({ open, onClose, logout, cookies }) {
   const classes = useStyles();
   return (
     <Drawer open={open} onClose={onClose}>
+      {cookies.username && (
+        <Typography variant="h6">Welcome, {cookies.username}</Typography>
+      )}
       <MyListItem className={classes.listItem} onClick={onClose}>
         <ListItemText>
           <MyLink className={classes.link} to="/">
@@ -109,14 +113,14 @@ function DrawerComponent({ open, onClose, logout, cookies }) {
         <>
           <MyListItem className={classes.listItem} onClick={onClose}>
             <ListItemText>
-              <MyLink className={classes.link} to="/auth/login">
+              <MyLink className={classes.link} to="/auth">
                 Login
               </MyLink>
             </ListItemText>
           </MyListItem>
           <MyListItem className={classes.listItem}>
             <ListItemText>
-              <MyLink className={classes.link} to="/auth/register">
+              <MyLink className={classes.link} to="/auth">
                 Register
               </MyLink>
             </ListItemText>

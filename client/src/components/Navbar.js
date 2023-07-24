@@ -35,16 +35,17 @@ const CssContainer = styled("div")(({ theme }) => ({
 }));
 
 export const Navbar = () => {
-  const [cookies, setCookies] = useCookies(["access_token"]);
+  const [cookies, setCookies] = useCookies(["access_token", "username"]);
   const navigate = useNavigate();
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const logout = () => {
-    setCookies("access_token", "");
-    window.localStorage.clear();
-    navigate("/auth/login");
-  };
+const logout = () => {
+  setCookies("access_token", "", { expires: new Date(0) });
+  setCookies("username", "", { expires: new Date(0) });
+  window.localStorage.clear();
+  navigate("/auth");
+};
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -72,6 +73,9 @@ export const Navbar = () => {
           </>
         ) : (
           <CssContainer>
+            {cookies.username && (
+              <Typography variant="h6">Welcome, {cookies.username}</Typography>
+            )}
             <LinkStyled to="/">Home</LinkStyled>
             <LinkStyled to="/programs">Programs</LinkStyled>
             <LinkStyled to="/program/create">Create Program</LinkStyled>
@@ -85,8 +89,8 @@ export const Navbar = () => {
             <LinkStyled to="/settings">Settings</LinkStyled>
             {!cookies.access_token ? (
               <>
-                <Link to="/auth/login">Login</Link>
-                <Link to="/auth/register">Register</Link>
+                <Link to="/auth">Login</Link>
+                <Link to="/auth">Register</Link>
               </>
             ) : (
               <Button

@@ -5,8 +5,6 @@ import {ProtectedWrapper} from "./components/ProtectedWrapper"
 import { Navbar } from "./components/Navbar";
 import { Spacer } from "./components/Spacer";
 import { Auth } from "./pages/user-pages/auth";
-import { Login } from "./pages/user-pages/login";
-import { Register } from "./pages/user-pages/register";
 import { Home } from "./pages/home";
 
 import AddPieceForm from "./pages/piece-pages/create-edit-piece"
@@ -42,9 +40,6 @@ function App() {
           <PiecesProvider>
             <Routes>
               <Route path="/auth" element={<Auth />} />
-              <Route path="/auth/register" element={<Register />} />
-              <Route path="/auth/login" element={<Login />} />
-
               <Route
                 path="/"
                 element={

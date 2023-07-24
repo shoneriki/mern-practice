@@ -3,18 +3,25 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
+import {Box, Button} from "@mui/material"
+
 import { AuthForm } from "../../components/AuthForm";
+import { useControlledValueWithTimezone } from "@mui/x-date-pickers/internals";
 
 export const Auth = () => {
+  const [isRegistering, setIsRegistering] = useState(true)
   return (
-    <div className="auth">
-      <Login />
-      <Register />
-    </div>
+    <Box>
+      {isRegistering ? (
+        <Register setIsRegistering={setIsRegistering} />
+      ) : (
+        <Login setIsRegistering={setIsRegistering} />
+      )}
+    </Box>
   );
 };
 
-const Register = () => {
+const Register = ({setIsRegistering}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -33,6 +40,7 @@ const Register = () => {
       );
       alert("Registration Completed!");
       setCookies("access_token", result.data.token);
+      setCookies("username", username)
       window.localStorage.setItem("userID", result.data.userID);
       navigate("/");
     } catch (error) {
@@ -41,18 +49,23 @@ const Register = () => {
   };
 
   return (
-    <AuthForm
-      username={username}
-      setUsername={setUsername}
-      password={password}
-      setPassword={setPassword}
-      handleSubmit={handleSubmit}
-      label="Register"
-    />
+    <Box>
+      <AuthForm
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleSubmit={handleSubmit}
+        label="Register"
+      />
+      <Button variant="contained" color="success" onClick={() => setIsRegistering(false)}>
+        Already have an account? Log in
+      </Button>
+    </Box>
   );
 };
 
-const Login = () => {
+const Login = ({setIsRegistering}) => {
   const [_, setCookies] = useCookies(["access_token"]);
 
   const [username, setUsername] = useState("");
@@ -76,6 +89,7 @@ const Login = () => {
         alert(result.data.message);
       } else {
         setCookies("access_token", result.data.token);
+        setCookies("username", username);
         window.localStorage.setItem("userID", result.data.userID);
         navigate("/");
       }
@@ -85,13 +99,18 @@ const Login = () => {
   };
 
   return (
-    <AuthForm
-      username={username}
-      setUsername={setUsername}
-      password={password}
-      setPassword={setPassword}
-      handleSubmit={handleSubmit}
-      label="Login"
-    />
+    <Box>
+      <AuthForm
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleSubmit={handleSubmit}
+        label="Login"
+      />
+      <Button variant="contained" color="success" onClick={() => setIsRegistering(true)}>
+        Don't have an account? Register
+      </Button>
+    </Box>
   );
 };
