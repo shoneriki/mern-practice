@@ -1,6 +1,7 @@
 import React, { } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
+import {ProtectedWrapper} from "./components/ProtectedWrapper"
 import { Navbar } from "./components/Navbar";
 import { Spacer } from "./components/Spacer";
 import { Auth } from "./pages/user-pages/auth";
@@ -33,52 +34,135 @@ import { PiecesProvider } from "./contexts/PiecesContext";
 
 function App() {
   return (
-    <div className="App">
+    <section className="App">
       <Router>
         <Navbar />
         <Spacer />
-          <ProgramsProvider>
-            <PiecesProvider>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/auth/register" element={<Register />} />
-                <Route path="/auth/login" element={<Login />} />
+        <ProgramsProvider>
+          <PiecesProvider>
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth/register" element={<Register />} />
+              <Route path="/auth/login" element={<Login />} />
 
-                <Route path="/pieces" element={<PieceList />} />
-                <Route path="/piece/create" element={<AddPieceForm />} />
-                <Route path="/piece/edit/:id" element={<AddPieceForm />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedWrapper>
+                    <Home />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route
+                path="/pieces"
+                element={
+                  <ProtectedWrapper>
+                    <PieceList />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route path="/piece/create" element={<ProtectedWrapper>
+                <AddPieceForm/>
+              </ProtectedWrapper>}
 
-                <Route path="/practiceSessions" element={<PracticeSessions />} />
-                <Route
-                  path="/practiceSession/create"
-                  element={<PracticeSessionCreateEdit />}
-                />
-                <Route
-                  path="/practiceSessions/practiceSession/create"
-                  element={<PracticeSessionCreateEdit />}
-                />
-                <Route
-                  path="/practiceSession/edit/:id"
-                  element={<PracticeSessionCreateEdit />}
-                />
-                <Route
-                  path="/practiceSessions/practiceSession/edit/:id"
-                  element={<PracticeSessionCreateEdit />}
-                />
+              />
+              <Route
+                path="/piece/edit/:id"
+                element={
+                  <ProtectedWrapper>
+                    <AddPieceForm />
+                  </ProtectedWrapper>
+                }
+              />
 
-                <Route path="/programs" element={<Programs />} />
-                <Route path="/program/create" element={<ProgramCreateEdit />} />
-                <Route path="/program/edit/:id" element={<ProgramCreateEdit />} />
+              <Route
+                path="/practiceSessions"
+                element={
+                  <ProtectedWrapper>
+                    <PracticeSessions />
+                  </ProtectedWrapper>
+                }
+              />
 
-                <Route path="/workspace" element={<Workspace />} />
-                <Route path="/workspace/:id" element={<Workspace />} />
-                <Route path="/settings" element={<Settings />} />
-              </Routes>
-            </PiecesProvider>
-          </ProgramsProvider>
+              <Route
+                path="/practiceSession/create"
+                element={
+                  <ProtectedWrapper>
+                    <PracticeSessionCreateEdit />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route
+                path="/practiceSession/edit/:id"
+                element={
+                  <ProtectedWrapper>
+                    <PracticeSessionCreateEdit />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route
+                path="/practiceSessions/practiceSession/edit/:id"
+                element={
+                  <ProtectedWrapper>
+                    <PracticeSessionCreateEdit />
+                  </ProtectedWrapper>
+                }
+              />
+
+              <Route
+                path="/programs"
+                element={
+                  <ProtectedWrapper>
+                    <Programs />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route
+                path="/program/create"
+                element={
+                  <ProtectedWrapper>
+                    <ProgramCreateEdit />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route
+                path="/program/edit/:id"
+                element={
+                  <ProtectedWrapper>
+                    <ProgramCreateEdit />
+                  </ProtectedWrapper>
+                }
+              />
+
+              <Route
+                path="/workspace"
+                element={
+                  <ProtectedWrapper>
+                    <Workspace />
+                  </ProtectedWrapper>
+                  }
+              />
+              <Route
+                path="/workspace/:id"
+                element={
+                  <ProtectedWrapper>
+                    <Workspace />
+                  </ProtectedWrapper>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedWrapper>
+                    <Settings />
+                  </ProtectedWrapper>
+                }
+              />
+            </Routes>
+          </PiecesProvider>
+        </ProgramsProvider>
       </Router>
-    </div>
+    </section>
   );
 }
 

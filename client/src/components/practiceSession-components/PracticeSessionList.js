@@ -79,9 +79,6 @@ export const PracticeSessionList = () => {
       );
       console.log("Deleted");
       setOpen(false);
-      // setPracticePlans(
-      //   practicePlans.filter((practicePlan) => practicePlan._id !== id)
-      // );
       fetchPracticeSessions();
     } catch (err) {
       console.log("error: ", err);

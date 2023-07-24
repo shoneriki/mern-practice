@@ -6,10 +6,6 @@ services:
   startCommand: cd client && npx serve -s build
   envVars:
   - key: REACT_APP_API_URL
-    fromService:
-      name: database
-      type: web
-      property: url
 
 - type: web
   name: practice-planner-backend
@@ -17,7 +13,4 @@ services:
   buildCommand: cd server && yarn install
   startCommand: cd server && yarn start:prod
   envVars:
-  - key: MONGO_URI
-    fromDatabase:
-      name: Database-For-Practice-Planner
-      property: connectionString
+  - key: MONGO_URI_PROD
