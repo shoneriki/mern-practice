@@ -23,7 +23,6 @@ export const getPiece = async (req, res) => {
     const id = req.params.id;
     const piece = await PiecesModel.findById(id);
     if (piece) {
-      console.log("piece from the get? ", piece);
       res.json(piece);
     } else {
       res.status(404).json({ message: "Piece not found" });

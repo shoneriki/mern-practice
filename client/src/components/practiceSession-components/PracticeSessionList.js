@@ -27,7 +27,6 @@ export const PracticeSessionList = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/practiceSessions/user/${userID}`
       );
-      console.log("response, ", response);
       response.data && response.data.length > 0
         ? setPracticeSessions(
             response.data.map((practiceSession) => ({
@@ -35,7 +34,6 @@ export const PracticeSessionList = () => {
             }))
           )
         : setPracticeSessions([]);
-      console.log("", practiceSessions);
     } catch (error) {
       console.error("Error fetching practice plans:", error);
     }
@@ -50,7 +48,6 @@ export const PracticeSessionList = () => {
   // edit functionality
 
   const handleEdit = (id) => {
-    console.log("id from handleEdit: ", id);
     navigate(`/practiceSession/edit/${id}`);
   };
 
@@ -62,7 +59,6 @@ export const PracticeSessionList = () => {
   const [toDelete, setToDelete] = useState(null);
 
   const handleClickOpen = (id) => {
-    console.log("Opening delete dialog for ID:", id);
     setOpen(true);
     setToDelete(id);
   };
@@ -72,12 +68,10 @@ export const PracticeSessionList = () => {
   };
 
   const handleDelete = async () => {
-    console.log("Deleting practice plan with ID:", toDelete);
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${toDelete}`
       );
-      console.log("Deleted");
       setOpen(false);
       fetchPracticeSessions();
     } catch (err) {

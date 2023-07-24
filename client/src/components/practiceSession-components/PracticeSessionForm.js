@@ -91,15 +91,6 @@ export const PracticeSessionForm = ({
                     label="Date and Time of Execution"
                     value={field.value}
                     onChange={(value) => {
-                      console.log(
-                        "dateOfExecution before DateTimePicker:",
-                        field.value
-                      );
-                      console.log(
-                        "Is dateOfExecution before DateTimePicker valid?",
-                        !isNaN(new Date(field.value))
-                      );
-
                       form.setFieldValue(field.name, value);
                     }}
                     sx={{ width: "100%" }}

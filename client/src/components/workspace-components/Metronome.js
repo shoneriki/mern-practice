@@ -9,7 +9,6 @@ import { Button, Slider, Box, TextField, Grid, InputAdornment, Typography} from 
 export class Metronome extends Component {
   constructor(props) {
     super(props);
-    console.log("props?", props);
     this.state = {
       isPlaying: false,
       count: 0,

@@ -104,10 +104,6 @@ export const PracticeSessionCreateEdit = (props) => {
             excerpts: pieceData.excerpts,
             dateOfExecution: new Date(practiceSessionData.dateOfExecution),
           });
-          console.log(
-            "formValues from useEffect inside if with id: ",
-            formValues
-          );
           setIsLoading(false);
           setDataLoaded(true);
         } catch (error) {
@@ -158,7 +154,6 @@ export const PracticeSessionCreateEdit = (props) => {
         );
 
         const pieceData = response.data;
-        console.log("pieceData from onChange", pieceData);
 
         setFieldValue("length", pieceData.length);
         setFieldValue("composer", pieceData.composer);

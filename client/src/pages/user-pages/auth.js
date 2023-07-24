@@ -47,7 +47,6 @@ const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
         setCookies("username", username)
         window.localStorage.setItem("userID", result.data.userID);
         setLoggedIn(true)
-        console.log("loggedIn?", loggedIn)
         navigate("/");
       }
     } catch (error) {

@@ -145,7 +145,6 @@ export const Workspace = () => {
   const [rep, setRep] = useState(10);
 
   const handleEdit = (id) => {
-    console.log("id from handleEdit: ", id);
     navigate(`/practiceSessions/practiceSession/edit/${id}`);
   };
 
@@ -156,17 +155,10 @@ export const Workspace = () => {
           `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
         );
         setPracticeSession(response.data);
-        console.log(
-          "response.data from useEffect in workspace for practiceSession",
-          response.data
-        );
-
         const pieceResponse = await axios.get(
           `${process.env.REACT_APP_API_URL}/pieces/piece/${response.data.piece}`
         );
         setPiece(pieceResponse.data);
-        console.log("response data for piece", piece);
-        console.log("response data for piece", pieceResponse.data);
         setLoading(false);
       } catch (error) {
         console.error(
@@ -176,7 +168,6 @@ export const Workspace = () => {
       }
     };
     fetchPracticeSession();
-    console.log("response data for piece", piece);
   }, [id]);
 
   return (

@@ -9,7 +9,6 @@ export const useForm = ({ initialValues, onValueChange }) => {
 
     if(onValueChange) {
       onValueChange({ [name]: value})
-      console.log("[name]: value", name, value)
     }
   };
 

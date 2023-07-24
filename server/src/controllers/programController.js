@@ -53,8 +53,6 @@ export const getAllProgramsFromUser = async (req, res) => {
   try {
     const userID = req.params.userID;
     const result = await ProgramsModel.find({userOwner: userID});
-    console.log("userID", userID)
-    console.log("result for getAllProgramsFromUser", result)
     res.json(result);
   } catch (err) {
     res.json(err);
@@ -70,7 +68,7 @@ export const saveNewProgram = async (req, res) => {
   try {
     const userID = req.params.userID;
     const savedProgram = await programPlan.save();
-    console.log("SAVED PROGRAM?", savedProgram);
+
     res.status(201).json(savedProgram);
   } catch (err) {
     console.log(err);

@@ -35,10 +35,6 @@ export const PieceList = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/pieces/user/${userID}`
         );
-        console.log(
-          "response.data from the pieces list component",
-          response.data
-        );
         response.data && response.data.length > 0
           ? setPieces(
               response.data.map((piece) => ({
@@ -105,7 +101,6 @@ export const PieceList = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log("id in toDelete", toDelete);
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/pieces/piece/${toDelete}`
@@ -115,7 +110,6 @@ export const PieceList = () => {
       setRefreshKey(Date.now());
       const updatedPrograms = await fetchUpdatedPrograms();
       updatePrograms(updatedPrograms);
-      console.log("updated Programs?", updatedPrograms);
     } catch (err) {
       console.log("error: ", err);
     }

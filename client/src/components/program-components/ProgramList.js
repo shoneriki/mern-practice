@@ -36,10 +36,6 @@ export const ProgramList = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/programs/user/${userID}`
         );
-        console.log(
-          "response.data from the program list component",
-          response.data
-        );
         if (response.data && response.data.length > 0) {
           const programs = await Promise.all(
             response.data.map(async (program) => {
@@ -49,7 +45,6 @@ export const ProgramList = () => {
                     const pieceResponse = await axios.get(
                       `${process.env.REACT_APP_API_URL}/pieces/piece/${pieceId}`
                     );
-                    console.log("Piece response data: ", pieceResponse.data);
                     return pieceResponse.data;
                   } catch (error) {
                     console.error(
@@ -68,9 +63,7 @@ export const ProgramList = () => {
               };
             })
           );
-          console.log("Programs:", programs);
           setPrograms(programs);
-          console.log("programs after setPrograms?", programs);
           setLoading(false); // Set loading to false once all data has been fetched
         } else {
           setPrograms([]);
@@ -114,7 +107,6 @@ export const ProgramList = () => {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/programs/program/${id}`
       );
-      console.log("Deleted");
       setOpen(false);
       setPrograms(programs.filter((program) => program._id !== id));
     } catch (err) {

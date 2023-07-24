@@ -29,7 +29,6 @@ export const ProgramCreateEdit = () => {
             `${process.env.REACT_APP_API_URL}/programs/program/${id}`
           );
           let programData = response.data;
-          console.log("programData: ", programData);
 
           // Converting 'dayjs' instances to strings
           programData.date = dayjs(programData.date);
@@ -64,9 +63,6 @@ export const ProgramCreateEdit = () => {
               programData
             );
           }
-
-          console.log("programData: ", programData);
-
           setProgram(programData);
 
           setIsLoading(false);
@@ -87,7 +83,6 @@ export const ProgramCreateEdit = () => {
   const onSubmit = async (data) => {
     console.log("is there data in this program form submission? Data: ", data);
     const dateTime = dayjs(data.date).format("YYYY-MM-DDTHH:mm:ss");
-    console.log("userID:", userID);
 
     try {
       const piecePromises = data.pieces.map((piece, pieceIndex) => {

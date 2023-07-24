@@ -109,23 +109,15 @@ function AddPieceForm() {
   });
 
   useEffect(() => {
-    console.log("id from useEffect", id);
     const fetchEditData = async () => {
       if (id) {
-        console.log("ID EXISTS!");
-        console.log("id in fetch", id);
+
         try {
-          console.log(
-            "from inside try of fetchEditData from create-piece page"
-          );
           const response = await axios.get(
             `${process.env.REACT_APP_API_URL}/pieces/piece/${id}`
           );
           const pieceData = response.data;
-          console.log("pieceData: ", pieceData);
           setPiece(pieceData);
-
-          console.log("PIECE DATA? From fetch", pieceData);
         } catch (error) {
           console.log("Inside the fetchEditData catch");
           console.error(
