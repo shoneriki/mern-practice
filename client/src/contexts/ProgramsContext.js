@@ -28,7 +28,10 @@ export const ProgramsProvider = ({ children }) => {
       }
     };
 
-    fetchPrograms();
+    if(userID) {
+      fetchPrograms();
+    }
+
   }, [userID]);
 
   return (

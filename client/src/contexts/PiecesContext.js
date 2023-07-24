@@ -23,7 +23,9 @@ export const PiecesProvider = ({ children }) => {
       }
     };
 
-    fetchPieces();
+    if (userID) {
+      fetchPieces();
+    }
   }, [userID]);
 
   return (

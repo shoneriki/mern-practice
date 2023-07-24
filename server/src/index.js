@@ -32,7 +32,6 @@ if (process.env.NODE_ENV === "production") {
   mongoUri = process.env.MONGO_URI_DEV;
 }
 
-
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

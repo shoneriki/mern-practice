@@ -68,7 +68,9 @@ export function useFetchProgramsForCalendar() {
       }
     };
 
-    fetchProgramsForCalendar();
+    if(userID) {
+      fetchProgramsForCalendar();
+    }
   }, [userID]);
 
   return programs;

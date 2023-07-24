@@ -7,7 +7,7 @@ const register = async (req, res) => {
   const user = await UserModel.findOne({ username });
 
   if (user) {
-    return res.json({ message: "User already exists!" });
+    return res.json({ status: 'error', message: "User already exists!" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,7 +29,7 @@ const login = async (req, res) => {
   const user = await UserModel.findOne({ username });
 
   if (!user) {
-    return res.json({ message: "User Doesn't Exist..." });
+    return res.json({ status: 'error', message: "User Doesn't Exist..." });
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);

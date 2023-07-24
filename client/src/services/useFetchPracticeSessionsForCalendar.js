@@ -55,8 +55,9 @@ export function useFetchPracticeSessionsForCalendar() {
         console.error("Error fetching programs: ", error);
       }
     };
-
-    fetchPracticeSessionsForCalendar();
+    if(userID) {
+      fetchPracticeSessionsForCalendar();
+    }
   }, [userID]);
 
   return practiceSessions;

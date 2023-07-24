@@ -44,7 +44,9 @@ export const PracticeSessionList = () => {
   };
 
   useEffect(() => {
-    fetchPracticeSessions();
+    if(userID) {
+      fetchPracticeSessions();
+    }
   }, [userID]);
 
   // edit functionality

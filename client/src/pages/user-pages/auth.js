@@ -38,12 +38,17 @@ const Register = ({setIsRegistering}) => {
           password,
         }
       );
-      alert("Registration Completed!");
-      setCookies("access_token", result.data.token);
-      setCookies("username", username)
-      window.localStorage.setItem("userID", result.data.userID);
-      navigate("/");
+      if (result.data.status === 'error') {
+        alert(result.data.message);
+      } else {
+        alert("Registration Completed!");
+        setCookies("access_token", result.data.token);
+        setCookies("username", username)
+        window.localStorage.setItem("userID", result.data.userID);
+        navigate("/");
+      }
     } catch (error) {
+      alert("error: ", error)
       console.error(error);
     }
   };
@@ -94,6 +99,7 @@ const Login = ({setIsRegistering}) => {
         navigate("/");
       }
     } catch (error) {
+      alert("error: " ,error)
       console.error(error);
     }
   };

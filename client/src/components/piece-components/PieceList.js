@@ -61,7 +61,9 @@ export const PieceList = () => {
         }
       }
     };
-    fetchPieces();
+    if(userID) {
+      fetchPieces();
+    }
   }, [userID]);
 
   // edit functionality
