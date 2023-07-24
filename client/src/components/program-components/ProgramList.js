@@ -82,7 +82,9 @@ export const ProgramList = () => {
       }
     };
 
-    fetchPrograms();
+    if(userID) {
+      fetchPrograms();
+    }
   }, [userID, setPrograms, refreshKey]);
 
   // edit functionality

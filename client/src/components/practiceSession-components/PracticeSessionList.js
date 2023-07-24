@@ -20,8 +20,6 @@ export const PracticeSessionList = () => {
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-
   const [practiceSessions, setPracticeSessions] = useState([]);
 
   const fetchPracticeSessions = async () => {

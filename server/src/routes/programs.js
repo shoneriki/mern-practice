@@ -6,108 +6,30 @@ import { UserModel } from "../models/Users.js";
 
 const router = express.Router();
 
-router.get("/search", async (req, res) => {
-  try {
-    const pieceTitle = req.query.pieceTitle;
-    const programs = await ProgramsModel.find({
-      "pieces.name": { $regex: new RegExp(piece, "i") },
-    });
-    const pieces = [];
-    programs.forEach((program) => {
-      program.pieces.forEach((piece) => {
-        if (piece.name.toLowerCase().includes(pieceTitle.toLowerCase())) {
-          const pieceWithProgramId = program._id
-            ? {
-              ...piece._doc,
-              programId: program._id,
-              programName: program.name,
-              programDate: program.date,
-            }
-            : {
-              ...piece._doc
-            }
-          pieces.push(pieceWithProgramId);
-        }
-      });
-    });
-    res.json(pieces);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+import {
+  search,
+  getProgram,
+  getAllProgramsFromUser,
+  saveNewProgram,
+  editProgram,
+  deleteProgram,
+} from "../controllers/programController.js";
+
+router.get("/search", search);
 
 //get specific program
-router.get(`/program/:id`, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const program = await ProgramsModel.findById(id);
-    console.log("PROGRAM from GET?", program)
-    if (program) {
-      res.json(program);
-    } else {
-      res.status(404).json({ message: "Program not found" });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+router.get(`/program/:id`, getProgram);
 
 //get all programs from user
-router.get("/user/:userID", async (req, res) => {
-  try {
-    const userID = req.params.userID;
-    const result = await ProgramsModel.find({userOwner: userID});
-    res.json(result);
-  } catch (err) {
-    res.json(err);
-  }
-});
+router.get("/user/:userID", getAllProgramsFromUser);
 
 //save a program
-router.post("/", async (req, res) => {
-  console.log("req.body from post",req.body)
-  const programPlan = new ProgramsModel({
-    ...req.body,
-  });
-
-  try {
-    const userID = req.params.userID;
-    const savedProgram = await programPlan.save();
-    console.log("SAVED PROGRAM?", savedProgram)
-    res.status(201).json(savedProgram)
-  } catch (err) {
-    console.log(err);
-    res.json(err);
-  }
-});
-
+router.post("/", saveNewProgram);
 
 //edit a program
-router.put(`/program/:id`, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const updates = req.body;
-    const updatedProgram = await ProgramsModel.findByIdAndUpdate(id, updates, {
-      new: true,
-    });
-    console.log("updatedProgram from server side put:", updatedProgram)
-    res.status(200).json(updatedProgram);
-  } catch (err) {
-    console.log("error: ", err);
-    res.status(500).json(err);
-  }
-});
+router.put(`/program/:id`, editProgram);
 
 //delete a program
-router.delete("/program/:id", async (req,res) => {
-  try {
-    const id = req.params.id;
-    await ProgramsModel.findByIdAndDelete(id);
-    res.status(200).json({message: "Program deleted successfully"})
-  } catch(err) {
-    console.log("error:", err)
-    res.status(500).json(err)
-  }
-})
+router.delete("/program/:id", deleteProgram)
 
 export { router as programsRouter };
