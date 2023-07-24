@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { NAVBAR_HEIGHT } from "./constants";
@@ -41,11 +41,19 @@ export const Navbar = () => {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  useEffect(() => {
+    const userID = window.localStorage.getItem("userID");
+    if (cookies.access_token && userID) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [cookies]);
+
 const logout = () => {
   setCookies("access_token", "", { expires: new Date(0) });
   setCookies("username", "", { expires: new Date(0) });
   window.localStorage.clear();
-  setIsLoggedIn(false);
   navigate("/auth");
 };
 

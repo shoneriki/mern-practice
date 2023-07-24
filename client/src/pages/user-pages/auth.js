@@ -9,19 +9,20 @@ import { AuthForm } from "../../components/AuthForm";
 import { useControlledValueWithTimezone } from "@mui/x-date-pickers/internals";
 
 export const Auth = () => {
-  const [login, setLogin] = useState(true)
+  const [loggedIn,setLoggedIn] = useState(false)
+  const [logIn, setLogIn] = useState(true)
   return (
     <Box>
-      {login ? (
-        <Login setLogin={setLogin} />
+      {logIn ? (
+        <Login logIn={logIn} setLogIn={setLogIn} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       ) : (
-        <Register setLogin={setLogin} />
+        <Register logIn={logIn} setLogIn={setLogIn} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       )}
     </Box>
   );
 };
 
-const Register = ({setLogin}) => {
+const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -45,6 +46,8 @@ const Register = ({setLogin}) => {
         setCookies("access_token", result.data.token);
         setCookies("username", username)
         window.localStorage.setItem("userID", result.data.userID);
+        setLoggedIn(true)
+        console.log("loggedIn?", loggedIn)
         navigate("/");
       }
     } catch (error) {
@@ -63,14 +66,14 @@ const Register = ({setLogin}) => {
         handleSubmit={handleSubmit}
         label="Register"
       />
-      <Button variant="contained" color="success" onClick={() => setLogin(true)}>
+      <Button variant="contained" color="success" onClick={() => setLogIn(true)}>
         Already have an account? Log in
       </Button>
     </Box>
   );
 };
 
-const Login = ({setLogin}) => {
+const Login = ({ setLogIn, logIn, loggedIn, setLoggedIn }) => {
   const [_, setCookies] = useCookies(["access_token"]);
 
   const [username, setUsername] = useState("");
@@ -96,10 +99,10 @@ const Login = ({setLogin}) => {
         setCookies("access_token", result.data.token);
         setCookies("username", username);
         window.localStorage.setItem("userID", result.data.userID);
+        setLoggedIn(true);
         navigate("/");
       }
     } catch (error) {
-      alert("error: " ,error)
       console.error(error);
     }
   };
@@ -113,8 +116,14 @@ const Login = ({setLogin}) => {
         setPassword={setPassword}
         handleSubmit={handleSubmit}
         label="Login"
+        setLoggedIn={setLoggedIn}
+        setLogIn={setLogIn}
       />
-      <Button variant="contained" color="success" onClick={() => setLogin(false)}>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() => setLogIn(false)}
+      >
         Don't have an account? Register
       </Button>
     </Box>

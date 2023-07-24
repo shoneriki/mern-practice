@@ -1,6 +1,6 @@
 import {Button, Box, Typography} from "@mui/material"
 
-export const AuthForm = ({username, setUsername, password, setPassword, handleSubmit, label}) => {
+export const AuthForm = ({username, setUsername, password, setPassword, handleSubmit, label, logIn, setLogIn, loggedIn, setLoggedIn}) => {
   return (
     <Box>
       <form onSubmit={handleSubmit}>
