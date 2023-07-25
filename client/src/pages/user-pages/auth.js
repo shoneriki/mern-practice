@@ -31,6 +31,7 @@ const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("entering handleSubmit of register")
     try {
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/register`,
@@ -39,6 +40,7 @@ const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
           password,
         }
       );
+      console.log("inside the try")
       if (result.data.status === 'error') {
         alert(result.data.message);
       } else {
