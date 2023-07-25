@@ -11,30 +11,17 @@ import {piecesRouter} from "./routes/pieces.js"
 const app = express();
 
 app.use(express.json());
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3000", "https://practice-planner.onrender.com"],
-//     credentials: true,
-//   })
-// );
-app.use(function (req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "https://practice-planner.onrender.com",
-  ];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
-  next();
-});
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://practice-planner.onrender.com"],
+    credentials: true,
+    allowedHeaders: [
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    ],
+    methods: ["GET, POST, PUT, DELETE, UPDATE"],
+  })
+);
+
 app.use("/auth", userRouter)
 app.use("/programs", programsRouter)
 app.use("/practiceSessions", practiceSessionsRouter)
