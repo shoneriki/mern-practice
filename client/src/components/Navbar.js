@@ -103,12 +103,12 @@ const logout = () => {
             )}
             <LinkStyled to="/">Home</LinkStyled>
             <LinkStyled to="/programs">Programs</LinkStyled>
-            <LinkStyled to="/program/create">Create Program</LinkStyled>
+            <LinkStyled to="/program/create">Add/Edit Program</LinkStyled>
             <LinkStyled to="/pieces">Pieces</LinkStyled>
             <LinkStyled to="/piece/create">Add/Edit Piece</LinkStyled>
             <LinkStyled to="/practiceSessions">Practice Sessions</LinkStyled>
             <LinkStyled to="/practiceSession/create">
-              Create Practice Session
+              Add/Edit Practice Session
             </LinkStyled>
             <LinkStyled to="/workspace">Workspace</LinkStyled>
             <LinkStyled to="/settings">Settings</LinkStyled>
