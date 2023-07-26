@@ -36,7 +36,7 @@ if (process.env.NODE_ENV === "production") {
   mongoUri = process.env.MONGO_URI_DEV;
 }
 
-console.log("mongoUri: ", mongoUri)
+console.log("mongoUri should be without quotes?: ", mongoUri)
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
