@@ -121,7 +121,7 @@ export const ProgramList = () => {
       {loading ? (
         <section>Loading...</section>
       ) : (
-        <Box className="programList" sx={{ width: "80%", margin: "2rem auto" }}>
+        <Box className="programList" sx={{ width: "80%", margin: "2rem auto",  }}>
           <Typography
             variant={"h4"}
             sx={{ textAlign: "center", margin: "1rem auto", width: "80%" }}
@@ -132,7 +132,7 @@ export const ProgramList = () => {
             {Array.isArray(programs) && programs.length !== 0 ? (
               programs.map((program, programIndex) => {
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={program._id}>
+                  <Grid item centered xs={12} sm={6} md={4} key={program._id}>
                     <Card
                       sx={{
                         border: "1px solid black",

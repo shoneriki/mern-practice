@@ -3,8 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { NAVBAR_HEIGHT } from "./constants";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+
 import {
   AppBar,
+  Box,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
   useTheme,
@@ -32,7 +38,65 @@ const LinkStyled = styled(Link)({
 const CssContainer = styled("div")(({ theme }) => ({
   marginLeft: theme.spacing(10),
   display: "flex",
+  alignItems: "center",
 }));
+
+const chevronDown = (
+  <FontAwesomeIcon icon={faChevronDown} sx={{ color: "white" }} />
+);
+
+export const DropdownMenu = ({ title, items }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <Box sx={{ color: "white", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Button variant="text" color="success" onClick={handleClick} sx={{ color: "white", margin: "auto" }}>
+        {title}
+      </Button>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        {items.map((item, itemIndex) => (
+          <MenuItem
+            onClick={handleClose}
+            key={itemIndex}
+            sx={{ color: "black",
+            fontSize: "20px",
+            display: "flex",
+            alignItems: "center",
+            "&:hover": {
+              color: "yellow",
+              borderBottom: "1px solid white",},
+            }}
+          >
+            <Link
+              to={item.path}
+              style={{
+                color: "black",
+                fontSize: "1em",
+                display: "flex",
+                alignItems: "center",
+                "&:hover": {
+                  color: "yellow",
+                  borderBottom: "1px solid white",
+                },
+              }}
+            >
+              {item.label}
+              {chevronDown}
+            </Link>
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  );
+};
 
 export const Navbar = () => {
   const [cookies, setCookies] = useCookies(["access_token", "username"]);
@@ -61,9 +125,16 @@ const logout = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="fixed" sx={{ marginBottom: NAVBAR_HEIGHT }}>
-      <Toolbar>
-        <Typography variant="h4" sx={{ flexGrow: "1", cursor: "pointer" }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        marginBottom: NAVBAR_HEIGHT,
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <Toolbar name="toolbar" sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Typography variant="h4" sx={{ cursor: "pointer" }}>
           Planner
         </Typography>
         {isMobile ? (
@@ -102,14 +173,33 @@ const logout = () => {
               </Typography>
             )}
             <LinkStyled to="/">Home</LinkStyled>
-            <LinkStyled to="/programs">Programs</LinkStyled>
-            <LinkStyled to="/program/create">Add/Edit Program</LinkStyled>
-            <LinkStyled to="/pieces">Pieces</LinkStyled>
-            <LinkStyled to="/piece/create">Add/Edit Piece</LinkStyled>
-            <LinkStyled to="/practiceSessions">Practice Sessions</LinkStyled>
-            <LinkStyled to="/practiceSession/create">
-              Add/Edit Practice Session
-            </LinkStyled>
+            <DropdownMenu
+              title="Programs"
+              items={[
+                { label: "All Programs", path: "/programs" },
+                { label: "Add Program", path: "/program/create" },
+              ]}
+            />
+            <DropdownMenu
+              title="Practice Sessions"
+              items={[
+                { label: "All Practice Sessions", path: "/practiceSessions" },
+                {
+                  label: "Add Practice Session",
+                  path: "/practiceSession/create",
+                },
+              ]}
+            />
+            <DropdownMenu
+              title="Pieces"
+              items={[
+                { label: "All Pieces", path: "/pieces" },
+                {
+                  label: "Add A Piece",
+                  path: "/piece/create",
+                },
+              ]}
+            />
             <LinkStyled to="/workspace">Workspace</LinkStyled>
             <LinkStyled to="/settings">Settings</LinkStyled>
             {!isLoggedIn ? (
@@ -118,22 +208,12 @@ const logout = () => {
                 <Link to="/auth">Register</Link>
               </LinkStyled>
             ) : (
-              <Button
+              <LinkStyled
                 id="logout-btn"
                 onClick={logout}
-                variant="contained"
-                sx={{
-                  color: "white",
-                  backgroundColor: "orange",
-                  margin: "auto 0",
-                  height: "50%",
-                  "&:hover": {
-                    backgroundColor: "red",
-                  },
-                }}
               >
                 Logout
-              </Button>
+              </LinkStyled>
             )}
           </CssContainer>
         )}
