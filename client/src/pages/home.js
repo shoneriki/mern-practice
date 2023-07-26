@@ -33,10 +33,8 @@ export const Home = () => {
       <ProgramList />
       <Grid
         container
-        spacing={4}
         justifyContent="center"
         sx={{
-          margin: "1rem auto",
           width: "80%",
         }}
       >
@@ -45,6 +43,9 @@ export const Home = () => {
             onClick={() => navigate("/programs")}
             color="secondary"
             variant="contained"
+            sx={{
+              margin: "1rem 0",
+            }}
           >
             All Programs?
           </Button>
