@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://practice-planner.onrender.com"],
+    origin: ["http://localhost:3000", "https://practice-planner.onrender.com", "https://practice-planner-backend.onrender.com"],
     credentials: true,
     allowedHeaders: [
       "Origin, X-Requested-With, Content-Type, Accept, Authorization",
