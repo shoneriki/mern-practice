@@ -5,12 +5,16 @@ import "../css/calendar.scss";
 import { useFetchProgramsForCalendar } from "../services/useFetchProgramsForCalendar.js";
 import { useFetchPracticeSessionsForCalendar } from "../services/useFetchPracticeSessionsForCalendar.js";
 
+import { useNavigate } from "react-router-dom";
+
 const localizer = momentLocalizer(moment);
 
 export const ScheduledCalendar = (props) => {
   const programs = useFetchProgramsForCalendar();
   const practiceSessions = useFetchPracticeSessionsForCalendar();
   const [events, setEvents] = useState([]);
+
+  const navigate = useNavigate()
 
   const [practiceSessionEvents, setPracticeSessionEvents] = useState([])
 
@@ -59,7 +63,7 @@ export const ScheduledCalendar = (props) => {
       return;
     }
 
-    console.log(program.events);
+    navigate(`/program/edit/${event.programId}`);
   };
 
   return (

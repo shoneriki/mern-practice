@@ -265,13 +265,21 @@ export const ProgramList = () => {
                 <Typography variant="h6">
                   There are no programs yet. Would you like to add one?
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => navigate(`/program/create`)}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%"
+                  }}
                 >
-                  Add Program?
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate(`/program/create`)}
+                  >
+                    Add Program?
+                  </Button>
+                </Box>
               </Box>
             )}
           </Grid>
