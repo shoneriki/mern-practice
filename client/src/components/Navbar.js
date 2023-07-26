@@ -203,10 +203,14 @@ const logout = () => {
             <LinkStyled to="/workspace">Workspace</LinkStyled>
             <LinkStyled to="/settings">Settings</LinkStyled>
             {!isLoggedIn ? (
-              <LinkStyled>
-                <Link to="/auth">Login</Link>
-                <Link to="/auth">Register</Link>
-              </LinkStyled>
+              <>
+                <LinkStyled>
+                  <Link to="/auth">Login</Link>
+                </LinkStyled>
+                <LinkStyled>
+                  <Link to="/auth">Register</Link>
+                </LinkStyled>
+              </>
             ) : (
               <LinkStyled
                 id="logout-btn"
