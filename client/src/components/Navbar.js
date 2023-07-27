@@ -57,22 +57,38 @@ export const DropdownMenu = ({ title, items }) => {
   };
 
   return (
-    <Box sx={{ color: "white", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <Button variant="text" color="success" onClick={handleClick} sx={{ color: "white", margin: "auto" }}>
+    <Box
+      sx={{
+        color: "white",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Button
+        variant="text"
+        color="success"
+        onClick={handleClick}
+        sx={{ color: "white", margin: "auto" }}
+      >
         {title}
+        {chevronDown}
       </Button>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         {items.map((item, itemIndex) => (
           <MenuItem
             onClick={handleClose}
             key={itemIndex}
-            sx={{ color: "black",
-            fontSize: "20px",
-            display: "flex",
-            alignItems: "center",
-            "&:hover": {
-              color: "yellow",
-              borderBottom: "1px solid white",},
+            sx={{
+              color: "black",
+              fontSize: "20px",
+              display: "flex",
+              alignItems: "center",
+              "&:hover": {
+                color: "yellow",
+                borderBottom: "1px solid white",
+              },
             }}
           >
             <Link
@@ -89,7 +105,6 @@ export const DropdownMenu = ({ title, items }) => {
               }}
             >
               {item.label}
-              {chevronDown}
             </Link>
           </MenuItem>
         ))}

@@ -49,37 +49,34 @@ export const Counter = ({rep}) => {
           width: "40%",
         }}
       >
-      {`${count}/${rep}`}
+        {`${count}/${rep}`}
       </TextField>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={4} fullWidth>
+        <Grid item xs={12} sm={4}>
           <Button
-            sx={{ backgroundColor: "red" }}
+            sx={{ backgroundColor: "red", width: "100%" }}
             onClick={reset}
             variant="contained"
-            fullWidth
           >
             Reset?
           </Button>
         </Grid>
-        <Grid item xs={12} sm={4} fullWidth>
+        <Grid item xs={12} sm={4}>
           <Button
-            sx={{ backgroundColor: "blue" }}
+            sx={{ backgroundColor: "blue", width: "100%" }}
             value="+"
             onClick={increment}
             variant="contained"
-            fullWidth
           >
             +
           </Button>
         </Grid>
-        <Grid item xs={12} sm={4} fullWidth>
+        <Grid item xs={12} sm={4}>
           <Button
-            sx={{ backgroundColor: "#bada55" }}
+            sx={{ backgroundColor: "#bada55", width: "100%" }}
             value="-"
             onClick={decrement}
             variant="contained"
-            fullWidth
           >
             -
           </Button>

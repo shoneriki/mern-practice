@@ -151,14 +151,23 @@ export const Workspace = () => {
   useEffect(() => {
     const fetchPracticeSession = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
-        );
-        setPracticeSession(response.data);
-        const pieceResponse = await axios.get(
-          `${process.env.REACT_APP_API_URL}/pieces/piece/${response.data.piece}`
-        );
-        setPiece(pieceResponse.data);
+        if(id) {
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
+          );
+          setPracticeSession(response.data);
+          if (response.data && response.data.piece) {
+            const pieceResponse = await axios.get(
+              `${process.env.REACT_APP_API_URL}/pieces/piece/${response.data.piece}`
+            );
+            setPiece(pieceResponse.data);
+          } else {
+            setPiece({});
+          }
+        } else {
+          setPracticeSession({})
+          setPiece({})
+        }
         setLoading(false);
       } catch (error) {
         console.error(
@@ -169,6 +178,7 @@ export const Workspace = () => {
     };
     fetchPracticeSession();
   }, [id]);
+
 
   return (
     <Box
@@ -188,6 +198,20 @@ export const Workspace = () => {
           }}
         >
           Loading...
+        </Box>
+      ) : Object.keys(practiceSession).length === 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "2rem auto",
+            width: "80%",
+          }}
+        >
+          <Metronome tempo={60} setTempo={setTempo} />
+          <Counter rep={10} />
         </Box>
       ) : (
         <Box
