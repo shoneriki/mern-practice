@@ -1,5 +1,7 @@
-import React, { } from "react";
+import React, {useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import { useCookies } from "react-cookie";
 import "./App.css";
 import {ProtectedWrapper} from "./components/ProtectedWrapper"
 import { Navbar } from "./components/Navbar";
@@ -29,12 +31,21 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import { ProgramsProvider } from "./contexts/ProgramsContext";
 import { PiecesProvider } from "./contexts/PiecesContext";
+import { faLinesLeaning } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
+    const [cookies, setCookies] = useCookies(["access_token", "username"]);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token);
+
+  useEffect(() => {
+    const userID = window.localStorage.getItem("userID");
+    cookies.access_Token && userID ?  setIsLoggedIn(true) : setIsLoggedIn(false)
+  }, [cookies])
+
   return (
     <section className="App">
       <Router>
-        <Navbar />
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Spacer />
         <ProgramsProvider>
           <PiecesProvider>
@@ -56,10 +67,13 @@ function App() {
                   </ProtectedWrapper>
                 }
               />
-              <Route path="/piece/create" element={<ProtectedWrapper>
-                <AddPieceForm/>
-              </ProtectedWrapper>}
-
+              <Route
+                path="/piece/create"
+                element={
+                  <ProtectedWrapper>
+                    <AddPieceForm />
+                  </ProtectedWrapper>
+                }
               />
               <Route
                 path="/piece/edit/:id"
@@ -135,7 +149,7 @@ function App() {
                   <ProtectedWrapper>
                     <Workspace />
                   </ProtectedWrapper>
-                  }
+                }
               />
               <Route
                 path="/workspace/:id"

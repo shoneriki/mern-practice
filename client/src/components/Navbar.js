@@ -115,8 +115,8 @@ export const DropdownMenu = ({ title, items }) => {
 
 export const Navbar = () => {
   const [cookies, setCookies] = useCookies(["access_token", "username"]);
-  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token)
+  const navigate = useNavigate();
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -140,7 +140,7 @@ const logout = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  return (
+  return  isLoggedIn ? (
     <AppBar
       position="fixed"
       sx={{
@@ -239,5 +239,5 @@ const logout = () => {
         )}
       </Toolbar>
     </AppBar>
-  );
+  ): null;
 };
