@@ -133,6 +133,7 @@ const logout = () => {
   setCookies("access_token", "", { expires: new Date(0) });
   setCookies("username", "", { expires: new Date(0) });
   window.localStorage.clear();
+  setIsLoggedIn(false)
   navigate("/auth");
 };
 
