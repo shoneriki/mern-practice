@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 
 import { PracticeSessionForm } from "../../components/practiceSession-components/PracticeSessionForm";
-import { PracticeSessionFormRHL } from "../../components/practiceSession-components/PracticeSessionFormRHL";
 
 export const PracticeSessionCreateEdit = (props) => {
   const userID = useGetUserID();
@@ -274,21 +273,7 @@ export const PracticeSessionCreateEdit = (props) => {
         width: "80%",
       }}
     >
-      {/* <PracticeSessionForm
-        initialValues={formValues}
-        validationSchema={validationSchema}
-        id={id}
-        practiceSession={practiceSession}
-        cookies={cookies}
-        navigate={navigate}
-        selectedPiece={selectedPiece}
-        suggestions={suggestions}
-        handlePieceSearch={handlePieceSearch}
-        handlePieceSelection={handlePieceSelection}
-        onSubmit={onSubmit}
-        handleAutocompleteChange={handleAutocompleteChange}
-      /> */}
-      <PracticeSessionFormRHL
+      <PracticeSessionForm
         initialValues={formValues}
         validationSchema={validationSchema}
         id={id}
