@@ -27,6 +27,7 @@ export const PracticeSessionList = () => {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/practiceSessions/user/${userID}`
       );
+      console.log("response from fetchPracticeSessions?", response)
       response.data && response.data.length > 0
         ? setPracticeSessions(
             response.data.map((practiceSession) => ({
@@ -48,6 +49,7 @@ export const PracticeSessionList = () => {
   // edit functionality
 
   const handleEdit = (id) => {
+    console.log("id????", id)
     navigate(`/practiceSession/edit/${id}`);
   };
 
@@ -144,42 +146,83 @@ export const PracticeSessionList = () => {
                     </Grid>
                   </Grid>
                 </Box>
-                <Box>
-                  <Grid
-                    id="piece"
-                    container
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
+
+                {/* Single piece */}
+             <Box>
+              <Grid
+                id="piece"
+                container
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Grid item sx={12}>
+                  <Typography
+                    variant={"h6"}
+                    sx={{ fontWeight: "bold" }}
+                    align="center"
                   >
-                    <Grid item sx={12}>
-                      <Typography
-                        variant={"h6"}
-                        sx={{ fontWeight: "bold" }}
-                        align="center"
-                      >
-                        Piece Name:
-                      </Typography>
-                      <Typography variant={"h6"} align="center">
-                        {practiceSession.piece.name}
-                      </Typography>
+                    Piece Name:
+                  </Typography>
+                  <Typography variant={"h6"} align="center">
+                    {practiceSession.piece.name}
+                  </Typography>
+                </Grid>
+                <Grid item sx={12}>
+                  <Typography
+                    variant={"h6"}
+                    sx={{ fontWeight: "bold" }}
+                    align="center"
+                  >
+                    Composer:
+                  </Typography>
+                  <Typography variant={"h6"} align="center">
+                    {practiceSession.piece.composer}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+
+                {/* {practiceSession.pieces.map((piece, pieceIndex) => (
+                  <Box>
+                    <Grid
+                      id="piece"
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Grid item sx={12}>
+                        <Typography
+                          variant={"h6"}
+                          sx={{ fontWeight: "bold" }}
+                          align="center"
+                        >
+                          Piece Name:
+                        </Typography>
+                        <Typography variant={"h6"} align="center">
+                          {practiceSession.piece.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item sx={12}>
+                        <Typography
+                          variant={"h6"}
+                          sx={{ fontWeight: "bold" }}
+                          align="center"
+                        >
+                          Composer:
+                        </Typography>
+                        <Typography variant={"h6"} align="center">
+                          {practiceSession.piece.composer}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item sx={12}>
-                      <Typography
-                        variant={"h6"}
-                        sx={{ fontWeight: "bold" }}
-                        align="center"
-                      >
-                        Composer:
-                      </Typography>
-                      <Typography variant={"h6"} align="center">
-                        {practiceSession.piece.composer}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Box>
+                  </Box>
+                ))} */}
 
                 <Box
                   name="delete-edit-btn-box"

@@ -86,7 +86,7 @@ export const PracticeSessionCreateEdit = (props) => {
 
           // Fetch the piece data
           const pieceResponse = await axios.get(
-            `${process.env.REACT_APP_API_URL}/pieces/piece/${practiceSessionData.piece}`,
+            `${process.env.REACT_APP_API_URL}/pieces/piece/${practiceSessionData.piece._id}`,
             {
               headers: { authorization: cookies.access_token },
             }
@@ -225,16 +225,17 @@ export const PracticeSessionCreateEdit = (props) => {
             headers: { authorization: cookies.access_token },
           }
         );
-        alert("practiceSession created");
         // Update the piece information whether it's a new practice session or an update
-        await axios.put(
-          `${process.env.REACT_APP_API_URL}/pieces/piece/${values.piece._id}`,
-          { ...values.piece },
-          {
-            headers: { authorization: cookies.access_token },
-          }
-        );
-
+        if (values.piece) {
+          await axios.put(
+            `${process.env.REACT_APP_API_URL}/pieces/piece/${values.piece._id}`,
+            { ...values.piece },
+            {
+              headers: { authorization: cookies.access_token },
+            }
+          );
+        }
+        alert("practiceSession created");
         navigate("/practiceSessions");
       }
     } catch (error) {

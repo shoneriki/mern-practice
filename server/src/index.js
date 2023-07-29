@@ -32,6 +32,8 @@ let mongoUri;
 
 if (process.env.NODE_ENV === "production") {
   mongoUri = process.env.MONGO_URI_PROD;
+} else if (process.env.NODE_ENV === "test") {
+  mongoUri = process.env.MONGO_URI_TEST;
 } else {
   mongoUri = process.env.MONGO_URI_DEV;
 }

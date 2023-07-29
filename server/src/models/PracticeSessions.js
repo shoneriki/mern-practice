@@ -15,12 +15,16 @@ const practiceSessionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Pieces",
     },
-    excerpts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Pieces.excerpts",
-      },
-    ],
+    // pieces: [{
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Pieces",
+    // }],
+    // excerpts: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Pieces.excerpts",
+    //   },
+    // ],
     runThrough: { type: Boolean, default: false },
     pieceLength: {
       hours: { type: Number, min: 0, max: 10 },

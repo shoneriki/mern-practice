@@ -6,9 +6,11 @@ import { PiecesModel } from "../models/Pieces.js";
 export const getPracticeSession = async (req, res) => {
   try {
     const id = req.params.id;
-    const practiceSession = await PracticeSessionsModel.findById(id);
+    const practiceSession = await PracticeSessionsModel.findById(id).populate("piece");
     if (practiceSession) {
       res.json(practiceSession);
+      console.log("****************PRACTICESESSION", practiceSession)
+
     } else {
       res.status(404).json({ message: "Practice Session not found" });
     }
@@ -25,6 +27,8 @@ export const findAllPracticeSessionsFromUser = async (req, res) => {
     }).populate("piece");
     // populate the piece field
 
+    console.log("RESULT?!", result)
+
     res.json(result);
     console.log("all practice sessions", result);
   } catch (err) {
@@ -39,27 +43,51 @@ export const saveNewPracticeSession = async (req, res) => {
     ...req.body,
   });
 
-  const piece = await PiecesModel.findById(req.body.piece._id);
-  piece.excerpts = req.body.piece.excerpts;
-  await piece.save;
-
   try {
+    let pieceObjs = [];
+    if (req.body.piece) {
+      // For single piece
+      const pieceObj = await PiecesModel.findById(req.body.piece._id);
+      pieceObj.excerpts = req.body.piece.excerpts;
+      await pieceObj.save();
+      pieceObjs.push(pieceObj);
+    }
+    // else if (req.body.pieces) {
+    //   // For multiple pieces
+    //   for (const piece of req.body.pieces) {
+    //     const pieceObj = await PiecesModel.findById(piece._id);
+    //     pieceObj.excerpts = piece.excerpts;
+    //     await pieceObj.save();
+    //     pieceObjs.push(pieceObj);
+    //   }
+    // }
+
     const savedPracticeSession = await practiceSession.save();
+
+    // for (const pieceObj of pieceObjs) {
+    //   pieceObj.practiceSessions.push(savedPracticeSession._id);
+    //   await pieceObj.save();
+    // }
+
     res.status(201).json(savedPracticeSession);
+    console.log("savedPracticeSession", savedPracticeSession)
   } catch (err) {
-    console.log("oh no, something is wrong");
+    console.log(
+      "oh no, something went wrong in saving your piece in the practiceSession"
+    );
     console.log(err);
     res.json(err);
   }
 };
 
+
 export const getSinglePracticeSession = async (req, res) => {
   try {
     console.log("inside mysterious .get in router");
     const practiceSession = await PracticeSessionsModel.findById(req.params.id)
-      .populate("programId")
-      .populate("pieceId");
-    console.log("practicePlan inside /single/:id", practicePlan);
+      .populate("pieces");
+    console.log("practiceSession inside /single/:id", practiceSession);
+    res.json(practiceSession)
   } catch (err) {
     res.status(500).json(err);
   }
@@ -69,9 +97,17 @@ export const editPracticeSession = async (req, res) => {
   const id = req.params.id;
   const updates = req.body;
 
-  const piece = await PiecesModel.findById(req.body.piece._id);
-  piece.excerpts = req.body.piece.excerpts;
-  await piece.save();
+  // For single piece
+  const pieceObj = await PiecesModel.findById(req.body.piece._id);
+  pieceObj.excerpts = req.body.piece.excerpt;
+  await pieceObj.save()
+
+  // For multiple pieces
+  // for (const piece of req.body.pieces) {
+  //   const pieceObj = await PiecesModel.findById(piece._id);
+  //   pieceObj.excerpts = piece.excerpt;
+  //   await pieceObj.save();
+  // }
 
   try {
     const updatedPracticeSession =
