@@ -148,7 +148,7 @@ export const PracticeSessionList = () => {
                 </Box>
 
                 {/* Single piece */}
-             <Box>
+             {/* <Box>
               <Grid
                 id="piece"
                 container
@@ -183,9 +183,12 @@ export const PracticeSessionList = () => {
                   </Typography>
                 </Grid>
               </Grid>
-            </Box>
+            </Box> */}
+            {/* end of single piece code */}
 
-                {/* {practiceSession.pieces.map((piece, pieceIndex) => (
+            {/* multiple pieces */}
+
+                 {practiceSession.pieces.map((piece, pieceIndex) => (
                   <Box>
                     <Grid
                       id="piece"
@@ -205,7 +208,7 @@ export const PracticeSessionList = () => {
                           Piece Name:
                         </Typography>
                         <Typography variant={"h6"} align="center">
-                          {practiceSession.piece.name}
+                          {piece.name}
                         </Typography>
                       </Grid>
                       <Grid item sx={12}>
@@ -217,12 +220,14 @@ export const PracticeSessionList = () => {
                           Composer:
                         </Typography>
                         <Typography variant={"h6"} align="center">
-                          {practiceSession.piece.composer}
+                          {piece.composer}
                         </Typography>
                       </Grid>
                     </Grid>
                   </Box>
-                ))} */}
+                ))}
+
+                {/* end of multiple pieces disply */}
 
                 <Box
                   name="delete-edit-btn-box"

@@ -1,4 +1,4 @@
-import { PracticeSessionsModel } from "../models/PracticeSessions.js";
+import { PracticeSessionsModel } from "./models/PracticeSessions.js";
 
 async function migrate() {
   // Find all practice sessions
