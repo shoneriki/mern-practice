@@ -147,9 +147,11 @@ const logout = () => {
         marginBottom: NAVBAR_HEIGHT,
         display: "flex",
         alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
       }}
     >
-      <Toolbar name="toolbar" sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <Toolbar name="toolbar" sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         <Typography variant="h4" sx={{ cursor: "pointer" }}>
           Planner
         </Typography>
