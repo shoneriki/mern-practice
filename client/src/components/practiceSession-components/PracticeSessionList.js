@@ -273,7 +273,7 @@ export const PracticeSessionList = () => {
                   </Button>
                   <Dialog name="dialog" open={open} onClose={handleClose}>
                     <DialogTitle>
-                      {"Are you sure you want to delete this program?"}
+                      {"Are you sure you want to delete this practice session?"}
                     </DialogTitle>
                     <DialogActions>
                       <Button onClick={handleClose} color="primary">
