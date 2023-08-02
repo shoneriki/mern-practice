@@ -375,6 +375,12 @@ const PieceForm = ({
     }
   }, [selectedPiece, reset, pieceIndex, pieceValues, values]);
 
+  useEffect(() => {
+    if (selectedPiece && selectedPiece.composer) {
+      setValue(`values.pieces[${pieceIndex}].composer`, selectedPiece.composer);
+    }
+  }, [selectedPiece, setValue, pieceIndex]);
+
   const {
     fields: excerptFields,
     append: appendExcerpt,
