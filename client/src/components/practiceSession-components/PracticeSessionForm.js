@@ -334,7 +334,9 @@ export const PracticeSessionForm = ({
           margin: "2rem 0",
         }}
       >
-        <Typography variant={'h6'} sx={{margin: "1rem 0"}}>Practice Session Form:</Typography>
+        <Typography variant={"h6"} sx={{ margin: "1rem 0" }}>
+          Practice Session Form:
+        </Typography>
         <Controller
           name="name"
           control={control}
@@ -402,7 +404,12 @@ export const PracticeSessionForm = ({
                   name="totalSessionLength.hours"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} type="number" label="hr" />
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="hr"
+                      inputProps={{ min: 0, max: 10}}
+                    />
                   )}
                 />
               </Box>
@@ -413,7 +420,12 @@ export const PracticeSessionForm = ({
                   name="totalSessionLength.minutes"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} type="number" label="min" />
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="min"
+                      inputProps={{ min: 0, max: 59 }}
+                    />
                   )}
                 />
               </Box>
@@ -424,7 +436,12 @@ export const PracticeSessionForm = ({
                   name="totalSessionLength.seconds"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} type="number" label="sec" />
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="sec"
+                      inputProps={{ min: 0, max: 59}}
+                    />
                   )}
                 />
               </Box>
