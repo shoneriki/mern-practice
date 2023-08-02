@@ -124,12 +124,6 @@ const ExcerptField = ({
     name: `pieces.${pieceIndex}.excerpts.${excerptIndex}.tempi`,
   });
 
-  if (selectedPiece) {
-    console.log("selectedPiece: ", selectedPiece);
-  } else {
-    console.log("selectedPiece is undefined");
-  }
-
   const excerptValues =
     Array.isArray(values.pieces) &&
     values.pieces[pieceIndex] &&
@@ -464,6 +458,7 @@ export const PracticeSessionForm = ({
   handlePieceSelection,
   onSubmit,
   handleAutocompleteChange,
+  resetSelectedPiece
 }) => {
   const {
     register,
@@ -601,6 +596,7 @@ export const PracticeSessionForm = ({
                 composer={values.composer}
                 appendPiece={appendPiece}
                 reset={reset}
+                resetSelectedPiece={resetSelectedPiece}
               />
             );
           })}
@@ -608,7 +604,7 @@ export const PracticeSessionForm = ({
         <Button
           color="primary"
           variant="contained"
-          onClick={() =>
+          onClick={() => {
             appendPiece({
               name: "",
               composer: "",
@@ -626,8 +622,9 @@ export const PracticeSessionForm = ({
                   ],
                 },
               ],
-            })
-          }
+            });
+            resetSelectedPiece(); 
+          }}
         >
           Add Piece
         </Button>

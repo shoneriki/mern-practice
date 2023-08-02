@@ -225,6 +225,10 @@ const handleAutocompleteChange = async (event, newValue, pieceIndex) => {
   }
 };
 
+const resetSelectedPiece = () => {
+  setSelectedPiece({})
+}
+
   // submitting the practiceSession form; new or edited
   const onSubmit = async (values) => {
     console.log("entering the submit?");
@@ -356,6 +360,7 @@ const handleAutocompleteChange = async (event, newValue, pieceIndex) => {
         handleAutocompleteChange={handleAutocompleteChange}
         formValues={formValues}
         appendPiece={appendPiece}
+        resetSelectedPiece={resetSelectedPiece}
       />
     </Box>
   );
