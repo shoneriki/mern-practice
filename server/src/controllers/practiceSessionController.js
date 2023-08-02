@@ -101,17 +101,17 @@ export const editPracticeSession = async (req, res) => {
   const id = req.params.id;
   const updates = req.body;
 
-  // For single piece
-  // const pieceObj = await PiecesModel.findById(req.body.piece._id);
-  // pieceObj.excerpts = req.body.piece.excerpt;
-  // await pieceObj.save()
-
   // For multiple pieces
+  let updatedPieces = [];
   for (const piece of req.body.pieces) {
     const pieceObj = await PiecesModel.findById(piece._id);
     pieceObj.excerpts = piece.excerpt;
     await pieceObj.save();
+    updatedPieces.push(pieceObj);
   }
+
+  // Update the pieces in the practice session
+  updates.pieces = updatedPieces.map((piece) => piece._id);
 
   try {
     const updatedPracticeSession =
@@ -129,6 +129,7 @@ export const editPracticeSession = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
 
 export const deletePracticeSession = async (req, res) => {
   try {
