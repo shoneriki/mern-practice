@@ -331,9 +331,6 @@ const PieceForm = ({
   composer,
   values,
   appendPiece,
-  // appendExcerpt,
-  // removeExcerpt,
-  // excerptFields,
   reset,
 }) => {
   const pieceValues = values.pieces ? values.pieces[pieceIndex] : {};
@@ -347,7 +344,7 @@ const PieceForm = ({
   };
 
   useEffect(() => {
-    if (selectedPiece._id) {
+    if (selectedPiece._id && pieceValues._id !== selectedPiece._id) {
       const updatedValues = {
         ...values,
         pieces: values.pieces.map((piece, index) => {
@@ -376,8 +373,7 @@ const PieceForm = ({
 
       reset(updatedValues);
     }
-  }, [selectedPiece, reset, pieceIndex, values]);
-
+  }, [selectedPiece, reset, pieceIndex, pieceValues, values]);
 
   const {
     fields: excerptFields,
