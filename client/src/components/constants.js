@@ -1,1 +1,1 @@
-export const NAVBAR_HEIGHT = "7rem"
+export const NAVBAR_HEIGHT = "2rem"
