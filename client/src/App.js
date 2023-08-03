@@ -12,7 +12,8 @@ import { Home } from "./pages/home";
 import AddPieceForm from "./pages/piece-pages/create-edit-piece"
 import {PieceList} from "./components/piece-components/PieceList"
 
-import { PracticeSessionCreateEdit } from "./pages/practiceSession-pages/practiceSession-create-edit";
+import {PracticeSessionCreateEdit } from "./pages/practiceSession-pages/practiceSession-create-edit";
+import {PracticeSession} from "./pages/practiceSession-pages/practiceSessionPage"
 import {PracticeSessions} from "./pages/practiceSession-pages/practiceSessions"
 
 import { ProgramCreateEdit } from "./pages/program-pages/program-create-edit";
@@ -97,7 +98,8 @@ function App() {
                 path="/practiceSession/create"
                 element={
                   <ProtectedWrapper>
-                    <PracticeSessionCreateEdit />
+                    {/* <PracticeSessionCreateEdit /> */}
+                    <PracticeSession/>
                   </ProtectedWrapper>
                 }
               />

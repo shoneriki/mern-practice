@@ -58,11 +58,14 @@ export const saveNewPracticeSession = async (req, res) => {
     // }
     // For multiple pieces
     if (req.body.pieces) {
-      for (const piece of req.body.pieces) {
-        const pieceObj = await PiecesModel.findById(piece._id);
-        pieceObj.excerpts = piece.excerpts;
-        await pieceObj.save();
-        pieceObjs.push(pieceObj);
+      for (const pieceId of req.body.pieces) {
+        const pieceObj = await PiecesModel.findById(pieceId);
+        if (pieceObj) {
+          await pieceObj.save();
+          pieceObjs.push(pieceObj);
+        } else {
+          console.log(`Piece with _id ${pieceId} not found`);
+        }
       }
     }
 
@@ -74,7 +77,7 @@ export const saveNewPracticeSession = async (req, res) => {
     }
 
     res.status(201).json(savedPracticeSession);
-    console.log("savedPracticeSession", savedPracticeSession)
+    console.log("savedPracticeSession", savedPracticeSession);
   } catch (err) {
     console.log(
       "oh no, something went wrong in saving your piece in the practiceSession"
@@ -103,9 +106,9 @@ export const editPracticeSession = async (req, res) => {
 
   // For multiple pieces
   let updatedPieces = [];
-  for (const piece of req.body.pieces) {
-    const pieceObj = await PiecesModel.findById(piece._id);
-    pieceObj.excerpts = piece.excerpt;
+  for (const pieceId of req.body.pieces) {
+    const pieceObj = await PiecesModel.findById(pieceId);
+    pieceObj.excerpts = piece.excerpt; // This line might still cause an error because `piece` is an ID, not an object with an `excerpt` property
     await pieceObj.save();
     updatedPieces.push(pieceObj);
   }

@@ -40,7 +40,7 @@ const TempoField = ({ control, excerptIndex, tempoIndex, removeTempo }) => {
           control={control}
           defaultValue=""
           render={({ field }) => (
-            <TextField {...field} type="number" label="BPM" fullWidth />
+            <TextField {...field} type="number" label="BPM" fullWidth  inputProps={{min: 10, max: 300}}/>
           )}
         />
         <Button
@@ -91,7 +91,7 @@ const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
           defaultValue=""
           multiline
           render={({ field }) => (
-            <TextField {...field} label="Notes" placeholder="Notes" fullWidth />
+            <TextField {...field} label="Notes" placeholder="Notes" fullWidth multiline />
           )}
         />
       </Grid>
@@ -101,7 +101,7 @@ const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
           control={control}
           defaultValue=""
           render={({ field }) => (
-            <TextField {...field} type="number" label="Repetitions" fullWidth />
+            <TextField {...field} type="number" label="Repetitions" fullWidth inputProps={{min: 0}} />
           )}
         />
       </Grid>
@@ -116,7 +116,7 @@ const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <TextField {...field} type="number" label="hours" fullWidth />
+              <TextField {...field} type="number" label="hours" fullWidth inputProps={{min: 0, max: 10}} />
             )}
           />
         </Grid>
@@ -126,7 +126,7 @@ const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <TextField {...field} type="number" label="minutes" fullWidth />
+              <TextField {...field} type="number" label="minutes" fullWidth inputProps={{min: 0, max: 59}}/>
             )}
           />
         </Grid>
@@ -136,7 +136,7 @@ const ExcerptField = ({control, excerptIndex, removeExcerpt}) => {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <TextField {...field} type="number" label="seconds" fullWidth />
+              <TextField {...field} type="number" label="seconds" fullWidth inputProps={{min: 0, max: 59}}/>
             )}
           />
         </Grid>

@@ -17,8 +17,8 @@ function AddPieceForm() {
   const { id } = useParams();
 
   const seedData = {
-    name: "Piece",
-    composer: "Composer",
+    name: "",
+    composer: "",
     length: {
       hours: 0,
       minutes: 30,
@@ -26,39 +26,35 @@ function AddPieceForm() {
     },
     excerpts: [
       {
-        location: "Spot 1, bars 20-50",
-        notes: "needs attention in coordination",
-        repetitions: 10,
+        location: "",
+        notes: "",
+        repetitions: 0,
         timeToSpend: {
           hours: 0,
-          minutes: 15,
+          minutes: 0,
           seconds: 0,
         },
         tempi: [
           {
-            notes: "speed for first part",
-            bpm: 108,
-          },
-          {
-            notes: "speed for second part",
-            bpm: 120,
+            notes: "",
+            bpm: 60,
           },
         ],
         mastered: false,
       },
       {
-        location: "Spot 2, bars 80-100",
-        notes: "familiarize with passage",
-        repetitions: 5,
+        location: "",
+        notes: "",
+        repetitions: 0,
         timeToSpend: {
           hours: 0,
-          minutes: 10,
+          minutes: 0,
           seconds: 0,
         },
         tempi: [
           {
-            notes: "Goal Tempo",
-            bpm: 72,
+            notes: "",
+            bpm: 60,
           },
         ],
         mastered: false,
@@ -175,7 +171,9 @@ function AddPieceForm() {
     >
       <PieceForm
         id={id}
-        initialValues={piece || seedData}
+        initialValues={
+          piece ||seedData
+          }
         validationSchema={validationSchema}
         cookies={cookies}
         navigate={navigate}

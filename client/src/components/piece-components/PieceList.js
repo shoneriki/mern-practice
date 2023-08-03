@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import { PieceForm } from "./PieceForm";
 import { PiecesContext } from "../../contexts/PiecesContext";
@@ -16,6 +16,7 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Checkbox,
 } from "@mui/material";
 
 export const PieceList = () => {
@@ -23,7 +24,31 @@ export const PieceList = () => {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const from = location.state?.from;
+
   const [pieces, setPieces] = useState([]);
+
+  const [selectedPieces, setSelectedPieces] = useState([]);
+
+  const handleCheckboxChange = (event, pieceId) => {
+    if (event.target.checked) {
+      setSelectedPieces((prevSelectedPieces) => [...prevSelectedPieces, pieceId]);
+      console.log("selectedPieces thus far", selectedPieces)
+    } else {
+      setSelectedPieces((prevSelectedPieces) => prevSelectedPieces.filter((id) => id !== pieceId))
+    }
+  }
+
+  const handleSelect = () => {
+    console.log("from: ",from);
+    console.log("selectedPieces: ",selectedPieces)
+    if (from === "practiceSession") {
+      navigate("/practiceSession/create", {state: {selectedPieces}})
+    } else if (from === "program") {
+      navigate("/program/create", {state: {selectedPieces}})
+    }
+  }
 
   const { setRefreshKey } = useContext(PiecesContext);
 
@@ -130,6 +155,13 @@ export const PieceList = () => {
       >
         List of Pieces
       </Typography>
+      <Button variant="contained" color="primary" onClick={handleSelect}>
+        {from === "practiceSession"
+          ? `Select Pieces for Practice Session`
+          : from === "program"
+          ? `Select Pieces for the program`
+          : `Your Pieces`}
+      </Button>
       <Grid container spacing={3}>
         {pieces.map((piece) => {
           return (
@@ -145,6 +177,10 @@ export const PieceList = () => {
                   alignItems: "center",
                 }}
               >
+                <Checkbox
+                  checked={selectedPieces.includes(piece._id)}
+                  onChange={(event) => handleCheckboxChange(event, piece._id)}
+                />
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   Piece Name:
                 </Typography>
@@ -201,6 +237,17 @@ export const PieceList = () => {
           );
         })}
       </Grid>
+      <Box>
+        <Typography variant={"h6"}>Selected Pieces:</Typography>
+        {selectedPieces.map((pieceId) => {
+          const piece = pieces.find((piece) => piece._id === pieceId);
+          return (
+            <Typography variant={"body1"} key={pieceId}>
+              {piece?.name}
+            </Typography>
+          );
+        })}
+      </Box>
     </Box>
   );
 };

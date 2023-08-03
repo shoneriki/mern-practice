@@ -638,7 +638,7 @@ export const PracticeSessionForm = ({
                 },
               ],
             });
-            resetSelectedPiece(); 
+            resetSelectedPiece();
           }}
         >
           Add Piece
