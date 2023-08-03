@@ -72,6 +72,8 @@ export const PracticeSession = (props) => {
              );
              const practiceSessionData = response.data;
 
+             console.log("response.data from useEffect for fetchEditData: ", response.data)
+
              // Fetch pieces for each piece in the practice session
              const piecesData = await Promise.all(
                practiceSessionData.pieces.map((piece) =>
@@ -144,13 +146,13 @@ export const PracticeSession = (props) => {
       fetchSelectedPieces();
     }, [selectedPiecesFromPiecesList]);
 
-    useEffect(() => {
-      // const savedPieces = localStorage.getItem("selectedPieces");
+    // useEffect(() => {
+    //   // const savedPieces = localStorage.getItem("selectedPieces");
 
-      // if (savedPieces) {
-      //   setSelectedPieces(JSON.parse(savedPieces));
-      // }
-    }, []);
+    //   // if (savedPieces) {
+    //   //   setSelectedPieces(JSON.parse(savedPieces));
+    //   // }
+    // }, []);
 
   const onSubmit = async (values) => {
     try {

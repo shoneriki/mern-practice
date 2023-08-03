@@ -49,13 +49,6 @@ export const saveNewPracticeSession = async (req, res) => {
 
   try {
     let pieceObjs = [];
-    // For single piece
-    // if (req.body.piece) {
-    //   const pieceObj = await PiecesModel.findById(req.body.piece._id);
-    //   pieceObj.excerpts = req.body.piece.excerpts;
-    //   await pieceObj.save();
-    //   pieceObjs.push(pieceObj);
-    // }
     // For multiple pieces
     if (req.body.pieces) {
       for (const pieceId of req.body.pieces) {

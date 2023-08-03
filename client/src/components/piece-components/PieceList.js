@@ -29,18 +29,31 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
+  const [selectedPieces, setSelectedPieces] = useState(
+    location.state?.selectedPieces.map((piece) => piece._id) || []
+  );
+
+
+
   // selected pieces for carrying over to practiceSession
 
-  const [selectedPieces, setSelectedPieces] = useState([]);
+  // const [selectedPieces, setSelectedPieces] = useState([]);
+
+  console.log("selectedPieces in between:", selectedPieces)
 
   const handleCheckboxChange = (event, pieceId) => {
     if (event.target.checked) {
-      setSelectedPieces((prevSelectedPieces) => [...prevSelectedPieces, pieceId]);
-      console.log("selectedPieces thus far", selectedPieces)
+      setSelectedPieces((prevSelectedPieces) => [
+        ...prevSelectedPieces,
+        pieceId,
+      ]);
     } else {
-      setSelectedPieces((prevSelectedPieces) => prevSelectedPieces.filter((id) => id !== pieceId))
+      setSelectedPieces((prevSelectedPieces) =>
+        prevSelectedPieces.filter((id) => id !== pieceId)
+      );
     }
-  }
+  };
+
 
   const handleSelect = () => {
     console.log("from: ",from);
@@ -168,6 +181,8 @@ export const PieceList = () => {
       </Button>
       <Grid container spacing={3}>
         {pieces.map((piece) => {
+          console.log("Piece ID:", piece._id);
+          console.log("Selected Pieces:", selectedPieces);
           return (
             <Grid item xs={12} sm={6} md={4} key={piece._id}>
               <Box
@@ -185,6 +200,7 @@ export const PieceList = () => {
                   checked={selectedPieces.includes(piece._id)}
                   onChange={(event) => handleCheckboxChange(event, piece._id)}
                 />
+
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   Piece Name:
                 </Typography>
