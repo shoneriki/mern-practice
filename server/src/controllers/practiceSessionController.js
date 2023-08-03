@@ -108,7 +108,6 @@ export const editPracticeSession = async (req, res) => {
   let updatedPieces = [];
   for (const pieceId of req.body.pieces) {
     const pieceObj = await PiecesModel.findById(pieceId);
-    pieceObj.excerpts = piece.excerpt; // This line might still cause an error because `piece` is an ID, not an object with an `excerpt` property
     await pieceObj.save();
     updatedPieces.push(pieceObj);
   }

@@ -18,6 +18,12 @@ export const PracticeSession = (props) => {
   const [cookies, _] = useCookies(["access_token"]);
   const { id } = useParams();
 
+    const [practiceSession, setPracticeSession] = useState({});
+    const [selectedPieces, setSelectedPieces] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [dataLoaded, setDataLoaded] = useState(false);
+
 
   const initialValues = {
     dateOfExecution: new Date(),
@@ -125,7 +131,7 @@ export const PracticeSession = (props) => {
 
             setSelectedPieces(piecesData);
 
-            localStorage.setItem('selectedPieces', JSON.stringify(piecesData))
+            // localStorage.setItem('selectedPieces', JSON.stringify(piecesData))
           } catch (error) {
             console.error(
               "I'm sorry there was a problem fetching the pieces from the pieces list: ",
@@ -139,20 +145,12 @@ export const PracticeSession = (props) => {
     }, [selectedPiecesFromPiecesList]);
 
     useEffect(() => {
-      const savedPieces = localStorage.getItem("selectedPieces");
+      // const savedPieces = localStorage.getItem("selectedPieces");
 
-      if (savedPieces) {
-        setSelectedPieces(JSON.parse(savedPieces));
-      }
+      // if (savedPieces) {
+      //   setSelectedPieces(JSON.parse(savedPieces));
+      // }
     }, []);
-
-
-
-  const [practiceSession, setPracticeSession] = useState({});
-  const [selectedPieces, setSelectedPieces] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [dataLoaded, setDataLoaded] = useState(false);
 
   const onSubmit = async (values) => {
     try {

@@ -108,11 +108,11 @@ export const NewPracticeSession = ({
             sx={{
               justifyContent: "center",
               margin: "auto 1rem",
-              width: "20%"
+              width: "20%",
             }}
           >
             <Grid item xs={12} sm={4}>
-              <Box sx={{ display: "flex", justifyContent: "center"}}>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Controller
                   name="totalSessionLength.hours"
                   control={control}
@@ -161,52 +161,57 @@ export const NewPracticeSession = ({
             </Grid>
           </Grid>
         </Box>
-          <Grid container spacing={4}>
-            {selectedPieces &&
-              selectedPieces.map((piece, pieceIndex) => (
-                <Grid item xs={12} sm={6} md={4} key={pieceIndex}>
-                  <Box
-                    sx={{
-                      borderRadius: "1rem",
-                      border: "1px solid black",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      width: "100%",
-                      padding: "1rem",
+        <Grid container spacing={4}>
+          {selectedPieces &&
+            selectedPieces.map((piece, pieceIndex) => (
+              <Grid item xs={12} sm={6} md={4} key={pieceIndex}>
+                <Box
+                  sx={{
+                    borderRadius: "1rem",
+                    border: "1px solid black",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                    padding: "1rem",
+                  }}
+                  name="piece-box"
+                >
+                  <Typography>
+                    Piece {pieceIndex + 1}: {piece.name}
+                  </Typography>
+                  <Typography>Composer: {piece.composer}</Typography>
+                  <Typography>excerpts: {piece.excerpts.length}</Typography>
+                  <Button
+                    color="error"
+                    variant="contained"
+                    onClick={() => {
+                      const newSelectedPieces = selectedPieces.filter(
+                        (_, index) => index !== pieceIndex
+                      );
+                      setSelectedPieces(newSelectedPieces);
+                      localStorage.setItem(
+                        "selectedPieces",
+                        JSON.stringify(newSelectedPieces)
+                      );
                     }}
-                    name="piece-box"
                   >
-                    <Typography>
-                      Piece {pieceIndex + 1}: {piece.name}
-                    </Typography>
-                    <Typography>Composer: {piece.composer}</Typography>
-                    <Typography>excerpts: {piece.excerpts.length}</Typography>
-                    <Button
-                      color="error"
-                      variant="contained"
-                      onClick={() => {
-                        const newSelectedPieces = selectedPieces.filter(
-                          (_, index) => index !== pieceIndex
-                        );
-                        setSelectedPieces(newSelectedPieces);
-                        localStorage.setItem(
-                          "selectedPieces",
-                          JSON.stringify(newSelectedPieces)
-                        );
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </Box>
-                </Grid>
-              ))}
-          </Grid>
+                    Remove
+                  </Button>
+                </Box>
+              </Grid>
+            ))}
+        </Grid>
         <Button
           color="success"
           variant="contained"
           onClick={() =>
-            navigate("/pieces", { state: { from: "practiceSession" } })
+            navigate("/pieces", {
+              state: {
+                from: "practiceSession",
+                selectedPieces: selectedPieces,
+              },
+            })
           }
         >
           Add Pieces to PracticeSession?

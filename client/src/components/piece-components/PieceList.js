@@ -29,6 +29,8 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
+  // selected pieces for carrying over to practiceSession
+
   const [selectedPieces, setSelectedPieces] = useState([]);
 
   const handleCheckboxChange = (event, pieceId) => {
@@ -49,6 +51,8 @@ export const PieceList = () => {
       navigate("/program/create", {state: {selectedPieces}})
     }
   }
+
+  // end of code to be able to carry selectedPieces to practiceSession
 
   const { setRefreshKey } = useContext(PiecesContext);
 

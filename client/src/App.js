@@ -107,7 +107,7 @@ function App() {
                 path="/practiceSession/edit/:id"
                 element={
                   <ProtectedWrapper>
-                    <PracticeSessionCreateEdit />
+                    <PracticeSession/>
                   </ProtectedWrapper>
                 }
               />
