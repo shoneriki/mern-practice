@@ -139,23 +139,35 @@ const logout = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const iconDisplay = useMediaQuery("(max-width:1000px)");
 
-  return  isLoggedIn ? (
+  return isLoggedIn ? (
     <AppBar
       position="fixed"
       sx={{
-        marginBottom: NAVBAR_HEIGHT,
+        margin: (theme) =>
+          theme.breakpoints.down("md")
+            ? `${NAVBAR_HEIGHT}px 0 0 0`
+            : `0 0 ${NAVBAR_HEIGHT}px 0`,
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
+        top: isMobile ? "auto" : 0,
+        bottom: isMobile ? 0 : "auto",
       }}
     >
-      <Toolbar name="toolbar" sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+      <Toolbar
+        name="toolbar"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
         <Typography variant="h4" sx={{ cursor: "pointer" }}>
           Planner
         </Typography>
-        {isMobile ? (
+        {iconDisplay ? (
           <>
             <IconButton
               sx={{ color: "white" }}
@@ -230,10 +242,7 @@ const logout = () => {
                 </LinkStyled>
               </>
             ) : (
-              <LinkStyled
-                id="logout-btn"
-                onClick={logout}
-              >
+              <LinkStyled id="logout-btn" onClick={logout}>
                 Logout
               </LinkStyled>
             )}
@@ -241,5 +250,5 @@ const logout = () => {
         )}
       </Toolbar>
     </AppBar>
-  ): null;
+  ) : null;
 };

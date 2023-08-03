@@ -547,7 +547,12 @@ export const PracticeSessionForm = ({
                   name="totalSessionLength.hours"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} type="number" label="hr" />
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="hr"
+                      inputProps={{ min: 0, max: 10}}
+                    />
                   )}
                 />
               </Box>
@@ -558,7 +563,12 @@ export const PracticeSessionForm = ({
                   name="totalSessionLength.minutes"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} type="number" label="min" />
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="min"
+                      inputProps={{ min: 0, max: 59 }}
+                    />
                   )}
                 />
               </Box>
@@ -569,7 +579,12 @@ export const PracticeSessionForm = ({
                   name="totalSessionLength.seconds"
                   control={control}
                   render={({ field }) => (
-                    <TextField {...field} type="number" label="sec" />
+                    <TextField
+                      {...field}
+                      type="number"
+                      label="sec"
+                      inputProps={{ min: 0, max: 59}}
+                    />
                   )}
                 />
               </Box>
