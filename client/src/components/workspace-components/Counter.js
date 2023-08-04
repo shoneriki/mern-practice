@@ -4,8 +4,6 @@ import {Box, Button, TextField, Grid, Typography} from "@mui/material"
 export const Counter = ({rep}) => {
   const [count, setCount] = useState(0)
 
-
-
   const reset = () => {
     setCount(0)
   }

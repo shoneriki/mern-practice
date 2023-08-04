@@ -31,13 +31,24 @@ async function migrate() {
   // Find all practice sessions
   const practiceSessions = await PracticeSessionsModel.find();
 
+  console.log(`Found ${practiceSessions.length} practice sessions.`);
+
   // Loop through each practice session
   for (const practiceSession of practiceSessions) {
+
+    console.log(`Checking practice session with id ${practiceSession._id}...`);
     // If the practice session has a piece field, move it to the pieces array
     if (practiceSession.piece) {
+      console.log(
+        `Found a piece in practice session with id ${practiceSession._id}. Moving it to pieces...`
+      );
       practiceSession.pieces = [practiceSession.piece];
       delete practiceSession.piece;
       await practiceSession.save();
+    } else {
+      console.log(
+        `No piece found in practice session with id ${practiceSession._id}.`
+      );
     }
   }
 

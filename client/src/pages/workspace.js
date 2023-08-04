@@ -135,7 +135,7 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
 export const Workspace = () => {
   const { id } = useParams();
   const [practiceSession, setPracticeSession] = useState({});
-  const [piece, setPiece] = useState({});
+  const [pieces, setPieces] = useState([]);
 
   const navigate = useNavigate();
 
@@ -151,22 +151,30 @@ export const Workspace = () => {
   useEffect(() => {
     const fetchPracticeSession = async () => {
       try {
-        if(id) {
+        if (id) {
           const response = await axios.get(
             `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
           );
           setPracticeSession(response.data);
-          if (response.data && response.data.piece) {
-            const pieceResponse = await axios.get(
-              `${process.env.REACT_APP_API_URL}/pieces/piece/${response.data.piece}`
+
+          if (response.data && response.data.pieces) {
+            console.log("response.data.piece", response.data.pieces)
+            const pieces = await Promise.all(
+              response.data.pieces.map(async (piece) => {
+                console.log("pieceId", piece)
+                const pieceResponse = await axios.get(
+                  `${process.env.REACT_APP_API_URL}/pieces/piece/${piece._id}`
+                );
+                return pieceResponse.data;
+              })
             );
-            setPiece(pieceResponse.data);
+            setPieces(pieces);
           } else {
-            setPiece({});
+            setPieces({});
           }
         } else {
-          setPracticeSession({})
-          setPiece({})
+          setPracticeSession({});
+          setPieces([]);
         }
         setLoading(false);
       } catch (error) {
@@ -178,6 +186,7 @@ export const Workspace = () => {
     };
     fetchPracticeSession();
   }, [id]);
+
 
 
   return (
@@ -238,9 +247,6 @@ export const Workspace = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography align="center">Piece name: {piece.name}</Typography>
-            </Grid>
-            <Grid item xs={12}>
               <Button
                 color="warning"
                 variant="contained"
@@ -250,94 +256,109 @@ export const Workspace = () => {
                 Edit Practice Session?
               </Button>
             </Grid>
-            <Grid
-              container
-              id={"grid-outside-excerpts"}
-              justifyContent="center"
-              sx={{
-                border: "1px solid black",
-                borderRadius: "1rem",
-                margin: "1rem auto",
-                display: "flex",
-              }}
-            >
-              {piece.excerpts.map((excerpt, excerptIndex) => (
-                <Grid item xs={12} sm={12} md={4} sx={{ margin: "2rem auto" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <Typography variant={"h6"} align="center">
-                      Excerpt {excerptIndex + 1}:
-                    </Typography>
-                    <Typography align="center">
-                      Location: {excerpt.location}
-                    </Typography>
-                    <Typography align="center">
-                      Notes: {excerpt.notes}
-                    </Typography>
-                    <Typography align="center">
-                      Repetitions: {excerpt.repetitions}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        setRep(excerpt.repetitions);
-                      }}
-                    >
-                      Set Repetitions to {excerpt.repetitions}?
-                    </Button>
-                  </Box>
-
-                  {excerpt.tempi.map((tempoInfo, tempoInfoIndex) => (
+            {/* container for each piece */}
+            {
+              pieces.map((piece, pieceIndex) => {
+                return (
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Typography align="center">Piece name: {piece.name}</Typography>
+                    </Grid>
+                    {/* grid for excerpts */}
                     <Grid
                       container
+                      id={"grid-outside-excerpts"}
+                      justifyContent="center"
                       sx={{
                         border: "1px solid black",
                         borderRadius: "1rem",
-                        padding: ".5rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
                         margin: "1rem auto",
+                        display: "flex",
                       }}
                     >
-                      <Grid item xs={12}>
-                        <Typography align="center">
-                          Notes for Tempo: {tempoInfo.notes}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography align="center">
-                          bpm (beats per minute): {tempoInfo.bpm}
-                        </Typography>
-                      </Grid>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          width: "100%",
-                        }}
-                      >
-                        <TempoControls
-                          tempoInfo={tempoInfo}
-                          setTempo={setTempo}
-                        />
-                      </Box>
+                      {piece.excerpts.map((excerpt, excerptIndex) => (
+                        <Grid item xs={12} sm={12} md={4} sx={{ margin: "2rem auto" }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              width: "100%",
+                            }}
+                          >
+                            <Typography variant={"h6"} align="center">
+                              Excerpt {excerptIndex + 1}:
+                            </Typography>
+                            <Typography align="center">
+                              Location: {excerpt.location}
+                            </Typography>
+                            <Typography align="center">
+                              Notes: {excerpt.notes}
+                            </Typography>
+                            <Typography align="center">
+                              Repetitions: {excerpt.repetitions}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => {
+                                setRep(excerpt.repetitions);
+                              }}
+                            >
+                              Set Repetitions to {excerpt.repetitions}?
+                            </Button>
+                          </Box>
+                          {/* piece's excerpt's tempi */}
+                          {excerpt.tempi.map((tempoInfo, tempoInfoIndex) => (
+                            <Grid
+                              container
+                              sx={{
+                                border: "1px solid black",
+                                borderRadius: "1rem",
+                                padding: ".5rem",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                margin: "1rem auto",
+                              }}
+                            >
+                              <Grid item xs={12}>
+                                <Typography align="center">
+                                  Notes for Tempo: {tempoInfo.notes}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography align="center">
+                                  bpm (beats per minute): {tempoInfo.bpm}
+                                </Typography>
+                              </Grid>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "100%",
+                                }}
+                              >
+                                <TempoControls
+                                  tempoInfo={tempoInfo}
+                                  setTempo={setTempo}
+                                />
+                              </Box>
+                            </Grid>
+                          ))}
+                          {/* end of piece's excerpt's tempi */}
+                        </Grid>
+                      ))}
+                        {/* end of piece's excerpt */}
                     </Grid>
-                  ))}
-                </Grid>
-              ))}
+                  </Grid>
+                );
+              })
+            }
             </Grid>
-          </Grid>
           <Metronome tempo={tempo} setTempo={setTempo} />
           <Counter rep={rep} />
         </Box>
