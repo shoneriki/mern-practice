@@ -229,6 +229,9 @@ export const NewPracticeSession = ({
               },
             })
           }
+          sx={{
+            margin: "2rem 0"
+          }}
         >
           Add Pieces to PracticeSession?
         </Button>
