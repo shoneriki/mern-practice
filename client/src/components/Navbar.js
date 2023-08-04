@@ -145,10 +145,6 @@ const logout = () => {
     <AppBar
       position="fixed"
       sx={{
-        margin: (theme) =>
-          theme.breakpoints.down("md")
-            ? `${NAVBAR_HEIGHT}px 0 0 0`
-            : `0 0 ${NAVBAR_HEIGHT}px 0`,
         display: "flex",
         alignItems: "center",
         top: isMobile ? "auto" : 0,

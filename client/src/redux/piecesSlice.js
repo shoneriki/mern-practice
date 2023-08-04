@@ -1,6 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-
 const selectedPiecesSlice = createSlice({
   name: "selectedPieces",
   initialState: [],

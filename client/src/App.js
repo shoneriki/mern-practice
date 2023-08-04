@@ -6,6 +6,10 @@ import "./App.css";
 import {ProtectedWrapper} from "./components/ProtectedWrapper"
 import { Navbar } from "./components/Navbar";
 import { Spacer } from "./components/Spacer";
+import {useTheme, useMediaQuery, Box} from "@mui/material"
+
+
+
 import { Auth } from "./pages/user-pages/auth";
 import { Home } from "./pages/home";
 
@@ -43,11 +47,20 @@ function App() {
     cookies.access_Token && userID ?  setIsLoggedIn(true) : setIsLoggedIn(false)
   }, [cookies])
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
   return (
-    <section className="App">
+    <Box
+      className="App"
+      sx={{
+        marginTop: isMobile ? 0 : NAVBAR_HEIGHT,
+        marginBottom: isMobile ? NAVBAR_HEIGHT : 0,
+      }}
+    >
       <Router>
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-        <Spacer />
+        {/* {!isMobile && <Spacer />} */}
         <ProgramsProvider>
           <PiecesProvider>
             <Routes>
@@ -99,7 +112,7 @@ function App() {
                 element={
                   <ProtectedWrapper>
                     {/* <PracticeSessionCreateEdit /> */}
-                    <PracticeSession/>
+                    <PracticeSession />
                   </ProtectedWrapper>
                 }
               />
@@ -107,7 +120,7 @@ function App() {
                 path="/practiceSession/edit/:id"
                 element={
                   <ProtectedWrapper>
-                    <PracticeSession/>
+                    <PracticeSession />
                   </ProtectedWrapper>
                 }
               />
@@ -173,7 +186,7 @@ function App() {
           </PiecesProvider>
         </ProgramsProvider>
       </Router>
-    </section>
+    </Box>
   );
 }
 
