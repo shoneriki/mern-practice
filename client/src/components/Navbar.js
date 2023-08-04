@@ -141,7 +141,7 @@ const logout = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const iconDisplay = useMediaQuery("(max-width:1000px)");
 
-  return isLoggedIn ? (
+  return (
     <AppBar
       position="fixed"
       sx={{
@@ -158,6 +158,7 @@ const logout = () => {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
+          backgroundColor: isLoggedIn ? "blue" : "gray"
         }}
       >
         <Typography variant="h4" sx={{ cursor: "pointer" }}>
@@ -246,5 +247,5 @@ const logout = () => {
         )}
       </Toolbar>
     </AppBar>
-  ) : null;
+  )
 };

@@ -11,10 +11,10 @@ const practiceSessionSchema = new mongoose.Schema(
       minutes: { type: Number, min: 0, max: 59 },
       seconds: { type: Number, min: 0, max: 59 },
     },
-    piece: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Pieces",
-    },
+    // piece: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Pieces",
+    // },
     pieces: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Pieces",

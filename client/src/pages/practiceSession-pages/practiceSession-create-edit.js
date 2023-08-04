@@ -2,252 +2,180 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   useForm,
-  useFieldArray,
-  Controller,
-  useController,
 } from "react-hook-form";
 import { useGetUserID } from "../../hooks/useGetUserID";
-// import { useForm } from "../../hooks/useForm";
-
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import * as Yup from "yup";
-
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
-
 import {
   Box,
-  Grid,
-  Typography,
-  InputLabel,
-  TextField,
-  Autocomplete,
-  avatarGroupClasses,
 } from "@mui/material";
-
 import { PracticeSessionForm } from "../../components/practiceSession-components/PracticeSessionForm";
+
+
+import {useDispatch, useSelector} from "react-redux";
+import {setSelectedPieces, addSelectedPiece, removeSelectedPiece} from '../../redux/piecesSlice';
+
 
 export const PracticeSessionCreateEdit = (props) => {
 
+  const dispatch = useDispatch();
+  const selectedPieces = useSelector(state => state.selectedPieces);
+
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
-  const navigate = useNavigate();
   const { id } = useParams();
 
-   const initialValues = {
-     dateOfExecution: new Date(),
-     name: "",
-     totalSessionLength: {
-       hours: 0,
-       minutes: 0,
-       seconds: 0,
-     },
-     pieces: [
-       {
-         name: "",
-         composer: "",
-         excerpts: [
-           {
-             location: "",
-             notes: "",
-             repetitions: 0,
-             timeToSpend: { hours: 0, minutes: 0, seconds: 0 },
-             tempi: [
-               {
-                 notes: "",
-                 bpm: 60,
-               },
-             ],
-           },
-         ],
-       },
-     ],
-     runThrough: false,
-     pieceLength: {
-       hours: 0,
-       minutes: 0,
-       seconds: 0,
-     },
-     userOwner: userID,
-   };
+    const [practiceSession, setPracticeSession] = useState({});
+    // const [selectedPieces, setSelectedPieces] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-   const validationSchema = Yup.object({
-     dateOfExecution: Yup.date(),
-     name: Yup.string(),
-     totalSessionLength: Yup.object({
-       hours: Yup.number().min(0).max(10),
-       minutes: Yup.number().min(0).max(59),
-       seconds: Yup.number().min(0).max(59),
-     }),
-     pieces: Yup.array().of(Yup.object().nullable()),
-     runThrough: Yup.boolean(),
-     runThroughLength: Yup.object({
-       hours: Yup.number().min(0).max(10),
-       minutes: Yup.number().min(0).max(59),
-       seconds: Yup.number().min(0).max(59),
-     }),
-     userOwner: Yup.string(),
-   });
-
-   const {
-     register,
-     handleSubmit,
-     formState: { errors },
-     reset,
-     control,
-     setValue,
-   } = useForm({
-     resolver: yupResolver(validationSchema),
-     defaultValues: initialValues,
-   });
-
-   const {
-     fields: pieceFields,
-     append: appendPiece,
-     remove: removePiece,
-   } = useFieldArray({
-     control,
-     name: "pieces",
-   });
+    const [dataLoaded, setDataLoaded] = useState(false);
 
 
-  const [practiceSession, setPracticeSession] = useState({});
-  const [selectedPiece, setSelectedPiece] = useState({});
-  const [suggestions, setSuggestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const initialValues = {
+    dateOfExecution: new Date(),
+    name: "",
+    totalSessionLength: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    },
+    pieces: [{}],
+    userOwner: userID,
+  };
 
-  useEffect(() => {
-    console.log("selectedPiece updated", selectedPiece);
-  }, [selectedPiece]);
+  const validationSchema = Yup.object({
+    dateOfExecution: Yup.date(),
+    name: Yup.string(),
+    totalSessionLength: Yup.object({
+      hours: Yup.number().min(0).max(10),
+      minutes: Yup.number().min(0).max(59),
+      seconds: Yup.number().min(0).max(59),
+    }),
+    pieces: Yup.array().of(Yup.object().nullable()),
+    userOwner: Yup.string(),
+  });
+
+  const {
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: initialValues,
+  });
+
+    const location = useLocation();
+    const selectedPiecesFromPiecesList = location.state?.selectedPieces || [];
 
 
+    const navigate = useNavigate();
 
-  const [formValues, setFormValues] = useState(initialValues);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [openNewPieceDialog, setOpenNewPieceDialog] = useState(true);
+     useEffect(() => {
+       setIsLoading(true);
+       const fetchEditData = async () => {
+         if (id) {
+           try {
+             const response = await axios.get(
+               `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
+             );
+             const practiceSessionData = response.data;
 
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchEditData = async () => {
-      if (id) {
-        try {
-          const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
+             console.log("response.data from useEffect for fetchEditData: ", response.data)
+
+             // Fetch pieces for each piece in the practice session
+             const piecesData = await Promise.all(
+               practiceSessionData.pieces.map((piece) =>
+                 axios.get(
+                   `${process.env.REACT_APP_API_URL}/pieces/piece/${piece._id}`,
+                   {
+                     headers: { authorization: cookies.access_token },
+                   }
+                 )
+               )
+             ).then((responses) => responses.map((response) => response.data));
+
+             setPracticeSession(practiceSessionData);
+             dispatch(setSelectedPieces(piecesData)); // Set the selected pieces
+
+             reset({
+               ...practiceSessionData,
+               pieces: piecesData,
+               dateOfExecution: new Date(practiceSessionData.dateOfExecution),
+             });
+
+             setIsLoading(false);
+             setDataLoaded(true);
+           } catch (error) {
+             console.error(
+               "an error occurred while fetching the program: ",
+               error
+             );
+           }
+         } else {
+           setIsLoading(false);
+           setDataLoaded(true);
+         }
+       };
+       fetchEditData();
+     }, [id]);
+
+    useEffect(() => {
+      const fetchSelectedPieces = async () => {
+        if (selectedPiecesFromPiecesList) {
+          console.log(
+            "selectedPieces carried over from pieces list",
+            selectedPiecesFromPiecesList
           );
-          const practiceSessionData = response.data;
 
-          // Fetch the piece data
-          const pieceResponse = await axios.get(
-            `${process.env.REACT_APP_API_URL}/pieces/piece/${practiceSessionData.piece._id}`,
-            {
-              headers: { authorization: cookies.access_token },
-            }
-          );
-          const pieceData = pieceResponse.data;
+          try {
+            const piecesData = await Promise.all(
+              selectedPiecesFromPiecesList.map((pieceId) =>
+                axios.get(
+                  `${process.env.REACT_APP_API_URL}/pieces/piece/${pieceId}`,
+                  {
+                    headers: { authorization: cookies.access_token },
+                  }
+                )
+              )
+            ).then((responses) => responses.map((response) => response.data));
 
-          setPracticeSession(practiceSessionData);
-          setSelectedPiece(pieceData); // Set the selected piece to the fetched piece data
+            dispatch(setSelectedPieces(piecesData));
 
-          reset({
-            ...practiceSessionData,
-            piece: pieceData,
-            composer: pieceData.composer,
-            excerpts: pieceData.excerpts,
-            dateOfExecution: new Date(practiceSessionData.dateOfExecution),
-          });
-
-          setIsLoading(false);
-          setDataLoaded(true);
-        } catch (error) {
-          console.error(
-            "an error occurred while fetching the program: ",
-            error
-          );
+            // localStorage.setItem('selectedPieces', JSON.stringify(piecesData))
+          } catch (error) {
+            console.error(
+              "I'm sorry there was a problem fetching the pieces from the pieces list: ",
+              error
+            );
+          }
         }
-      } else {
-        setIsLoading(false);
-        setDataLoaded(true);
+      };
+
+      fetchSelectedPieces();
+    }, []);
+
+    useEffect(() => {
+      const savedPieces = localStorage.getItem("selectedPieces");
+
+      if (savedPieces) {
+        setSelectedPieces(JSON.parse(savedPieces));
       }
-    };
-    fetchEditData();
-  }, [id]);
+    }, [selectedPiecesFromPiecesList]);
 
-
-
-  const handlePieceSearch = async (searchValue) => {
-    if (searchValue) {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/pieces/suggestions?search=${searchValue}`
-        );
-        const pieceSuggestions = response.data;
-        setSuggestions(pieceSuggestions);
-      } catch (error) {
-        console.error("Error while fetching piece suggestions:", error);
-      }
-    }
-  };
-
-  const handlePieceSelection = (event, value) => {
-    if (value.isNewPiece) {
-      setOpenNewPieceDialog(true);
-    }
-    reset((prevValues) => ({
-      ...prevValues,
-      pieces: [...prevValues.pieces, value],
-    }));
-  };
-
-
-
- const handleAddPiece = () => {
-   appendPiece({ ...selectedPiece, excerpts: selectedPiece.excerpts || [] });
-   setSelectedPiece({});
- };
-
-const handleAutocompleteChange = async (event, newValue, pieceIndex) => {
-  if (newValue) {
-    const pieceData = await axios
-      .get(`${process.env.REACT_APP_API_URL}/pieces/piece/${newValue._id}`, {
-        headers: { authorization: cookies.access_token },
-      })
-      .then((response) => response.data);
-
-    console.log("piece data", pieceData);
-    setSelectedPiece(pieceData);
-    return pieceData;
-  } else {
-    setValue("totalSessionLength", { hours: 0, minutes: 0, seconds: 0 });
-    setValue("composer", "");
-    setValue("pieces", []);
-    return null;
-  }
-};
-
-const resetSelectedPiece = () => {
-  setSelectedPiece({})
-}
-
-  // submitting the practiceSession form; new or edited
   const onSubmit = async (values) => {
-    console.log("entering the submit?");
     try {
       const practiceSessionData = {
         ...values,
-        pieces: values.pieces.map((piece) => ({
-          _id: piece._id,
-          excerpts: piece.excerpts.map((excerpt, excerptIndex) => ({
-            location: excerpt.location,
-            notes: excerpt.notes,
-            repetitions: excerpt.repetitions,
-            timeToSpend: excerpt.timeToSpend,
-            tempi: excerpt.tempi,
-            mastered: excerpt.mastered
-          }))
-        })),
+        pieces: selectedPieces
+          .filter((piece) => piece !== null)
+          .map((piece) => piece._id),
         dateOfExecution: new Date(values.dateOfExecution),
+        userOwner: userID,
       };
+
+      console.log("userID from submit", userID);
 
       if (id) {
         await axios.put(
@@ -257,26 +185,8 @@ const resetSelectedPiece = () => {
             headers: { authorization: cookies.access_token },
           }
         );
-        for (const piece of values.pieces) {
-          if (piece._id) {
-            await axios.put(
-              `${process.env.REACT_APP_API_URL}/pieces/piece/${piece._id}`,
-              { ...piece },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-          } else {
-            await axios.post(
-              `${process.env.REACT_APP_API_URL}/pieces`,
-              { ...piece },
-              { headers: { authorization: cookies.access_token } }
-            );
-          }
-        }
-        console.log("Form values on submit: ", values)
+        console.log("Form values on submit: ", values);
         alert("practiceSession updated");
-        navigate("/practiceSessions");
       } else {
         console.log("inside the else... for submitting");
         await axios.post(
@@ -286,49 +196,14 @@ const resetSelectedPiece = () => {
             headers: { authorization: cookies.access_token },
           }
         );
-        // Update the piece information whether it's a new practice session or an update
-        for (const piece of values.pieces) {
-          if (piece._id) {
-            await axios.put(
-              `${process.env.REACT_APP_API_URL}/pieces/piece/${piece._id}`,
-              { ...piece },
-              {
-                headers: { authorization: cookies.access_token },
-              }
-            );
-          } else {
-            await axios.post(
-              `${process.env.REACT_APP_API_URL}/pieces`,
-              { ...piece },
-              { headers: { authorization: cookies.access_token } }
-            );
-          }
-        }
         alert("practiceSession created");
-        navigate("/practiceSessions");
       }
+      navigate("/practiceSessions");
     } catch (error) {
       alert("I'm sorry, there's an error in submitting this form");
       console.log("error", error);
     }
   };
-
-
-  // const errors = {};
-  try {
-    validationSchema.validateSync(initialValues, { abortEarly: false });
-  } catch (validationErrors) {
-    validationErrors.inner.forEach((error) => {
-      errors[error.path] = error.message;
-    });
-  }
-
-  if (Object.keys(errors).length === 0) {
-    console.log("No validation errors.");
-  } else {
-    console.log("Validation errors:");
-    console.log(errors);
-  }
 
   if (isLoading || !dataLoaded) {
     return <section>Loading...</section>;
@@ -345,22 +220,17 @@ const resetSelectedPiece = () => {
       }}
     >
       <PracticeSessionForm
-        reset={reset}
-        initialValues={formValues}
+        initialValues={initialValues}
+        formValues={practiceSession}
         validationSchema={validationSchema}
         id={id}
         practiceSession={practiceSession}
         cookies={cookies}
-        navigate={navigate}
-        selectedPiece={selectedPiece}
-        suggestions={suggestions}
-        handlePieceSearch={handlePieceSearch}
-        handlePieceSelection={handlePieceSelection}
+        selectedPieces={selectedPieces}
+        setSelectedPieces={setSelectedPieces}
         onSubmit={onSubmit}
-        handleAutocompleteChange={handleAutocompleteChange}
-        formValues={formValues}
-        appendPiece={appendPiece}
-        resetSelectedPiece={resetSelectedPiece}
+        // useNavigate={useNavigate}
+        useLocation={useLocation}
       />
     </Box>
   );

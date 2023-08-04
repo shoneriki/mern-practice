@@ -1,24 +1,22 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { useCookies } from "react-cookie";
 import "./App.css";
-import {ProtectedWrapper} from "./components/ProtectedWrapper"
+import { ProtectedWrapper } from "./components/ProtectedWrapper";
 import { Navbar } from "./components/Navbar";
 import { Spacer } from "./components/Spacer";
-import {useTheme, useMediaQuery, Box} from "@mui/material"
-
-
+import { useTheme, useMediaQuery, Box } from "@mui/material";
 
 import { Auth } from "./pages/user-pages/auth";
 import { Home } from "./pages/home";
 
-import AddPieceForm from "./pages/piece-pages/create-edit-piece"
-import {PieceList} from "./components/piece-components/PieceList"
+import AddPieceForm from "./pages/piece-pages/create-edit-piece";
+import { PieceList } from "./components/piece-components/PieceList";
 
-import {PracticeSessionCreateEdit } from "./pages/practiceSession-pages/practiceSession-create-edit";
-import {PracticeSession} from "./pages/practiceSession-pages/practiceSessionPage"
-import {PracticeSessions} from "./pages/practiceSession-pages/practiceSessions"
+import { PracticeSessionCreateEdit } from "./pages/practiceSession-pages/practiceSession-create-edit";
+import { PracticeSessionPage } from "./pages/practiceSession-pages/practiceSession-create-edit";
+import { PracticeSessions } from "./pages/practiceSession-pages/practiceSessions";
 
 import { ProgramCreateEdit } from "./pages/program-pages/program-create-edit";
 import { Programs } from "./pages/program-pages/programs";
@@ -39,16 +37,16 @@ import { PiecesProvider } from "./contexts/PiecesContext";
 import { faLinesLeaning } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
-    const [cookies, setCookies] = useCookies(["access_token", "username"]);
-    const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token);
+  const [cookies, setCookies] = useCookies(["access_token", "username"]);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token);
 
   useEffect(() => {
     const userID = window.localStorage.getItem("userID");
-    cookies.access_Token && userID ?  setIsLoggedIn(true) : setIsLoggedIn(false)
-  }, [cookies])
+    cookies.access_Token && userID ? setIsLoggedIn(true) : setIsLoggedIn(false);
+  }, [cookies]);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box
@@ -59,7 +57,10 @@ function App() {
       }}
     >
       <Router>
-        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Navbar
+        // isLoggedIn={isLoggedIn}
+        // setIsLoggedIn={setIsLoggedIn}
+        />
         {/* {!isMobile && <Spacer />} */}
         <ProgramsProvider>
           <PiecesProvider>
@@ -111,8 +112,7 @@ function App() {
                 path="/practiceSession/create"
                 element={
                   <ProtectedWrapper>
-                    {/* <PracticeSessionCreateEdit /> */}
-                    <PracticeSession />
+                    <PracticeSessionCreateEdit />
                   </ProtectedWrapper>
                 }
               />
@@ -120,18 +120,18 @@ function App() {
                 path="/practiceSession/edit/:id"
                 element={
                   <ProtectedWrapper>
-                    <PracticeSession />
+                    <PracticeSessionCreateEdit />
                   </ProtectedWrapper>
                 }
               />
-              <Route
+              {/* <Route
                 path="/practiceSessions/practiceSession/edit/:id"
                 element={
                   <ProtectedWrapper>
                     <PracticeSessionCreateEdit />
                   </ProtectedWrapper>
                 }
-              />
+              /> */}
 
               <Route
                 path="/programs"
