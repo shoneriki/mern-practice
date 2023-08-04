@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, {
+  // useEffect
+} from "react";
 import {
   useForm,
-  useFieldArray,
+  // useFieldArray,
   Controller,
-  useController,
+  // useController,
 } from "react-hook-form";
+import {useNavigate} from "react-router-dom"
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   TextField,
@@ -14,9 +17,17 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  // DatePicker
+} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
+import {useDispatch} from 'react-redux';
+import {removePiece} from "../../redux/piecesSlice";
+
+
 
 export const NewPracticeSession = ({
   initialValues,
@@ -25,7 +36,8 @@ export const NewPracticeSession = ({
   id,
   practiceSession,
   cookies,
-  useNavigate,
+  // useNavigate,
+  selectedPieces,
   selectedPiece,
   suggestions,
   handlePieceSearch,
@@ -34,20 +46,21 @@ export const NewPracticeSession = ({
   handleAutocompleteChange,
   resetSelectedPiece,
   useLocation,
-  selectedPieces,
   setSelectedPieces
 }) => {
+
+  const dispatch = useDispatch();
 
   const {
     handleSubmit,
     control,
-    watch,
+    // watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
 
-  const values = watch();
+  // const values = watch();
 
   const navigate = useNavigate()
 
@@ -183,17 +196,20 @@ export const NewPracticeSession = ({
                   <Typography>Composer: {piece.composer}</Typography>
                   <Typography>excerpts: {piece.excerpts.length}</Typography>
                   <Button
+                    color="warning"
+                    variant="contained"
+                    onClick={() => navigate(`/piece/edit/${piece._id}`)}
+                    sx={{
+                      marginBottomm: "1rem",
+                    }}
+                  >
+                    Edit?
+                  </Button>
+                  <Button
                     color="error"
                     variant="contained"
                     onClick={() => {
-                      const newSelectedPieces = selectedPieces.filter(
-                        (_, index) => index !== pieceIndex
-                      );
-                      setSelectedPieces(newSelectedPieces);
-                      localStorage.setItem(
-                        "selectedPieces",
-                        JSON.stringify(newSelectedPieces)
-                      );
+                      dispatch(removePiece(pieceIndex));
                     }}
                   >
                     Remove

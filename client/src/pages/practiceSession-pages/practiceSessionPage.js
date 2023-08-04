@@ -13,13 +13,22 @@ import {
 } from "@mui/material";
 import { NewPracticeSession } from "../../components/practiceSession-components/NewPracticeSession";
 
+
+import {useDispatch, useSelector} from "react-redux";
+import {setSelectedPieces, addSelectedPiece, removeSelectedPiece} from '../../redux/piecesSlice';
+
+
 export const PracticeSession = (props) => {
+
+  const dispatch = useDispatch();
+  const selectedPieces = useSelector(state => state.selectedPieces);
+
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
   const { id } = useParams();
 
     const [practiceSession, setPracticeSession] = useState({});
-    const [selectedPieces, setSelectedPieces] = useState([]);
+    // const [selectedPieces, setSelectedPieces] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -58,7 +67,8 @@ export const PracticeSession = (props) => {
   });
 
     const location = useLocation();
-    const selectedPiecesFromPiecesList = location.state?.selectedPieces;
+    const selectedPiecesFromPiecesList = location.state?.selectedPieces || [];
+
 
     const navigate = useNavigate();
 
@@ -87,7 +97,7 @@ export const PracticeSession = (props) => {
              ).then((responses) => responses.map((response) => response.data));
 
              setPracticeSession(practiceSessionData);
-             setSelectedPieces(piecesData); // Set the selected pieces
+             dispatch(setSelectedPieces(piecesData)); // Set the selected pieces
 
              reset({
                ...practiceSessionData,
@@ -131,7 +141,7 @@ export const PracticeSession = (props) => {
               )
             ).then((responses) => responses.map((response) => response.data));
 
-            setSelectedPieces(piecesData);
+            dispatch(setSelectedPieces(piecesData));
 
             // localStorage.setItem('selectedPieces', JSON.stringify(piecesData))
           } catch (error) {
@@ -144,15 +154,15 @@ export const PracticeSession = (props) => {
       };
 
       fetchSelectedPieces();
+    }, []);
+
+    useEffect(() => {
+      const savedPieces = localStorage.getItem("selectedPieces");
+
+      if (savedPieces) {
+        setSelectedPieces(JSON.parse(savedPieces));
+      }
     }, [selectedPiecesFromPiecesList]);
-
-    // useEffect(() => {
-    //   // const savedPieces = localStorage.getItem("selectedPieces");
-
-    //   // if (savedPieces) {
-    //   //   setSelectedPieces(JSON.parse(savedPieces));
-    //   // }
-    // }, []);
 
   const onSubmit = async (values) => {
     try {
@@ -195,8 +205,6 @@ export const PracticeSession = (props) => {
     }
   };
 
-
-
   if (isLoading || !dataLoaded) {
     return <section>Loading...</section>;
   }
@@ -221,7 +229,7 @@ export const PracticeSession = (props) => {
         selectedPieces={selectedPieces}
         setSelectedPieces={setSelectedPieces}
         onSubmit={onSubmit}
-        useNavigate={useNavigate}
+        // useNavigate={useNavigate}
         useLocation={useLocation}
       />
     </Box>
