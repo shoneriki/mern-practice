@@ -1,5 +1,23 @@
+import mongoose from 'mongoose';
 import { PracticeSessionsModel } from "./models/PracticeSessions.js";
 
+let mongoUri;
+
+if (process.env.NODE_ENV === "production") {
+  mongoUri = process.env.MONGO_URI_PROD;
+} else if (process.env.NODE_ENV === "test") {
+  mongoUri = process.env.MONGO_URI_TEST;
+} else {
+  mongoUri = process.env.MONGO_URI_DEV;
+}
+
+mongoose.connect(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected for migration"))
+
+  .catch((err) => console.log(err));
 async function migrate() {
   // Find all practice sessions
   const practiceSessions = await PracticeSessionsModel.find();
@@ -15,6 +33,8 @@ async function migrate() {
   }
 
   console.log("Migration complete");
+
+  mongoose.connection.close();
 }
 
 migrate().catch(console.error);
