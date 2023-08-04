@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { PracticeSessionsModel } from "./models/PracticeSessions.js";
+import { PracticeSessionsModel } from "../../src/models/PracticeSessions";
 
 let mongoUri;
 
