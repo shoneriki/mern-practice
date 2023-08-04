@@ -18,6 +18,8 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
     tempoChangePercentage: 10,
   });
 
+  const [startButtonClicked, setStartButtonClicked] = useState(false)
+
   const calculateTempo = (percentage) => {
     return Math.round((tempoState.baseTempo * percentage) / 100);
   };
@@ -48,6 +50,16 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
     });
   };
 
+  // calculate minimum so bpm can never go below 1
+  const calculateMinPercentage = (bpm) => {
+    return Math.ceil(1/(bpm/100))
+  }
+
+  // calculate max so bpm can never go above 300
+  const calculateMaxPercentage = (bpm) => {
+    return Math.floor(300/(bpm/100))
+  }
+
   useEffect(() => {
     const newTempo = calculateTempo(tempoState.currentPercentage);
     setTempo(newTempo);
@@ -71,6 +83,10 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
           label="Start Percentage"
           value={tempoState.startPercentage}
           centered
+          inputProps={{
+            min: calculateMinPercentage(tempoInfo.bpm),
+            max: calculateMaxPercentage(tempoInfo.bpm),
+          }}
           onChange={(event) =>
             setTempoState({
               ...tempoState,
@@ -83,6 +99,10 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
           type="number"
           label="Tempo Change Percentage"
           value={tempoState.tempoChangePercentage}
+          inputProps={{
+            min: calculateMinPercentage(tempoInfo.bpm),
+            max: 100,
+          }}
           onChange={(event) =>
             setTempoState({
               ...tempoState,
@@ -98,35 +118,60 @@ export const TempoControls = ({ tempoInfo, setTempo }) => {
           flexDirection: "column",
         }}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            const newTempoState = {
-              ...tempoState,
-              baseTempo: tempoInfo.bpm,
-              currentPercentage: tempoState.startPercentage,
-            };
-            const startTempo = calculateTempo(newTempoState.startPercentage);
-            setTempo(startTempo);
-            setTempoState(newTempoState);
-          }}
-        >
-          Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={incrementTempo}
-          sx={{ margin: "1rem 0" }}
-        >
-          Increase tempo to{" "}
-          {tempoState.currentPercentage + tempoState.tempoChangePercentage}%?
-        </Button>
-        <Button variant="contained" color="warning" onClick={decrementTempo}>
-          Decrease tempo to{" "}
-          {tempoState.currentPercentage - tempoState.tempoChangePercentage}%?
-        </Button>
+        {tempoState.startPercentage > 0 &&
+          tempoInfo.bpm >= 1 &&
+          tempoInfo.bpm <= 300 && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                const newTempoState = {
+                  ...tempoState,
+                  baseTempo: tempoInfo.bpm,
+                  currentPercentage: tempoState.startPercentage,
+                };
+                const startTempo = calculateTempo(
+                  newTempoState.startPercentage
+                );
+                setTempo(startTempo);
+                setTempoState(newTempoState);
+                setStartButtonClicked(true);
+              }}
+            >
+              Start at {tempoState.startPercentage}% of {tempoInfo.bpm}?
+            </Button>
+          )}
+        {startButtonClicked && (
+          <>
+            {tempoState.currentPercentage + tempoState.tempoChangePercentage <=
+              calculateMaxPercentage(tempoInfo.bpm) && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={incrementTempo}
+                sx={{ margin: "1rem 0" }}
+              >
+                Increase tempo to{" "}
+                {tempoState.currentPercentage +
+                  tempoState.tempoChangePercentage}
+                %?
+              </Button>
+            )}
+            {tempoState.currentPercentage - tempoState.tempoChangePercentage >=
+              calculateMinPercentage(tempoInfo.bpm) && (
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={decrementTempo}
+              >
+                Decrease tempo to{" "}
+                {tempoState.currentPercentage -
+                  tempoState.tempoChangePercentage}
+                %?
+              </Button>
+            )}
+          </>
+        )}
       </Box>
     </Box>
   );
@@ -145,7 +190,7 @@ export const Workspace = () => {
   const [rep, setRep] = useState(10);
 
   const handleEdit = (id) => {
-    navigate(`/practiceSessions/practiceSession/edit/${id}`);
+    navigate(`/practiceSession/edit/${id}`);
   };
 
   useEffect(() => {
@@ -242,8 +287,11 @@ export const Workspace = () => {
             }}
           >
             <Grid item xs={12}>
+              <Typography variant={`h6`}align="center" sx={{fontWeight: "bold"}}>
+                Practice Session Name:
+              </Typography>
               <Typography align="center">
-                Name: {practiceSession.name}
+                {practiceSession.name}
               </Typography>
             </Grid>
             <Grid item xs={12}>

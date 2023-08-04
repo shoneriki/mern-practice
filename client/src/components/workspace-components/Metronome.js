@@ -40,7 +40,7 @@ export class Metronome extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.tempo !== prevProps.tempo) {
       this.setState({ bpm: this.props.tempo });
-      alert(`metronome updated with this.props.tempo: ${this.props.tempo}`);
+      alert(`metronome updated to ${this.props.tempo}`);
     }
   }
 
@@ -256,7 +256,7 @@ export class Metronome extends Component {
                 width: "100%",
                 textAlign: "center",
               }}
-              min={10}
+              min={1}
               max={300}
               onChange={this.handleBpmInputChange}
               onIncrement={() => this.handleBpmChange(null, bpm + 1)}
@@ -311,7 +311,7 @@ export class Metronome extends Component {
             </Box>
             <Slider
               type="range"
-              min={10}
+              min={1}
               max={300}
               value={bpm}
               onChange={this.handleBpmChange}
