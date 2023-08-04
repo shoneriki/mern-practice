@@ -1,5 +1,13 @@
-import mongoose from 'mongoose';
-import { PracticeSessionsModel } from "../../src/models/PracticeSessions";
+import path from "path";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import { PracticeSessionsModel } from "../../src/models/PracticeSessions.js";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 let mongoUri;
 
@@ -11,13 +19,14 @@ if (process.env.NODE_ENV === "production") {
   mongoUri = process.env.MONGO_URI_DEV;
 }
 
-mongoose.connect(mongoUri, {
+mongoose
+  .connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("MongoDB connected for migration"))
-
   .catch((err) => console.log(err));
+
 async function migrate() {
   // Find all practice sessions
   const practiceSessions = await PracticeSessionsModel.find();
