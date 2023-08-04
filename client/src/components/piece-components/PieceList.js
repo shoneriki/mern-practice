@@ -35,11 +35,8 @@ export const PieceList = () => {
 
 
 
-  // selected pieces for carrying over to practiceSession
+  // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
-  // const [selectedPieces, setSelectedPieces] = useState([]);
-
-  console.log("selectedPieces in between:", selectedPieces)
 
   const handleCheckboxChange = (event, pieceId) => {
     if (event.target.checked) {
@@ -65,7 +62,7 @@ export const PieceList = () => {
     }
   }
 
-  // end of code to be able to carry selectedPieces to practiceSession
+  // end of code to save pieces for the practiceSession in the
 
   const { setRefreshKey } = useContext(PiecesContext);
 

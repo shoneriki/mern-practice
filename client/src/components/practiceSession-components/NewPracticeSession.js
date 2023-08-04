@@ -54,13 +54,13 @@ export const NewPracticeSession = ({
   const {
     handleSubmit,
     control,
-    // watch,
+    watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
 
-  // const values = watch();
+  const values = watch();
 
   const navigate = useNavigate()
 

@@ -205,7 +205,7 @@ export const PracticeSessionList = () => {
                           sx={{ fontWeight: "bold" }}
                           align="center"
                         >
-                          Piece Name:
+                          Piece {pieceIndex + 1}:
                         </Typography>
                         <Typography variant={"h6"} align="center">
                           {piece.name}

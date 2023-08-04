@@ -12,7 +12,7 @@ const selectedPiecesSlice = createSlice({
       state.push(action.payload);
     },
     removePiece: (state, action) => {
-      return state.filter((piece) => piece._id !== action.payload._id);
+      state.splice(action.payload, 1);
     },
   },
 });
