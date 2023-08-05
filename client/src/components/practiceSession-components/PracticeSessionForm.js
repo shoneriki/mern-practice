@@ -51,14 +51,11 @@ export const PracticeSessionForm = ({
 
   const dispatch = useDispatch();
 
-  const {
-    handleSubmit,
-    control,
-    watch,
-  } = useForm({
-    defaultValues: initialValues,
+  const { handleSubmit, control, watch } = useForm({
+    defaultValues: id ? formValues : initialValues,
     resolver: yupResolver(validationSchema),
   });
+
 
   const values = watch();
 
@@ -101,7 +98,7 @@ export const PracticeSessionForm = ({
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
                 label="Date and Time of Execution"
-                value={field.value}
+                value={new Date(field.value)}
                 onChange={(value) => {
                   field.onChange(value);
                 }}
@@ -225,12 +222,13 @@ export const PracticeSessionForm = ({
             navigate("/pieces", {
               state: {
                 from: "practiceSession",
+                practiceSessionId: id ? id : null,
                 selectedPieces: selectedPieces,
               },
             })
           }
           sx={{
-            margin: "2rem 0"
+            margin: "2rem 0",
           }}
         >
           Add Pieces to PracticeSession?

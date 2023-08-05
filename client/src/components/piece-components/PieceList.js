@@ -51,16 +51,31 @@ export const PieceList = () => {
     }
   };
 
+  const practiceSessionId = location.state?.practiceSessionId;
+
+  const programId = location.state?.programId;
+
+
 
   const handleSelect = () => {
     console.log("from: ",from);
     console.log("selectedPieces: ",selectedPieces)
     if (from === "practiceSession") {
-      navigate("/practiceSession/create", {state: {selectedPieces}})
+      if(practiceSessionId) {
+        navigate(`/practiceSession/edit/${practiceSessionId}`, {state: {selectedPieces}})
+      } else {
+        navigate("/practiceSession/create", {state: {selectedPieces}})
+      }
     } else if (from === "program") {
-      navigate("/program/create", {state: {selectedPieces}})
+      if(programId) {
+        navigate(`/program/edit/${programId}`, {state: {selectedPieces}})
+      } else {
+        navigate("/program/create", {state: {selectedPieces}})
+      }
     }
   }
+
+
 
   // end of code to save pieces for the practiceSession in the
 
