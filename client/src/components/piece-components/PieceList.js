@@ -8,6 +8,13 @@ import { PieceForm } from "./PieceForm";
 import { PiecesContext } from "../../contexts/PiecesContext";
 import { ProgramsContext } from "../../contexts/ProgramsContext";
 
+import { useDispatch } from "react-redux";
+import {
+  addPieceToSession,
+  removePieceFromSession,
+} from "../../redux/practiceSessionSlice";
+
+
 import {
   Box,
   Typography,
@@ -34,9 +41,13 @@ export const PieceList = () => {
   );
 
 
-
   // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
+
+
+
+  const practiceSessionId = location.state?.practiceSessionId;
+  const dispatch = useDispatch()
 
   const handleCheckboxChange = (event, pieceId) => {
     if (event.target.checked) {
@@ -44,14 +55,14 @@ export const PieceList = () => {
         ...prevSelectedPieces,
         pieceId,
       ]);
+      dispatch(addPieceToSession({sessionId: practiceSessionId, piece: pieceId})); // Add piece to session in Redux store
     } else {
       setSelectedPieces((prevSelectedPieces) =>
         prevSelectedPieces.filter((id) => id !== pieceId)
       );
+      dispatch(removePieceFromSession({sessionId: practiceSessionId, piece: pieceId})); // Remove piece from session in Redux store
     }
   };
-
-  const practiceSessionId = location.state?.practiceSessionId;
 
   const programId = location.state?.programId;
 
@@ -62,8 +73,10 @@ export const PieceList = () => {
     console.log("selectedPieces: ",selectedPieces)
     if (from === "practiceSession") {
       if(practiceSessionId) {
+        console.log("selectedPieces from the edit", selectedPieces)
         navigate(`/practiceSession/edit/${practiceSessionId}`, {state: {selectedPieces}})
       } else {
+        console.log("selectedPieces from the create", selectedPieces);
         navigate("/practiceSession/create", {state: {selectedPieces}})
       }
     } else if (from === "program") {

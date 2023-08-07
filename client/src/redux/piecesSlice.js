@@ -11,7 +11,10 @@ const selectedPiecesSlice = createSlice({
       state.push(action.payload);
     },
     removePiece: (state, action) => {
-      state.splice(action.payload, 1);
+      const index = state.findIndex((piece) => piece._id === action.payload);
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     },
   },
 });

@@ -32,6 +32,20 @@ export const PracticeSessionList = () => {
         ? setPracticeSessions(
             response.data.map((practiceSession) => ({
               ...practiceSession,
+              totalSessionLength: {
+                hours:
+                  practiceSession.totalSessionLength.hours > 0
+                    ? practiceSession.totalSessionLength.hours
+                    : 0,
+                minutes:
+                  practiceSession.totalSessionLength.minutes > 0
+                    ? practiceSession.totalSessionLength.minutes
+                    : 0,
+                seconds:
+                  practiceSession.totalSessionLength.seconds > 0
+                    ? practiceSession.totalSessionLength.seconds
+                    : 0,
+              },
             }))
           )
         : setPracticeSessions([]);

@@ -1,5 +1,5 @@
 import React, {
-  // useEffect
+  useEffect
 } from "react";
 import {
   useForm,
@@ -25,6 +25,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import {useDispatch} from 'react-redux';
+import {removePieceFromSession} from '../../redux/practiceSessionSlice'
 import {removePiece} from "../../redux/piecesSlice";
 
 
@@ -46,20 +47,31 @@ export const PracticeSessionForm = ({
   handleAutocompleteChange,
   resetSelectedPiece,
   useLocation,
-  setSelectedPieces
+  setSelectedPieces,
+  piecesData,
 }) => {
+  console.log("session id? ",id)
 
   const dispatch = useDispatch();
 
-  const { handleSubmit, control, watch } = useForm({
+  const { handleSubmit, control, watch, setValue } = useForm({
     defaultValues: id ? formValues : initialValues,
     resolver: yupResolver(validationSchema),
   });
+
+  useEffect(() => {
+    if (formValues) {
+      for (let key in formValues) {
+        setValue(key, formValues[key]);
+      }
+    }
+  }, [formValues, setValue]);
 
 
   const values = watch();
 
   const navigate = useNavigate()
+
 
   return (
     <form
@@ -191,7 +203,9 @@ export const PracticeSessionForm = ({
                     Piece {pieceIndex + 1}: {piece.name}
                   </Typography>
                   <Typography>Composer: {piece.composer}</Typography>
-                  <Typography>excerpts: {piece.excerpts.length}</Typography>
+                  <Typography>
+                    Excerpts: {piece.excerpts ? piece.excerpts.length : 0}
+                  </Typography>
                   <Button
                     color="warning"
                     variant="contained"
@@ -206,7 +220,21 @@ export const PracticeSessionForm = ({
                     color="error"
                     variant="contained"
                     onClick={() => {
-                      dispatch(removePiece(pieceIndex));
+                      console.log(
+                        "Removing piece with ID:",
+                        piece._id,
+                        "from session with ID:",
+                        id
+                      );
+                      dispatch(
+                        removePieceFromSession({
+                          sessionId: id,
+                          pieceId: piece._id,
+                        })
+                      );
+                      // setSelectedPieces(
+                      //   selectedPieces.filter((p) => p._id !== piece._id)
+                      // );
                     }}
                   >
                     Remove
