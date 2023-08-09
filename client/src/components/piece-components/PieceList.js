@@ -8,11 +8,16 @@ import { PieceForm } from "./PieceForm";
 import { PiecesContext } from "../../contexts/PiecesContext";
 import { ProgramsContext } from "../../contexts/ProgramsContext";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addPieceToSession,
   removePieceFromSession,
 } from "../../redux/practiceSessionSlice";
+
+import {
+  addPiece,
+  removePiece,
+} from "../../redux/piecesSlice"
 
 
 import {
@@ -36,10 +41,11 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
-  const [selectedPieces, setSelectedPieces] = useState(
-    location.state?.selectedPieces.map((piece) => piece._id) || []
-  );
+  // const [selectedPieces, setSelectedPieces] = useState(
+  //   location.state?.selectedPieces.map((piece) => piece._id) || []
+  // );
 
+  const selectedPieces = useSelector((state) => state.selectedPieces);
 
   // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
@@ -51,21 +57,32 @@ export const PieceList = () => {
 
   const handleCheckboxChange = (event, pieceId) => {
     if (event.target.checked) {
-      setSelectedPieces((prevSelectedPieces) => [
-        ...prevSelectedPieces,
-        pieceId,
-      ]);
-      dispatch(addPieceToSession({sessionId: practiceSessionId, piece: pieceId})); // Add piece to session in Redux store
+      if (practiceSessionId) {
+        // If editing a practice session, add the piece to the session
+        dispatch(
+          addPieceToSession({ sessionId: practiceSessionId, piece: pieceId })
+        );
+      } else {
+        // If creating a practice session, add the piece to selected pieces
+        dispatch(addPiece(pieceId));
+      }
     } else {
-      setSelectedPieces((prevSelectedPieces) =>
-        prevSelectedPieces.filter((id) => id !== pieceId)
-      );
-      dispatch(removePieceFromSession({sessionId: practiceSessionId, piece: pieceId})); // Remove piece from session in Redux store
+      if (practiceSessionId) {
+        // If editing a practice session, remove the piece from the session
+        dispatch(
+          removePieceFromSession({
+            sessionId: practiceSessionId,
+            piece: pieceId,
+          })
+        );
+      } else {
+        // If creating a practice session, remove the piece from selected pieces
+        dispatch(removePiece(pieceId));
+      }
     }
   };
 
   const programId = location.state?.programId;
-
 
 
   const handleSelect = () => {

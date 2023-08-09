@@ -13,7 +13,16 @@ const practiceSessionSlice = createSlice({
     },
     addPieceToSession: (state, action) => {
       const { sessionId, piece } = action.payload;
-      state.sessions[sessionId].pieces.push(piece);
+      if (!state.sessions[sessionId]) {
+        // If the session doesn't exist
+        state.sessions[sessionId] = {
+          // Create a new session
+          pieces: [piece], // Initialize the pieces array with the given piece
+          // You can add other properties here if needed
+        };
+      } else {
+        state.sessions[sessionId].pieces.push(piece); // If the session exists, add the piece to it
+      }
     },
     removePieceFromSession: (state, action) => {
       const { sessionId, pieceId } = action.payload;
