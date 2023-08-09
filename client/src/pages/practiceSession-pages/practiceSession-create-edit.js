@@ -36,7 +36,16 @@ export const PracticeSessionCreateEdit = (props) => {
     const session = state.practiceSession.sessions[id];
     return session ? session.pieces : [];
   });
-  const currentSession = sessions ? sessions[id] : undefined;
+
+  const selectMutableSession = (state, sessionId) => {
+    const session = state.practiceSession.sessions[sessionId];
+    return session ? { ...session } : undefined;
+  };
+
+  const currentSession = useSelector((state) =>
+    selectMutableSession(state, id)
+  );
+
   console.log("currentSession", currentSession)
 
   const userID = useGetUserID();
@@ -83,14 +92,14 @@ export const PracticeSessionCreateEdit = (props) => {
     const selectedPiecesFromPiecesList = location.state?.selectedPieces || [];
 
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const selectedPieces = useSelector((state) => {
-      const session = state.practiceSession.sessions[id];
-      return session ? session.pieces : [];
-    });
+  const selectedPieces = useSelector((state) => {
+    const session = state.practiceSession.sessions[id];
+    return session ? session.pieces : [];
+  });
 
-    console.log("selectedPieces currently:", selectedPieces)
+  console.log("selectedPieces currently:", selectedPieces)
 
 useEffect(() => {
   setIsLoading(true);
@@ -99,7 +108,8 @@ useEffect(() => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/practiceSessions/practiceSession/${id}`
         );
-        const practiceSessionData = response.data;
+        const practiceSessionData = JSON.parse(JSON.stringify(response.data));
+
         console.log("practiceSessionData: ", response.data)
 
         // Fetch pieces for each piece in the practice session;
@@ -119,10 +129,17 @@ useEffect(() => {
         console.log("piecesData", piecesData)
         dispatch(setSession({ sessionId: id, data: practiceSessionData }));
         console.log("practiceSessionData: ", practiceSessionData)
+        console.log(
+          "Is hours writable?",
+          Object.getOwnPropertyDescriptor(
+            practiceSessionData.totalSessionLength,
+            "hours"
+          ).writable
+        );
 
         reset({
           ...practiceSessionData,
-          pieces: piecesData,
+          pieces: [...piecesData],
           dateOfExecution: new Date(practiceSessionData.dateOfExecution),
         });
       } catch (error) {
@@ -171,17 +188,20 @@ useEffect(() => {
      fetchSelectedPieces();
    }
 
-}, [id,selectedPiecesFromPiecesList]);
-
+}, [
+  id,
+  // selectedPiecesFromPiecesList
+]
+);
 
   const onSubmit = async (values) => {
     try {
       const practiceSessionData = {
         ...values,
+        dateOfExecution: new Date(values.dateOfExecution).toISOString(),
         pieces: selectedPieces
           .filter((piece) => piece !== null)
           .map((piece) => piece._id),
-        dateOfExecution: new Date(values.dateOfExecution),
         userOwner: userID,
       };
 

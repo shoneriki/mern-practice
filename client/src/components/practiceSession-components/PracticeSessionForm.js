@@ -50,7 +50,9 @@ export const PracticeSessionForm = ({
   setSelectedPieces,
   piecesData,
 }) => {
-  console.log("session id? ",id)
+  useEffect(() => {
+    console.log("session id? ", id);
+  }, [id]);
 
   const dispatch = useDispatch();
 
@@ -60,6 +62,7 @@ export const PracticeSessionForm = ({
   });
 
   useEffect(() => {
+    console.log("formValues: ", formValues)
     if (formValues) {
       for (let key in formValues) {
         setValue(key, formValues[key]);
@@ -112,7 +115,7 @@ export const PracticeSessionForm = ({
                 label="Date and Time of Execution"
                 value={new Date(field.value)}
                 onChange={(value) => {
-                  field.onChange(value);
+                  field.onChange(value.toISOString());
                 }}
                 sx={{ width: "100%" }}
                 renderInput={(params) => <TextField {...params} />}
@@ -232,9 +235,6 @@ export const PracticeSessionForm = ({
                           pieceId: piece._id,
                         })
                       );
-                      // setSelectedPieces(
-                      //   selectedPieces.filter((p) => p._id !== piece._id)
-                      // );
                     }}
                   >
                     Remove

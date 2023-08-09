@@ -21,18 +21,20 @@ export const PracticeSessionList = () => {
   const navigate = useNavigate();
 
   const [practiceSessions, setPracticeSessions] = useState([]);
+  console.log("practice sessions from the list component: ", practiceSessions);
 
   const fetchPracticeSessions = async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/practiceSessions/user/${userID}`
       );
-      console.log("response from fetchPracticeSessions?", response)
+      console.log("response from fetchPracticeSessions?", response);
       response.data && response.data.length > 0
         ? setPracticeSessions(
             response.data.map((practiceSession) => ({
               ...practiceSession,
               totalSessionLength: {
+                ...practiceSession.totalSessionLength,
                 hours:
                   practiceSession.totalSessionLength.hours > 0
                     ? practiceSession.totalSessionLength.hours
@@ -49,13 +51,16 @@ export const PracticeSessionList = () => {
             }))
           )
         : setPracticeSessions([]);
+
+
     } catch (error) {
       console.error("Error fetching practice plans:", error);
     }
   };
 
+
   useEffect(() => {
-    if(userID) {
+    if (userID) {
       fetchPracticeSessions();
     }
   }, [userID]);
@@ -63,7 +68,7 @@ export const PracticeSessionList = () => {
   // edit functionality
 
   const handleEdit = (id) => {
-    console.log("id????", id)
+    console.log("id????", id);
     navigate(`/practiceSession/edit/${id}`);
   };
 
@@ -162,7 +167,7 @@ export const PracticeSessionList = () => {
                 </Box>
 
                 {/* Single piece */}
-             {/* <Box>
+                {/* <Box>
               <Grid
                 id="piece"
                 container
@@ -198,11 +203,11 @@ export const PracticeSessionList = () => {
                 </Grid>
               </Grid>
             </Box> */}
-            {/* end of single piece code */}
+                {/* end of single piece code */}
 
-            {/* multiple pieces */}
+                {/* multiple pieces */}
 
-                 {practiceSession.pieces.map((piece, pieceIndex) => (
+                {practiceSession.pieces.map((piece, pieceIndex) => (
                   <Box>
                     <Grid
                       id="piece"
