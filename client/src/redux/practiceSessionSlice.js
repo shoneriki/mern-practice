@@ -9,7 +9,10 @@ const practiceSessionSlice = createSlice({
   reducers: {
     setSession: (state, action) => {
       const { sessionId, data } = action.payload;
-      state.sessions[sessionId] = data;
+      state.sessions[sessionId] = {
+        ...data,
+        totalSessionLength: { ...data.totalSessionLength }, // Create a copy of the object
+      };
     },
     addPieceToSession: (state, action) => {
       const { sessionId, piece } = action.payload;
@@ -19,6 +22,9 @@ const practiceSessionSlice = createSlice({
           // Create a new session
           pieces: [piece], // Initialize the pieces array with the given piece
           // You can add other properties here if needed
+          totalSessionLength: {
+            ...state.sessions[sessionId].totalSessionLength,
+          },
         };
       } else {
         state.sessions[sessionId].pieces.push(piece); // If the session exists, add the piece to it
