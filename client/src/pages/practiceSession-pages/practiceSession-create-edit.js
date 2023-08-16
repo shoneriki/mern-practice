@@ -20,41 +20,30 @@ import {
 } from '../../redux/piecesSlice';
 import {
   setSession,
-  addPieceToSession, removePieceFromSession
-} from '../../redux/practiceSessionSlice'
+  addPieceToSession,
+  removePieceFromSession,
+  setTempSession,
+  addPieceToTempSession,
+  removePieceFromTempSession,
+} from "../../redux/practiceSessionSlice";
 
 
 export const PracticeSessionCreateEdit = (props) => {
 
+    const userID = useGetUserID();
+    const [cookies, _] = useCookies(["access_token"]);
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [dataLoaded, setDataLoaded] = useState(false);
+
+
   console.log("PracticeSessionCreateEdit is rendering");
 
   const dispatch = useDispatch();
-  const sessions = useSelector((state) => state.practiceSession.sessions);
+  // const sessions = useSelector((state) => state.practiceSession.sessions);
 
   const { id } = useParams();
-  const pieces = useSelector((state) => {
-    const session = state.practiceSession.sessions[id];
-    return session ? session.pieces : [];
-  });
-
-  const selectMutableSession = (state, sessionId) => {
-    const session = state.practiceSession.sessions[sessionId];
-    return session ? { ...session } : undefined;
-  };
-
-  const currentSession = useSelector((state) =>
-    selectMutableSession(state, id)
-  );
-
-  console.log("currentSession", currentSession)
-
-  const userID = useGetUserID();
-  const [cookies, _] = useCookies(["access_token"]);
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [dataLoaded, setDataLoaded] = useState(false);
-
 
   const initialValues = {
     dateOfExecution: new Date(),
@@ -79,6 +68,36 @@ export const PracticeSessionCreateEdit = (props) => {
     pieces: Yup.array().of(Yup.object().nullable()),
     userOwner: Yup.string(),
   });
+  // const pieces = useSelector((state) => {
+  //   const session = state.practiceSession.sessions[id];
+  //   return session ? session.pieces : [];
+  // });
+
+  // const selectMutableSession = (state, sessionId) => {
+  //   const session = state.practiceSession.sessions[sessionId];
+  //   return session ? { ...session } : {};
+  // };
+
+
+
+  // const currentSession = useSelector((state) =>
+  //   selectMutableSession(state, id)
+  // );
+const currentSession = useSelector((state) => {
+  if (id) {
+    return state.practiceSession.sessions[id];
+  } else {
+    if (!state.practiceSession.tempSession) {
+      dispatch(setTempSession({ data: initialValues }));
+    }
+    return state.practiceSession.tempSession;
+  }
+});
+
+
+  console.log("currentSession", currentSession)
+
+
 
   const {
     formState: { errors },
@@ -88,8 +107,8 @@ export const PracticeSessionCreateEdit = (props) => {
     defaultValues: initialValues,
   });
 
-    const location = useLocation();
-    const selectedPiecesFromPiecesList = location.state?.selectedPieces || [];
+    // const location = useLocation();
+    // const selectedPiecesFromPiecesList = location.state?.selectedPieces || [];
 
 
   const navigate = useNavigate();
@@ -100,6 +119,7 @@ export const PracticeSessionCreateEdit = (props) => {
   });
 
   console.log("selectedPieces currently:", selectedPieces)
+  // console.log("selectedPiecesFromPiecesList", selectedPiecesFromPiecesList)
 
 useEffect(() => {
   setIsLoading(true);
@@ -129,13 +149,6 @@ useEffect(() => {
         console.log("piecesData", piecesData)
         dispatch(setSession({ sessionId: id, data: practiceSessionData }));
         console.log("practiceSessionData: ", practiceSessionData)
-        console.log(
-          "Is hours writable?",
-          Object.getOwnPropertyDescriptor(
-            practiceSessionData.totalSessionLength,
-            "hours"
-          ).writable
-        );
 
         reset({
           ...practiceSessionData,
@@ -151,7 +164,7 @@ useEffect(() => {
    const fetchSelectedPieces = async () => {
      try {
        const piecesData = await Promise.all(
-         selectedPiecesFromPiecesList.map((pieceId) =>
+         selectedPieces.map((pieceId) =>
            axios.get(
              `${process.env.REACT_APP_API_URL}/pieces/piece/${pieceId}`,
              {
@@ -167,8 +180,6 @@ useEffect(() => {
            data: { ...currentSession, pieces: piecesData },
          })
        );
-
-
      } catch (error) {
        console.error("Error fetching the selected pieces: ", error);
      }
@@ -184,7 +195,7 @@ useEffect(() => {
      setDataLoaded(true);
    }
 
-   if (selectedPiecesFromPiecesList.length) {
+   if (selectedPieces.length) {
      fetchSelectedPieces();
    }
 
@@ -252,12 +263,12 @@ useEffect(() => {
     >
       <PracticeSessionForm
         initialValues={initialValues}
-        formValues={currentSession}
+        currentSession={currentSession}
         validationSchema={validationSchema}
         id={id}
         cookies={cookies}
         selectedPieces={selectedPieces}
-        selectedPiecesFromPiecesList={selectedPiecesFromPiecesList}
+        // selectedPiecesFromPiecesList={selectedPiecesFromPiecesList}
         onSubmit={onSubmit}
         useLocation={useLocation}
       />

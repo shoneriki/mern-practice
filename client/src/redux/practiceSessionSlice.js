@@ -5,6 +5,8 @@ const practiceSessionSlice = createSlice({
   name: "practiceSession",
   initialState: {
     sessions: {},
+    tempSession: null,
+    // tempSession for before the practiceSession is saved into the database
   },
   reducers: {
     setSession: (state, action) => {
@@ -16,19 +18,7 @@ const practiceSessionSlice = createSlice({
     },
     addPieceToSession: (state, action) => {
       const { sessionId, piece } = action.payload;
-      if (!state.sessions[sessionId]) {
-        // If the session doesn't exist
-        state.sessions[sessionId] = {
-          // Create a new session
-          pieces: [piece], // Initialize the pieces array with the given piece
-          // You can add other properties here if needed
-          totalSessionLength: {
-            ...state.sessions[sessionId].totalSessionLength,
-          },
-        };
-      } else {
-        state.sessions[sessionId].pieces.push(piece); // If the session exists, add the piece to it
-      }
+      state.sessions[sessionId].pieces.push(piece);
     },
     removePieceFromSession: (state, action) => {
       const { sessionId, pieceId } = action.payload;
@@ -36,9 +26,34 @@ const practiceSessionSlice = createSlice({
         sessionId
       ].pieces.filter((p) => p._id !== pieceId);
     },
+
+    setTempSession: (state, action) => {
+      const { data } = action.payload;
+      state.tempSession = {
+        ...data,
+        totalSessionLength: { ...data.totalSessionLength },
+      };
+    },
+    addPieceToTempSession: (state,action) => {
+      const {piece} = action.payload;
+      if(!state.tempSession) {
+        state.tempSession = {
+          pieces: [piece],
+          totalSessionLength: {
+            ...state.tempSession?.totalSessionLength
+          }
+        }
+      } else {
+        state.tempSession.pieces.push(action.payload);
+      }
+    },
+    removePieceFromTempSession: (state, action) => {
+      const {pieceId} = action.payload;
+      state.tempSession.pieces = state.tempSession.pieces.filter((pieceObj) => pieceObj._id !== pieceId);
+    }
   },
 });
 
-export const { setSession, addPieceToSession, removePieceFromSession } =
+export const { setSession, addPieceToSession, removePieceFromSession, setTempSession, addPieceToTempSession, removePieceFromTempSession } =
   practiceSessionSlice.actions;
 export default practiceSessionSlice.reducer;

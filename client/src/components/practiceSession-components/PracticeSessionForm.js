@@ -32,13 +32,14 @@ import {removePiece} from "../../redux/piecesSlice";
 
 export const PracticeSessionForm = ({
   initialValues,
-  formValues,
+  currentSession,
   validationSchema,
   id,
   practiceSession,
   cookies,
   // useNavigate,
   selectedPieces,
+  selectedPiecesFromPiecesList,
   selectedPiece,
   suggestions,
   handlePieceSearch,
@@ -54,21 +55,23 @@ export const PracticeSessionForm = ({
     console.log("session id? ", id);
   }, [id]);
 
+  console.log("selectedPiecesFromPiecesList", selectedPiecesFromPiecesList)
+
   const dispatch = useDispatch();
 
   const { handleSubmit, control, watch, setValue } = useForm({
-    defaultValues: id ? formValues : initialValues,
+    defaultValues: id ? currentSession : initialValues,
     resolver: yupResolver(validationSchema),
   });
 
   useEffect(() => {
-    console.log("formValues: ", formValues)
-    if (formValues) {
-      for (let key in formValues) {
-        setValue(key, formValues[key]);
+    console.log("currentSession: ", currentSession)
+    if (currentSession) {
+      for (let key in currentSession) {
+        setValue(key, currentSession[key]);
       }
     }
-  }, [formValues, setValue]);
+  }, [currentSession, setValue]);
 
 
   const values = watch();
@@ -222,8 +225,23 @@ export const PracticeSessionForm = ({
                   <Button
                     color="error"
                     variant="contained"
-                    onClick={() => {
-                      console.log(
+                    // onClick={() => {
+                    //   console.log(
+                    //     "Removing piece with ID:",
+                    //     piece._id,
+                    //     "from session with ID:",
+                    //     id
+                    //   );
+                    //   dispatch(
+                    //     removePieceFromSession({
+                    //       sessionId: id,
+                    //       pieceId: piece._id,
+                    //     })
+                    //   );
+                    // }}
+                    onClick={()=>{
+                      if(id){
+                        console.log(
                         "Removing piece with ID:",
                         piece._id,
                         "from session with ID:",
@@ -235,6 +253,12 @@ export const PracticeSessionForm = ({
                           pieceId: piece._id,
                         })
                       );
+                      } else {
+                        console.log("piece only", piece)
+                        dispatch(
+                          removePiece(piece)
+                        )
+                      }
                     }}
                   >
                     Remove
@@ -250,8 +274,6 @@ export const PracticeSessionForm = ({
             navigate("/pieces", {
               state: {
                 from: "practiceSession",
-                practiceSessionId: id ? id : null,
-                selectedPieces: selectedPieces,
               },
             })
           }

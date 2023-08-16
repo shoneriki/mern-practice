@@ -10,8 +10,12 @@ import { ProgramsContext } from "../../contexts/ProgramsContext";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setSession,
   addPieceToSession,
   removePieceFromSession,
+  setTempSession,
+  addPieceToTempSession,
+  removePieceFromTempSession,
 } from "../../redux/practiceSessionSlice";
 
 import {
@@ -41,18 +45,32 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
+
+
   // const [selectedPieces, setSelectedPieces] = useState(
   //   location.state?.selectedPieces.map((piece) => piece._id) || []
   // );
 
-  const selectedPieces = useSelector((state) => state.selectedPieces);
+  const selectedPieces = useSelector((state) => {
+    console.log("state createEdit for practiceSession", state)
+    const sessionId = state.practiceSession.practiceSessionId;
+    return sessionId
+      ? state.practiceSession.sessions[sessionId].pieces
+      : state.practiceSession.tempSession.pieces;
+  });
+
+  console.log("selectedPieces from useSelector?!", selectedPieces)
+
+  useEffect(() => {
+  }, [selectedPieces]);
 
   // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
 
-
-
-  const practiceSessionId = location.state?.practiceSessionId;
+  // const practiceSessionId = location.state?.practiceSessionId;
+  const practiceSessionId = useSelector(
+    (state) => state.practiceSession.practiceSessionId
+  );
   const dispatch = useDispatch()
 
   const handleCheckboxChange = (event, pieceId) => {
@@ -64,7 +82,8 @@ export const PieceList = () => {
         );
       } else {
         // If creating a practice session, add the piece to selected pieces
-        dispatch(addPiece(pieceId));
+        console.log("creating a tempSession and adding piece?", pieceId)
+        dispatch(addPieceToTempSession(pieceId));
       }
     } else {
       if (practiceSessionId) {
@@ -76,8 +95,8 @@ export const PieceList = () => {
           })
         );
       } else {
-        // If creating a practice session, remove the piece from selected pieces
-        dispatch(removePiece(pieceId));
+        // If creating a practice session, remove the piece from TempSession
+        dispatch(removePieceFromTempSession(pieceId));
       }
     }
   };
@@ -88,20 +107,12 @@ export const PieceList = () => {
   const handleSelect = () => {
     console.log("from: ",from);
     console.log("selectedPieces: ",selectedPieces)
-    if (from === "practiceSession") {
-      if(practiceSessionId) {
-        console.log("selectedPieces from the edit", selectedPieces)
-        navigate(`/practiceSession/edit/${practiceSessionId}`, {state: {selectedPieces}})
-      } else {
-        console.log("selectedPieces from the create", selectedPieces);
-        navigate("/practiceSession/create", {state: {selectedPieces}})
-      }
-    } else if (from === "program") {
-      if(programId) {
-        navigate(`/program/edit/${programId}`, {state: {selectedPieces}})
-      } else {
-        navigate("/program/create", {state: {selectedPieces}})
-      }
+    if(practiceSessionId) {
+      console.log("selectedPieces for edit", selectedPieces)
+      navigate(`/practiceSession/edit/${practiceSessionId}`)
+    } else {
+      console.log("selectedPieces for create", selectedPieces);
+      navigate("/practiceSession/create")
     }
   }
 
@@ -223,8 +234,6 @@ export const PieceList = () => {
       </Button>
       <Grid container spacing={3}>
         {pieces.map((piece) => {
-          console.log("Piece ID:", piece._id);
-          console.log("Selected Pieces:", selectedPieces);
           return (
             <Grid item xs={12} sm={6} md={4} key={piece._id}>
               <Box
