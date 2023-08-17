@@ -268,10 +268,17 @@ export const PracticeSessionForm = ({
           variant="contained"
           onClick={() => {
             console.log("values?", values)
-            dispatch(setTempSession({ data: values }));
+            if(id) {
+              console.log(`inside the if id bit: practiceSession id is ${id}`)
+              console.log("the values inside the if statement for onClick?", values)
+              dispatch(setSession({sessionId: id, data: values}))
+            } else {
+              dispatch(setTempSession({ data: values }));
+            }
             navigate("/pieces", {
               state: {
                 from: "practiceSession",
+                practiceSessionId: id,
               },
             });
           }}

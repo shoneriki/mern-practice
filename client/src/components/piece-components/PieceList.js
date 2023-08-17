@@ -45,16 +45,17 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
-  const {id} = useParams()
+  // const {id} = useParams()
+
+  const { state } = useLocation();
+  console.log("state?!", state)
+  const practiceSessionId = state?.practiceSessionId;
 
 
-  // const [selectedPieces, setSelectedPieces] = useState(
-  //   location.state?.selectedPieces.map((piece) => piece._id) || []
-  // );
 
   const currentSession = useSelector((state) => {
-    if (id) {
-      return state.practiceSession.sessions[id];
+    if (practiceSessionId) {
+      return state.practiceSession.sessions[practiceSessionId];
     } else {
       return state.practiceSession.tempSession;
     }
@@ -62,16 +63,6 @@ export const PieceList = () => {
 
   console.log("currentSession", currentSession)
 
-    // const selectedPieces = useSelector((state) => {
-    //   const sessionId = state.practiceSession.practiceSessionId;
-    //   const session = state.practiceSession.sessions[sessionId];
-    //   const tempSession = state.practiceSession.tempSession;
-    //   return sessionId && session
-    //     ? session.pieces
-    //     : tempSession
-    //     ? tempSession.pieces
-    //     : [];
-    // });
 
   const selectedPieces = currentSession ? currentSession.pieces : [];
 
@@ -84,40 +75,42 @@ export const PieceList = () => {
   // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
 
-  // const practiceSessionId = location.state?.practiceSessionId;
-  const practiceSessionId = useSelector(
-    (state) => state.practiceSession.practiceSessionId
-  );
+
+  // const practiceSessionId = useSelector(
+  //   (state) => state.practiceSession.practiceSessionId
+  // );
   const dispatch = useDispatch()
+
+  const isPieceSelected = (pieceId) => {
+    if (practiceSessionId) {
+      return selectedPieces.some((piece) => piece._id === pieceId);
+    } else {
+      return selectedPieces.includes(pieceId);
+    }
+  };
+
 
   const handleCheckboxChange = (event, pieceId) => {
     if (event.target.checked) {
       if (practiceSessionId) {
-        // If editing a practice session, add the piece to the session
-        dispatch(
-          addPieceToSession({ sessionId: practiceSessionId, piece: pieceId })
-        );
+        // If it's a saved session
+        // Find the piece object from your pieces list
+        const pieceObject = pieces.find((piece) => piece._id === pieceId);
+        dispatch(addPieceToSession({ sessionId: practiceSessionId, piece: pieceObject }));
       } else {
-        // If creating a practice session, add the piece to selected pieces
-        console.log("creating a tempSession and adding piece?", pieceId)
+        // If it's a tempSession
         dispatch(addPieceToTempSession(pieceId));
       }
     } else {
-      // when unchecked
+      // Handle unchecking logic similarly...
       if (practiceSessionId) {
-        // If editing a practice session, remove the piece from the session
-        dispatch(
-          removePieceFromSession({
-            sessionId: practiceSessionId,
-            piece: pieceId,
-          })
-        );
+        dispatch(removePieceFromSession({ sessionId: practiceSessionId, pieceId: pieceId }));
       } else {
-        // If creating a practice session, remove the piece from TempSession
         dispatch(removePieceFromTempSession(pieceId));
       }
     }
   };
+
 
   const programId = location.state?.programId;
 
@@ -269,7 +262,7 @@ export const PieceList = () => {
               >
                 {(from === "practiceSession" || from === "program") && (
                   <Checkbox
-                    checked={selectedPieces.includes(piece._id)}
+                    checked={isPieceSelected(piece._id)}
                     onChange={(event) => handleCheckboxChange(event, piece._id)}
                   />
                 )}
@@ -333,22 +326,21 @@ export const PieceList = () => {
       {(from === "practiceSession" || from === "program") && (
         <Box>
           <Typography variant={"h6"}>Selected Pieces:</Typography>
-          {selectedPieces.map((pieceId) => {
-            const piece = pieces.find((piece) => piece._id === pieceId);
+          {selectedPieces.map((pieceOrId) => {
+            const piece =
+              typeof pieceOrId === "string"
+                ? pieces.find((piece) => piece._id === pieceOrId)
+                : pieceOrId;
             return (
-              <Typography variant={"body1"} key={pieceId}>
-                {piece?.name}
+              <Typography variant={"body1"} key={piece._id}>
+                {piece.name}
               </Typography>
             );
           })}
         </Box>
       )}
       <Box>
-        <Button
-          variant="contained"
-          color="success"
-          href="/piece/create"
-        >
+        <Button variant="contained" color="success" href="/piece/create">
           Add a piece?
         </Button>
       </Box>
