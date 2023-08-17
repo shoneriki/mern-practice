@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import axios from "axios";
 import { format } from "date-fns";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { PieceForm } from "./PieceForm";
 import { PiecesContext } from "../../contexts/PiecesContext";
@@ -45,19 +45,33 @@ export const PieceList = () => {
 
   const [pieces, setPieces] = useState([]);
 
+  const {id} = useParams()
 
 
   // const [selectedPieces, setSelectedPieces] = useState(
   //   location.state?.selectedPieces.map((piece) => piece._id) || []
   // );
 
-  const selectedPieces = useSelector((state) => {
-    console.log("state createEdit for practiceSession", state)
-    const sessionId = state.practiceSession.practiceSessionId;
-    return sessionId
-      ? state.practiceSession.sessions[sessionId].pieces
-      : state.practiceSession.tempSession.pieces;
+  const currentSession = useSelector((state) => {
+    if (id) {
+      return state.practiceSession.sessions[id];
+    } else {
+      return state.practiceSession.tempSession;
+    }
   });
+
+  console.log("currentSession", currentSession)
+
+    const selectedPieces = useSelector((state) => {
+      const sessionId = state.practiceSession.practiceSessionId;
+      const session = state.practiceSession.sessions[sessionId];
+      const tempSession = state.practiceSession.tempSession;
+      return sessionId && session
+        ? session.pieces
+        : tempSession
+        ? tempSession.pieces
+        : [];
+    });
 
   console.log("selectedPieces from useSelector?!", selectedPieces)
 
@@ -86,6 +100,7 @@ export const PieceList = () => {
         dispatch(addPieceToTempSession(pieceId));
       }
     } else {
+      // when unchecked
       if (practiceSessionId) {
         // If editing a practice session, remove the piece from the session
         dispatch(

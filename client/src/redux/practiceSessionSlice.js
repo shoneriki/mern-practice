@@ -29,22 +29,30 @@ const practiceSessionSlice = createSlice({
 
     setTempSession: (state, action) => {
       const { data } = action.payload;
+      console.log("data?!", data)
       state.tempSession = {
         ...data,
         totalSessionLength: { ...data.totalSessionLength },
       };
     },
     addPieceToTempSession: (state,action) => {
-      const {piece} = action.payload;
+      const pieceId = action.payload;
       if(!state.tempSession) {
         state.tempSession = {
-          pieces: [piece],
+          ...state.tempSession,
+          pieces: [pieceId],
           totalSessionLength: {
             ...state.tempSession?.totalSessionLength
           }
         }
       } else {
-        state.tempSession.pieces.push(action.payload);
+        state.tempSession = {
+          ...state.tempSession,
+          totalSessionLength: {
+            ...state.tempSession?.totalSessionLength
+          },
+          pieces: [...state.tempSession.pieces, pieceId]
+        }
       }
     },
     removePieceFromTempSession: (state, action) => {

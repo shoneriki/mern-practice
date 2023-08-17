@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import {
   useForm,
@@ -41,19 +41,18 @@ export const PracticeSessionCreateEdit = (props) => {
   console.log("PracticeSessionCreateEdit is rendering");
 
   const dispatch = useDispatch();
-  // const sessions = useSelector((state) => state.practiceSession.sessions);
 
   const { id } = useParams();
 
   const initialValues = {
-    dateOfExecution: new Date(),
+    dateOfExecution: new Date().toISOString(),
     name: "",
     totalSessionLength: {
       hours: 0,
       minutes: 0,
       seconds: 0,
     },
-    pieces: [{}],
+    pieces: [],
     userOwner: userID,
   };
 
@@ -68,54 +67,68 @@ export const PracticeSessionCreateEdit = (props) => {
     pieces: Yup.array().of(Yup.object().nullable()),
     userOwner: Yup.string(),
   });
-  // const pieces = useSelector((state) => {
-  //   const session = state.practiceSession.sessions[id];
-  //   return session ? session.pieces : [];
-  // });
 
-  // const selectMutableSession = (state, sessionId) => {
-  //   const session = state.practiceSession.sessions[sessionId];
-  //   return session ? { ...session } : {};
-  // };
-
-
-
-  // const currentSession = useSelector((state) =>
-  //   selectMutableSession(state, id)
-  // );
 const currentSession = useSelector((state) => {
   if (id) {
     return state.practiceSession.sessions[id];
   } else {
-    if (!state.practiceSession.tempSession) {
-      dispatch(setTempSession({ data: initialValues }));
-    }
     return state.practiceSession.tempSession;
   }
 });
 
-
   console.log("currentSession", currentSession)
 
+  const defaultValues = useMemo(() => currentSession, [currentSession])
 
-
+  console.log("defaultValues?!", defaultValues)
   const {
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(validationSchema),
-    defaultValues: initialValues,
+    defaultValues: defaultValues,
   });
 
-    // const location = useLocation();
-    // const selectedPiecesFromPiecesList = location.state?.selectedPieces || [];
+  const values = watch();
 
+
+  // const formValues = reset(); // Get the current form values
+
+useEffect(() => {
+  if (!id) {
+    dispatch(setTempSession({ data: initialValues }));
+  }
+}, [dispatch]);
+
+
+useEffect(() => {
+  if (currentSession) {
+    console.log("currentSession inside the useEffect",currentSession)
+    reset(currentSession);
+  }
+}, [currentSession, reset]);
 
   const navigate = useNavigate();
 
+
+  // const selectedPieces = useSelector((state) => {
+  //   const sessionId = state.practiceSession.practiceSessionId;
+  //   return sessionId
+  //     ? state.practiceSession.sessions[sessionId].pieces
+  //     : state.practiceSession.tempSession.pieces;
+  // });
+
   const selectedPieces = useSelector((state) => {
-    const session = state.practiceSession.sessions[id];
-    return session ? session.pieces : [];
+    const sessionId = state.practiceSession.practiceSessionId;
+    const session = state.practiceSession.sessions[sessionId];
+    const tempSession = state.practiceSession.tempSession;
+    return sessionId && session
+      ? session.pieces
+      : tempSession
+      ? tempSession.pieces
+      : [];
   });
 
   console.log("selectedPieces currently:", selectedPieces)
@@ -174,12 +187,22 @@ useEffect(() => {
          )
        ).then((responses) => responses.map((response) => response.data));
 
-       dispatch(
-         setSession({
-           sessionId: id,
-           data: { ...currentSession, pieces: piecesData },
-         })
-       );
+       console.log("piecesData", piecesData)
+
+       if(!id) {
+        const updatedTempSession = {
+          ...currentSession,
+          pieces: piecesData,
+        };
+        dispatch(setTempSession({data: updatedTempSession}))
+       } else {
+         dispatch(
+           setSession({
+             sessionId: id,
+             data: { ...currentSession, pieces: piecesData },
+           })
+         );
+       }
      } catch (error) {
        console.error("Error fetching the selected pieces: ", error);
      }
@@ -209,7 +232,7 @@ useEffect(() => {
     try {
       const practiceSessionData = {
         ...values,
-        dateOfExecution: new Date(values.dateOfExecution).toISOString(),
+        dateOfExecution: new Date(values.dateOfExecution),
         pieces: selectedPieces
           .filter((piece) => piece !== null)
           .map((piece) => piece._id),
@@ -262,15 +285,17 @@ useEffect(() => {
       }}
     >
       <PracticeSessionForm
-        initialValues={initialValues}
-        currentSession={currentSession}
-        validationSchema={validationSchema}
-        id={id}
         cookies={cookies}
+        currentSession={currentSession}
+        defaultValues={defaultValues}
+        id={id}
+        initialValues={initialValues}
+        onSubmit={onSubmit}
         selectedPieces={selectedPieces}
         // selectedPiecesFromPiecesList={selectedPiecesFromPiecesList}
-        onSubmit={onSubmit}
         useLocation={useLocation}
+        validationSchema={validationSchema}
+        values={values}
       />
     </Box>
   );

@@ -25,7 +25,14 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import {useDispatch} from 'react-redux';
-import {removePieceFromSession} from '../../redux/practiceSessionSlice'
+import {
+  setSession,
+  addPieceToSession,
+  removePieceFromSession,
+  setTempSession,
+  addPieceToTempSession,
+  removePieceFromTempSession,
+} from "../../redux/practiceSessionSlice";
 import {removePiece} from "../../redux/piecesSlice";
 
 
@@ -33,6 +40,7 @@ import {removePiece} from "../../redux/piecesSlice";
 export const PracticeSessionForm = ({
   initialValues,
   currentSession,
+  defaultValues,
   validationSchema,
   id,
   practiceSession,
@@ -51,32 +59,27 @@ export const PracticeSessionForm = ({
   setSelectedPieces,
   piecesData,
 }) => {
-  useEffect(() => {
-    console.log("session id? ", id);
-  }, [id]);
 
-  console.log("selectedPiecesFromPiecesList", selectedPiecesFromPiecesList)
 
   const dispatch = useDispatch();
 
   const { handleSubmit, control, watch, setValue } = useForm({
-    defaultValues: id ? currentSession : initialValues,
+    defaultValues: defaultValues,
     resolver: yupResolver(validationSchema),
   });
 
+  const values = watch();
+
+  const navigate = useNavigate()
+
   useEffect(() => {
-    console.log("currentSession: ", currentSession)
     if (currentSession) {
-      for (let key in currentSession) {
+      for (const key in currentSession) {
         setValue(key, currentSession[key]);
       }
     }
   }, [currentSession, setValue]);
 
-
-  const values = watch();
-
-  const navigate = useNavigate()
 
 
   return (
@@ -150,6 +153,9 @@ export const PracticeSessionForm = ({
                       type="number"
                       label="hr"
                       inputProps={{ min: 0, max: 10 }}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value, 10));
+                      }}
                     />
                   )}
                 />
@@ -166,6 +172,9 @@ export const PracticeSessionForm = ({
                       type="number"
                       label="min"
                       inputProps={{ min: 0, max: 59 }}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value, 10));
+                      }}
                     />
                   )}
                 />
@@ -182,6 +191,9 @@ export const PracticeSessionForm = ({
                       type="number"
                       label="sec"
                       inputProps={{ min: 0, max: 59 }}
+                      onChange={(e) => {
+                        field.onChange(parseInt(e.target.value, 10));
+                      }}
                     />
                   )}
                 />
@@ -225,39 +237,23 @@ export const PracticeSessionForm = ({
                   <Button
                     color="error"
                     variant="contained"
-                    // onClick={() => {
-                    //   console.log(
-                    //     "Removing piece with ID:",
-                    //     piece._id,
-                    //     "from session with ID:",
-                    //     id
-                    //   );
-                    //   dispatch(
-                    //     removePieceFromSession({
-                    //       sessionId: id,
-                    //       pieceId: piece._id,
-                    //     })
-                    //   );
-                    // }}
-                    onClick={()=>{
-                      if(id){
+                    onClick={() => {
+                      if (id) {
                         console.log(
-                        "Removing piece with ID:",
-                        piece._id,
-                        "from session with ID:",
-                        id
-                      );
-                      dispatch(
-                        removePieceFromSession({
-                          sessionId: id,
-                          pieceId: piece._id,
-                        })
-                      );
-                      } else {
-                        console.log("piece only", piece)
+                          "Removing piece with ID:",
+                          piece._id,
+                          "from session with ID:",
+                          id
+                        );
                         dispatch(
-                          removePiece(piece)
-                        )
+                          removePieceFromSession({
+                            sessionId: id,
+                            pieceId: piece._id,
+                          })
+                        );
+                      } else {
+                        console.log("piece only", piece);
+                        dispatch(removePieceFromTempSession(piece));
                       }
                     }}
                   >
@@ -270,13 +266,15 @@ export const PracticeSessionForm = ({
         <Button
           color="success"
           variant="contained"
-          onClick={() =>
+          onClick={() => {
+            console.log("values?", values)
+            dispatch(setTempSession({ data: values }));
             navigate("/pieces", {
               state: {
                 from: "practiceSession",
               },
-            })
-          }
+            });
+          }}
           sx={{
             margin: "2rem 0",
           }}
