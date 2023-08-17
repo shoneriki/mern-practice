@@ -22,7 +22,6 @@ const pieceSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     composer: {
       type: String,

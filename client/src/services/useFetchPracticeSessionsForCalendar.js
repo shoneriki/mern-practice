@@ -43,7 +43,13 @@ export function useFetchPracticeSessionsForCalendar() {
                   });
                 }
               }
-              return { ...practiceSession, events };
+              return {
+                ...practiceSession,
+                events,
+                totalSessionLength: {
+                  ...practiceSession.totalSessionLength,
+                },
+              };
             }
           );
 
