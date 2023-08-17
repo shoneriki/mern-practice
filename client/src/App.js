@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     const userID = window.localStorage.getItem("userID");
-    cookies.access_Token && userID ? setIsLoggedIn(true) : setIsLoggedIn(false);
+    cookies.access_token && userID ? setIsLoggedIn(true) : setIsLoggedIn(false);
   }, [cookies]);
 
   const theme = useTheme();
@@ -124,14 +124,6 @@ function App() {
                   </ProtectedWrapper>
                 }
               />
-              {/* <Route
-                path="/practiceSessions/practiceSession/edit/:id"
-                element={
-                  <ProtectedWrapper>
-                    <PracticeSessionCreateEdit />
-                  </ProtectedWrapper>
-                }
-              /> */}
 
               <Route
                 path="/programs"

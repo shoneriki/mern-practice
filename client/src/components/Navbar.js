@@ -158,7 +158,7 @@ const logout = () => {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
-          backgroundColor: isLoggedIn ? "blue" : "gray"
+          backgroundColor: isLoggedIn ? "blue" : "gray",
         }}
       >
         <Typography variant="h4" sx={{ cursor: "pointer" }}>
@@ -199,47 +199,54 @@ const logout = () => {
                 Welcome, {cookies.username}
               </Typography>
             )}
-            <LinkStyled to="/">Home</LinkStyled>
-            <DropdownMenu
-              title="Programs"
-              items={[
-                { label: "All Programs", path: "/programs" },
-                { label: "Add Program", path: "/program/create" },
-              ]}
-            />
-            <DropdownMenu
-              title="Practice Sessions"
-              items={[
-                { label: "All Practice Sessions", path: "/practiceSessions" },
-                {
-                  label: "Add Practice Session",
-                  path: "/practiceSession/create",
-                },
-              ]}
-            />
-            <DropdownMenu
-              title="Pieces"
-              items={[
-                { label: "All Pieces", path: "/pieces" },
-                {
-                  label: "Add A Piece",
-                  path: "/piece/create",
-                },
-              ]}
-            />
-            <LinkStyled to="/workspace">Workspace</LinkStyled>
-            <LinkStyled to="/settings">Settings</LinkStyled>
+            {isLoggedIn && (
+              <>
+              <LinkStyled to="/">Home</LinkStyled>
+                <DropdownMenu
+                  title="Programs"
+                  items={[
+                    { label: "All Programs", path: "/programs" },
+                    { label: "Add Program", path: "/program/create" },
+                  ]}
+                />
+                <DropdownMenu
+                  title="Practice Sessions"
+                  items={[
+                    {
+                      label: "All Practice Sessions",
+                      path: "/practiceSessions",
+                    },
+                    {
+                      label: "Add Practice Session",
+                      path: "/practiceSession/create",
+                    },
+                  ]}
+                />
+                <DropdownMenu
+                  title="Pieces"
+                  items={[
+                    { label: "All Pieces", path: "/pieces" },
+                    {
+                      label: "Add A Piece",
+                      path: "/piece/create",
+                    },
+                  ]}
+                />
+                <LinkStyled to="/workspace">Workspace</LinkStyled>
+                <LinkStyled to="/settings">Settings</LinkStyled>
+              </>
+            )}
             {!isLoggedIn ? (
               <>
                 <LinkStyled>
-                  <Link to="/auth">Login</Link>
+                  <Link to="/auth/login">Login</Link>
                 </LinkStyled>
                 <LinkStyled>
-                  <Link to="/auth">Register</Link>
+                  <Link to="/auth/register">Register</Link>
                 </LinkStyled>
               </>
             ) : (
-              <LinkStyled id="logout-btn" onClick={logout}>
+              <LinkStyled id="logout-btn" onClick={logout} href="/auth">
                 Logout
               </LinkStyled>
             )}
@@ -247,5 +254,5 @@ const logout = () => {
         )}
       </Toolbar>
     </AppBar>
-  )
+  );
 };
