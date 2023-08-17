@@ -120,16 +120,19 @@ useEffect(() => {
   //     : state.practiceSession.tempSession.pieces;
   // });
 
-  const selectedPieces = useSelector((state) => {
-    const sessionId = state.practiceSession.practiceSessionId;
-    const session = state.practiceSession.sessions[sessionId];
-    const tempSession = state.practiceSession.tempSession;
-    return sessionId && session
-      ? session.pieces
-      : tempSession
-      ? tempSession.pieces
-      : [];
-  });
+  // const selectedPieces = useSelector((state) => {
+  //   const sessionId = state.practiceSession.practiceSessionId;
+  //   const session = state.practiceSession.sessions[sessionId];
+  //   const tempSession = state.practiceSession.tempSession;
+  //   return sessionId && session
+  //     ? session.pieces
+  //     : tempSession
+  //     ? tempSession.pieces
+  //     : [];
+  // });
+
+  const selectedPieces = currentSession ? currentSession.pieces : [];
+
 
   console.log("selectedPieces currently:", selectedPieces)
   // console.log("selectedPiecesFromPiecesList", selectedPiecesFromPiecesList)

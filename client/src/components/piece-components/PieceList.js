@@ -62,21 +62,24 @@ export const PieceList = () => {
 
   console.log("currentSession", currentSession)
 
-    const selectedPieces = useSelector((state) => {
-      const sessionId = state.practiceSession.practiceSessionId;
-      const session = state.practiceSession.sessions[sessionId];
-      const tempSession = state.practiceSession.tempSession;
-      return sessionId && session
-        ? session.pieces
-        : tempSession
-        ? tempSession.pieces
-        : [];
-    });
+    // const selectedPieces = useSelector((state) => {
+    //   const sessionId = state.practiceSession.practiceSessionId;
+    //   const session = state.practiceSession.sessions[sessionId];
+    //   const tempSession = state.practiceSession.tempSession;
+    //   return sessionId && session
+    //     ? session.pieces
+    //     : tempSession
+    //     ? tempSession.pieces
+    //     : [];
+    // });
+
+  const selectedPieces = currentSession ? currentSession.pieces : [];
+
 
   console.log("selectedPieces from useSelector?!", selectedPieces)
 
-  useEffect(() => {
-  }, [selectedPieces]);
+  // useEffect(() => {
+  // }, [selectedPieces]);
 
   // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
@@ -240,13 +243,15 @@ export const PieceList = () => {
       >
         List of Pieces
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleSelect}>
-        {from === "practiceSession"
-          ? `Select Pieces for Practice Session`
-          : from === "program"
-          ? `Select Pieces for the program`
-          : `Your Pieces`}
-      </Button>
+      {(from === "practiceSession" || from === "program") && (
+        <Button variant="contained" color="primary" onClick={handleSelect}>
+          {from === "practiceSession"
+            ? `Select Pieces for Practice Session`
+            : from === "program"
+            ? `Select Pieces for the program`
+            : `Your Pieces`}
+        </Button>
+      )}
       <Grid container spacing={3}>
         {pieces.map((piece) => {
           return (
@@ -262,10 +267,12 @@ export const PieceList = () => {
                   alignItems: "center",
                 }}
               >
-                <Checkbox
-                  checked={selectedPieces.includes(piece._id)}
-                  onChange={(event) => handleCheckboxChange(event, piece._id)}
-                />
+                {(from === "practiceSession" || from === "program") && (
+                  <Checkbox
+                    checked={selectedPieces.includes(piece._id)}
+                    onChange={(event) => handleCheckboxChange(event, piece._id)}
+                  />
+                )}
 
                 <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                   Piece Name:
@@ -323,16 +330,27 @@ export const PieceList = () => {
           );
         })}
       </Grid>
+      {(from === "practiceSession" || from === "program") && (
+        <Box>
+          <Typography variant={"h6"}>Selected Pieces:</Typography>
+          {selectedPieces.map((pieceId) => {
+            const piece = pieces.find((piece) => piece._id === pieceId);
+            return (
+              <Typography variant={"body1"} key={pieceId}>
+                {piece?.name}
+              </Typography>
+            );
+          })}
+        </Box>
+      )}
       <Box>
-        <Typography variant={"h6"}>Selected Pieces:</Typography>
-        {selectedPieces.map((pieceId) => {
-          const piece = pieces.find((piece) => piece._id === pieceId);
-          return (
-            <Typography variant={"body1"} key={pieceId}>
-              {piece?.name}
-            </Typography>
-          );
-        })}
+        <Button
+          variant="contained"
+          color="success"
+          href="/piece/create"
+        >
+          Add a piece?
+        </Button>
       </Box>
     </Box>
   );
