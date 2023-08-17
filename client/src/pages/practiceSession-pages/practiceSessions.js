@@ -16,7 +16,6 @@ export const PracticeSessions = () => {
       }}
     >
       <PracticeSessionList />;
-      <ScheduledCalendar/>;
     </Box>
   )
 };
