@@ -80,8 +80,6 @@ export const PracticeSessionForm = ({
     }
   }, [currentSession, setValue]);
 
-
-
   return (
     <form
       id="practiceSession-form"

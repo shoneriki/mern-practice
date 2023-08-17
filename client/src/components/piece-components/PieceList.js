@@ -69,16 +69,8 @@ export const PieceList = () => {
 
   console.log("selectedPieces from useSelector?!", selectedPieces)
 
-  // useEffect(() => {
-  // }, [selectedPieces]);
-
   // beginning of using redux for storing the pieces for the practiceSession in the frontend to be added later into the backend
 
-
-
-  // const practiceSessionId = useSelector(
-  //   (state) => state.practiceSession.practiceSessionId
-  // );
   const dispatch = useDispatch()
 
   const isPieceSelected = (pieceId) => {
@@ -236,15 +228,27 @@ export const PieceList = () => {
       >
         List of Pieces
       </Typography>
-      {(from === "practiceSession" || from === "program") && (
-        <Button variant="contained" color="primary" onClick={handleSelect}>
-          {from === "practiceSession"
-            ? `Select Pieces for Practice Session`
-            : from === "program"
-            ? `Select Pieces for the program`
-            : `Your Pieces`}
-        </Button>
+      {pieces.length === 0 ? (
+        <Box>
+          <Typography>
+            You don't seem to have any pieces... It is highly suggested that you
+            add at least one, so you can use it for your practiceSession or
+            program
+          </Typography>
+        </Box>
+      ) : (
+        <Box></Box>
       )}
+      {(from === "practiceSession" || from === "program") &&
+        pieces.length !== 0 && (
+          <Button variant="contained" color="primary" onClick={handleSelect}>
+            {from === "practiceSession"
+              ? `Select Pieces for Practice Session`
+              : from === "program"
+              ? `Select Pieces for the program`
+              : `Your Pieces`}
+          </Button>
+        )}
       <Grid container spacing={3}>
         {pieces.map((piece) => {
           return (
@@ -323,26 +327,62 @@ export const PieceList = () => {
           );
         })}
       </Grid>
-      {(from === "practiceSession" || from === "program") && (
-        <Box>
-          <Typography variant={"h6"}>Selected Pieces:</Typography>
-          {selectedPieces.map((pieceOrId) => {
-            const piece =
-              typeof pieceOrId === "string"
-                ? pieces.find((piece) => piece._id === pieceOrId)
-                : pieceOrId;
-            return (
-              <Typography variant={"body1"} key={piece._id}>
-                {piece.name}
-              </Typography>
-            );
-          })}
-        </Box>
-      )}
-      <Box>
-        <Button variant="contained" color="success" href="/piece/create">
-          Add a piece?
+      {(from === "practiceSession" || from === "program") &&
+        pieces.length !== 0 && (
+          <Box>
+            <Typography variant={"h6"}>Selected Pieces:</Typography>
+            {selectedPieces.map((pieceOrId) => {
+              const piece =
+                typeof pieceOrId === "string"
+                  ? pieces.find((piece) => piece._id === pieceOrId)
+                  : pieceOrId;
+              return (
+                <Typography variant={"body1"} key={piece._id}>
+                  {piece.name}
+                </Typography>
+              );
+            })}
+          </Box>
+        )}
+      <Box
+        sx={{
+          margin: "2rem 0",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="success"
+          href="/piece/create"
+          sx={{
+            margin: "auto",
+          }}
+        >
+          Add a Piece?
         </Button>
+      </Box>
+      <Box
+        sx={{
+          margin: "2rem 0",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+      {
+        pieces.length !== 0 && (
+          <Button
+            variant="contained"
+            color="success"
+            href="/practiceSession/create"
+            sx={{
+              margin: "auto",
+            }}
+          >
+            Create a Practice Session?
+          </Button>
+        )
+      }
       </Box>
     </Box>
   );

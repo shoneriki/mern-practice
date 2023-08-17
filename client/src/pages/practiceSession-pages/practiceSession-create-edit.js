@@ -112,25 +112,6 @@ useEffect(() => {
 
   const navigate = useNavigate();
 
-
-  // const selectedPieces = useSelector((state) => {
-  //   const sessionId = state.practiceSession.practiceSessionId;
-  //   return sessionId
-  //     ? state.practiceSession.sessions[sessionId].pieces
-  //     : state.practiceSession.tempSession.pieces;
-  // });
-
-  // const selectedPieces = useSelector((state) => {
-  //   const sessionId = state.practiceSession.practiceSessionId;
-  //   const session = state.practiceSession.sessions[sessionId];
-  //   const tempSession = state.practiceSession.tempSession;
-  //   return sessionId && session
-  //     ? session.pieces
-  //     : tempSession
-  //     ? tempSession.pieces
-  //     : [];
-  // });
-
   const selectedPieces = currentSession ? currentSession.pieces : [];
 
 

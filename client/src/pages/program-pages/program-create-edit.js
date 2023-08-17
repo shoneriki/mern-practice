@@ -10,6 +10,16 @@ import { ProgramForm } from "../../components/program-components/ProgramForm";
 
 import dayjs from "dayjs";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setProgram,
+  addPieceToProgram,
+  removePieceFromProgram,
+  setTempProgram,
+  addPieceToTempProgram,
+  removePieceFromTempProgram,
+} from "../../redux/programSlice";
+
 export const ProgramCreateEdit = () => {
   const userID = useGetUserID();
   const [cookies, _] = useCookies(["access_token"]);
@@ -64,6 +74,7 @@ export const ProgramCreateEdit = () => {
             );
           }
           setProgram(programData);
+          
 
           setIsLoading(false);
         } catch (error) {
@@ -79,6 +90,18 @@ export const ProgramCreateEdit = () => {
     };
     fetchEditData();
   }, [id]);
+
+  //redux for pieces
+
+  const currentProgram = useSelector((state) => {
+    if (id) {
+      return state.practiceSession.sessions[id];
+    } else {
+      return state.practiceSession.tempSession;
+    }
+  });
+
+  //end of lone functions dealing with redux
 
   const onSubmit = async (data) => {
     console.log("is there data in this program form submission? Data: ", data);
