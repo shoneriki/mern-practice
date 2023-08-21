@@ -8,7 +8,7 @@ import { Navbar } from "./components/Navbar";
 import { Spacer } from "./components/Spacer";
 import { useTheme, useMediaQuery, Box } from "@mui/material";
 
-import { Auth } from "./pages/user-pages/auth";
+import { Auth, Login, Register } from "./pages/user-pages/auth";
 import { Home } from "./pages/home";
 
 import AddPieceForm from "./pages/piece-pages/create-edit-piece";
@@ -39,11 +39,17 @@ import { faLinesLeaning } from "@fortawesome/free-solid-svg-icons";
 function App() {
   const [cookies, setCookies] = useCookies(["access_token", "username"]);
   const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token);
+  const [showLogIn, setShowLogIn] = useState(true);
+
+  // useEffect(() => {
+  //   const userID = window.localStorage.getItem("userID");
+  //   cookies.access_token && userID ? setIsLoggedIn(true) : setIsLoggedIn(false);
+  // }, [cookies]);
 
   useEffect(() => {
-    const userID = window.localStorage.getItem("userID");
-    cookies.access_token && userID ? setIsLoggedIn(true) : setIsLoggedIn(false);
+    setIsLoggedIn(!!cookies.access_token);
   }, [cookies]);
+
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -58,14 +64,24 @@ function App() {
     >
       <Router>
         <Navbar
-        // isLoggedIn={isLoggedIn}
-        // setIsLoggedIn={setIsLoggedIn}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          showLogIn={showLogIn}
+          setShowLogIn={setShowLogIn}
         />
-        {/* {!isMobile && <Spacer />} */}
         <ProgramsProvider>
           <PiecesProvider>
             <Routes>
-              <Route path="/auth" element={<Auth />} />
+              <Route
+                path="/auth"
+                element={
+                  <Auth
+                    setIsLoggedIn={setIsLoggedIn}
+                    showLogIn={showLogIn}
+                    setShowLogIn={setShowLogIn}
+                  />
+                }
+              />
               <Route
                 path="/"
                 element={

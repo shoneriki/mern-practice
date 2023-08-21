@@ -8,21 +8,19 @@ import {Box, Button} from "@mui/material"
 import { AuthForm } from "../../components/AuthForm";
 import { useControlledValueWithTimezone } from "@mui/x-date-pickers/internals";
 
-export const Auth = () => {
-  const [loggedIn,setLoggedIn] = useState(false)
-  const [logIn, setLogIn] = useState(true)
+export const Auth = ({setIsLoggedIn, showLogIn, setShowLogIn}) => {
   return (
     <Box>
-      {logIn ? (
-        <Login logIn={logIn} setLogIn={setLogIn} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+      {showLogIn ? (
+        <Login setIsLoggedIn={setIsLoggedIn} setShowLogIn={setShowLogIn} />
       ) : (
-        <Register logIn={logIn} setLogIn={setLogIn} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        <Register setIsLoggedIn={setIsLoggedIn} setShowLogIn={setShowLogIn} />
       )}
     </Box>
   );
 };
 
-const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
+export const Register = ({setIsLoggedIn, setShowLogIn}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -48,7 +46,8 @@ const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
         setCookies("access_token", result.data.token);
         setCookies("username", username)
         window.localStorage.setItem("userID", result.data.userID);
-        setLoggedIn(true)
+        console.log("inside handlesubmit?")
+        setIsLoggedIn(true)
         navigate("/");
       }
     } catch (error) {
@@ -66,15 +65,16 @@ const Register = ({setLogIn, logIn, loggedIn, setLoggedIn}) => {
         setPassword={setPassword}
         handleSubmit={handleSubmit}
         label="Register"
+        setIsLoggedIn={setIsLoggedIn}
       />
-      <Button variant="contained" color="success" onClick={() => setLogIn(true)}>
+      <Button variant="contained" color="success" onClick={() => setShowLogIn(true)}>
         Already have an account? Log in
       </Button>
     </Box>
   );
 };
 
-const Login = ({ setLogIn, logIn, loggedIn, setLoggedIn }) => {
+export const Login = ({ setIsLoggedIn, setShowLogIn }) => {
   const [_, setCookies] = useCookies(["access_token"]);
 
   const [username, setUsername] = useState("");
@@ -100,7 +100,7 @@ const Login = ({ setLogIn, logIn, loggedIn, setLoggedIn }) => {
         setCookies("access_token", result.data.token);
         setCookies("username", username);
         window.localStorage.setItem("userID", result.data.userID);
-        setLoggedIn(true);
+        setIsLoggedIn(true);
         navigate("/");
       }
     } catch (error) {
@@ -117,13 +117,12 @@ const Login = ({ setLogIn, logIn, loggedIn, setLoggedIn }) => {
         setPassword={setPassword}
         handleSubmit={handleSubmit}
         label="Login"
-        setLoggedIn={setLoggedIn}
-        setLogIn={setLogIn}
+        setIsLoggedIn={setIsLoggedIn}
       />
       <Button
         variant="contained"
         color="success"
-        onClick={() => setLogIn(false)}
+        onClick={() => setShowLogIn(false)}
       >
         Don't have an account? Register
       </Button>

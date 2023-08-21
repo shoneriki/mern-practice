@@ -38,77 +38,80 @@ const LogoutBtn = styled("btn")({
   },
 });
 
-function DrawerComponent({ open, onClose, logout, cookies, isLoggedIn  }) {
+function DrawerComponent({ open, onClose, logout, cookies, isLoggedIn,setIsLoggedIn  }) {
   const classes = useStyles();
   return (
     <Drawer open={open} onClose={onClose}>
-      {cookies.username && (
+      {isLoggedIn && cookies.username && (
+        <>
         <Typography variant="h6">Welcome, {cookies.username}</Typography>
-      )}
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/">
-            Home
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/programs">
-            Programs
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/program/create">
-            Create Program
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/pieces">
-            Pieces
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/piece/create">
-            Add/Edit Piece
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/">
+              Home
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/programs">
+              Programs
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/program/create">
+              Create Program
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/pieces">
+              Pieces
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/piece/create">
+              Add/Edit Piece
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
 
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/practiceSession/create">
-            Create Practice Session
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/practiceSessions">
-            Practice Sessions
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/workspace">
-            Workspace
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
-      <MyListItem className={classes.listItem} onClick={onClose}>
-        <ListItemText>
-          <MyLink className={classes.link} to="/settings">
-            Settings
-          </MyLink>
-        </ListItemText>
-      </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/practiceSession/create">
+              Create Practice Session
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/practiceSessions">
+              Practice Sessions
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/workspace">
+              Workspace
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+        <MyListItem className={classes.listItem} onClick={onClose}>
+          <ListItemText>
+            <MyLink className={classes.link} to="/settings">
+              Settings
+            </MyLink>
+          </ListItemText>
+        </MyListItem>
+
+        </>
+      )}
       {!isLoggedIn ? (
         <>
           <MyListItem className={classes.listItem} onClick={onClose}>

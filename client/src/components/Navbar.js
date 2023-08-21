@@ -6,6 +6,8 @@ import { NAVBAR_HEIGHT } from "./constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
+
+
 import {
   AppBar,
   Box,
@@ -113,9 +115,8 @@ export const DropdownMenu = ({ title, items }) => {
   );
 };
 
-export const Navbar = () => {
+export const Navbar = ({isLoggedIn, setIsLoggedIn, showLogIn, setShowLogIn}) => {
   const [cookies, setCookies] = useCookies(["access_token", "username"]);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!cookies.access_token)
   const navigate = useNavigate();
 
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -129,13 +130,13 @@ export const Navbar = () => {
     }
   }, [cookies]);
 
-const logout = () => {
-  setCookies("access_token", "", { expires: new Date(0) });
-  setCookies("username", "", { expires: new Date(0) });
-  window.localStorage.clear();
-  setIsLoggedIn(false)
-  navigate("/auth");
-};
+  const logout = () => {
+    setCookies("access_token", "", { expires: new Date(0) });
+    setCookies("username", "", { expires: new Date(0) });
+    window.localStorage.clear();
+    setIsLoggedIn(false);
+    navigate("/auth");
+  };
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -178,6 +179,7 @@ const logout = () => {
               logout={logout}
               cookies={cookies}
               isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
             />
           </>
         ) : (
@@ -201,7 +203,7 @@ const logout = () => {
             )}
             {isLoggedIn && (
               <>
-              <LinkStyled to="/">Home</LinkStyled>
+                <LinkStyled to="/">Home</LinkStyled>
                 <DropdownMenu
                   title="Programs"
                   items={[
@@ -239,10 +241,10 @@ const logout = () => {
             {!isLoggedIn ? (
               <>
                 <LinkStyled>
-                  <Link to="/auth/login">Login</Link>
+                  <Link to="/auth">Login</Link>
                 </LinkStyled>
                 <LinkStyled>
-                  <Link to="/auth/register">Register</Link>
+                  <Link to="/auth">Register</Link>
                 </LinkStyled>
               </>
             ) : (
