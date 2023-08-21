@@ -10,7 +10,13 @@ import { useControlledValueWithTimezone } from "@mui/x-date-pickers/internals";
 
 export const Auth = ({setIsLoggedIn, showLogIn, setShowLogIn}) => {
   return (
-    <Box>
+    <Box
+      sx={{
+        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;",
+        padding: "1rem",
+        borderRadius: "1rem",
+      }}
+    >
       {showLogIn ? (
         <Login setIsLoggedIn={setIsLoggedIn} setShowLogIn={setShowLogIn} />
       ) : (

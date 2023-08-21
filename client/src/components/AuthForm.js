@@ -9,7 +9,7 @@ export const AuthForm = ({username, setUsername, password, setPassword, handleSu
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItem: "center",
+          alignItem: "center"
         }}
       >
         <Typography variant={'h6'} sx={{margin: "1rem 0", textAlign: "center"}}>{label}</Typography>
