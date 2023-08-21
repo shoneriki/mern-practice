@@ -106,7 +106,7 @@ export class Metronome extends Component {
           count: 0,
           isPlaying: true,
         },
-        () => this.playSound(this.clickBuffer)
+        // () => this.playSound(this.clickBuffer)
       );
     }
   };
