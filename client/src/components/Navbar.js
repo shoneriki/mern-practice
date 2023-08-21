@@ -121,6 +121,14 @@ export const Navbar = ({isLoggedIn, setIsLoggedIn, showLogIn, setShowLogIn}) => 
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const handleLoginClick = () => {
+    setShowLogIn(true);
+  };
+
+  const handleRegisterClick = () => {
+    setShowLogIn(false);
+  };
+
   useEffect(() => {
     const userID = window.localStorage.getItem("userID");
     if (cookies.access_token && userID) {
@@ -180,6 +188,8 @@ export const Navbar = ({isLoggedIn, setIsLoggedIn, showLogIn, setShowLogIn}) => 
               cookies={cookies}
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
+              showLogIn={showLogIn}
+              setShowLogIn={setShowLogIn}
             />
           </>
         ) : (
@@ -240,10 +250,10 @@ export const Navbar = ({isLoggedIn, setIsLoggedIn, showLogIn, setShowLogIn}) => 
             )}
             {!isLoggedIn ? (
               <>
-                <LinkStyled>
+                <LinkStyled onClick={handleLoginClick}>
                   <Link to="/auth">Login</Link>
                 </LinkStyled>
-                <LinkStyled>
+                <LinkStyled onClick={handleRegisterClick}>
                   <Link to="/auth">Register</Link>
                 </LinkStyled>
               </>
