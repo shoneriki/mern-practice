@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   Button,
@@ -96,12 +96,30 @@ export const ProgramForm = ({
     console.log("Input Modes:", inputModes);
   }, [inputModes]);
 
+  const formRef = useRef(null)
+
+  useEffect(() => {
+    const formEl = document.getElementById("program-form");
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" && e.target.tagName === "INPUT") {
+        e.preventDefault();
+      }
+    };
+
+    formEl.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      formEl.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
       <Typography sx={{ textAlign: "center" }} variant={"h6"}>
         Program
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} id="program-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={4}>
             <FormControl fullWidth>
