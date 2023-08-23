@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useEffect, useRef} from "react";
 // import { Formik, Form, FastField, Field, FieldArray } from "formik";
 
 // import { debounce } from "lodash";
@@ -208,9 +208,28 @@ export const PieceForm = ({
     control,
     name: "excerpts",
   })
+
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    const formEl = formRef.current;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" && e.target.tagName === "INPUT") {
+        e.preventDefault();
+      }
+    };
+
+    formEl.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      formEl.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <Box>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form ref={formRef} onSubmit={handleSubmit((data, e) => onSubmit(data, e))}>
         <Typography variant={"h6"} sx={{ textAlign: "center" }}>
           Add a piece
         </Typography>
