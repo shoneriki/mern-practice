@@ -8,6 +8,8 @@ import {
   Typography,
   TextField,
   Grid,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -49,6 +51,31 @@ export const ProgramForm = ({
     }
   }, [program]);
 
+  const [allPieces, setAllPieces] = useState([]);
+
+  useEffect(() => {
+    const fetchAllPieces = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/pieces/user/${userID}`
+      ); // Assuming this endpoint fetches all pieces
+      setAllPieces(response.data);
+    };
+    fetchAllPieces();
+  }, []);
+
+  const [inputModes, setInputModes] = useState([])
+
+  // const [inputModes, setInputModes] = useState(
+  //   program.pieces.map((piece) => (piece._id ? "dropdown" : "text"))
+  // );
+
+  useEffect(() => {
+    setInputModes(
+      program.pieces.map((piece) => (piece._id ? "dropdown" : "text"))
+    );
+  }, [program.pieces]);
+
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "pieces",
@@ -63,6 +90,11 @@ export const ProgramForm = ({
   useEffect(() => {
     setValue("numOfPieces", pieces.length);
   }, [pieces, setValue]);
+
+  useEffect(() => {
+    console.log("inside useEffect for inputModes")
+    console.log("Input Modes:", inputModes);
+  }, [inputModes]);
 
   return (
     <Box sx={{ "& > *": { mt: 2, mb: 2 } }}>
@@ -89,7 +121,7 @@ export const ProgramForm = ({
                 <DateTimePicker
                   label="Date and Time"
                   name="date"
-                  value={dayjs()}
+                  value={dayjs(program.date || new Date())}
                   onChange={handleDateTimeChange}
                   renderInput={(props) => <TextField {...props} fullWidth />}
                 />
@@ -108,12 +140,117 @@ export const ProgramForm = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <TextField
-                    {...register(`pieces.${index}.name`)}
-                    id={`piece-${index}-name`}
-                    label="Piece Name"
-                    name={`pieces.${index}.name`}
-                  />
+                  <InputLabel htmlFor={`piece-${index}-existing`}></InputLabel>
+                  {inputModes[index] === "text" ||
+                  inputModes[index] === undefined ? (
+                    <>
+                      <TextField
+                        {...register(`pieces.${index}.name`)}
+                        id={`piece-${index}-name`}
+                        // label="Piece Name"
+                        name={`pieces.${index}.name`}
+                      />
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const updatedModes = [...inputModes];
+                          updatedModes[index] = "dropdown";
+                          setInputModes(updatedModes);
+                          setValue(`pieces.${index}._id`, "");
+                        }}
+                      >
+                        Select from list
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Select
+                        value={pieces[index]._id || ""}
+                        onChange={(e) => {
+                          const updatedModes = [...inputModes];
+                          updatedModes[index] =
+                            e.target.value === "new" ? "text" : "dropdown";
+                          console.log(
+                            "Select onChange triggered",
+                            e.target.value
+                          );
+                          setInputModes(updatedModes);
+                          if (e.target.value === "new") {
+                            console.log("new?", e.target.value);
+                            setValue(`pieces.${index}.name`, "");
+                            setValue(`pieces.${index}.composer`, "");
+                            setValue(`pieces.${index}.length`, {
+                              hours: 0,
+                              minutes: 0,
+                              seconds: 0,
+                            });
+                          } else if (e.target.value === "") {
+                            setValue(`pieces.${index}._id`, "");
+                            setValue(`pieces.${index}.name`, "");
+                            setValue(`pieces.${index}.composer`, "");
+                            setValue(`pieces.${index}.length`, {
+                              hours: 0,
+                              minutes: 0,
+                              seconds: 0,
+                            });
+                          } else {
+                            const selectedPiece = allPieces.find(
+                              (p) => p._id === e.target.value
+                            );
+                            console.log("selectedPiece", selectedPiece);
+                            // Update the piece data in the form
+                            setValue(`pieces.${index}._id`, selectedPiece._id);
+                            setValue(
+                              `pieces.${index}.name`,
+                              selectedPiece.name
+                            );
+                            setValue(
+                              `pieces.${index}.composer`,
+                              selectedPiece.composer || ""
+                            );
+                            setValue(
+                              `pieces.${index}.length`,
+                              selectedPiece.length || {
+                                hours: 0,
+                                minutes: 0,
+                                seconds: 0,
+                              }
+                            );
+                          }
+                        }}
+                        inputProps={{
+                          name: `pieces.${index}.existing`,
+                          id: `piece-${index}-existing`,
+                        }}
+                      >
+                        <MenuItem value=""></MenuItem>
+                        {allPieces.map((piece) => (
+                          <MenuItem key={piece._id} value={piece._id}>
+                            {piece.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const updatedModes = [...inputModes];
+                          updatedModes[index] = "text";
+                          setInputModes(updatedModes);
+
+                          // Reset the values for this piece
+                          setValue(`pieces.${index}.name`, "");
+                          setValue(`pieces.${index}.composer`, "");
+                          setValue(`pieces.${index}.length`, {
+                            hours: 0,
+                            minutes: 0,
+                            seconds: 0,
+                          });
+                        }}
+                      >
+                        Create a New Piece?
+                      </Button>
+                    </>
+                  )}
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -190,13 +327,14 @@ export const ProgramForm = ({
                 backgroundColor: "#2D944F",
               },
             }}
-            onClick={() =>
+            onClick={() => {
               append({
                 name: "",
                 composer: "",
                 length: { hours: 0, minutes: 0, seconds: 0 },
-              })
-            }
+              });
+              setInputModes((prevModes) => [...prevModes, "text"]);
+            }}
           >
             Add A Piece?
           </Button>
