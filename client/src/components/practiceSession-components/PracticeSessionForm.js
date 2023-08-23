@@ -1,5 +1,6 @@
 import React, {
-  useEffect
+  useEffect,
+  useRef,
 } from "react";
 import {
   useForm,
@@ -72,6 +73,9 @@ export const PracticeSessionForm = ({
 
   const navigate = useNavigate()
 
+  const formRef = useRef(null)
+
+
   useEffect(() => {
     if (currentSession) {
       for (const key in currentSession) {
@@ -80,11 +84,28 @@ export const PracticeSessionForm = ({
     }
   }, [currentSession, setValue]);
 
+  useEffect(() => {
+    const formEl = formRef.current;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" && e.target.tagName === "INPUT") {
+        e.preventDefault();
+      }
+    };
+
+    formEl.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      formEl.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <form
+      ref={formRef}
       id="practiceSession-form"
       name="practiceSession-form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit((data, e) => onSubmit(data, e))}
     >
       <Box
         id="inside-form-box"
@@ -265,11 +286,14 @@ export const PracticeSessionForm = ({
           color="success"
           variant="contained"
           onClick={() => {
-            console.log("values?", values)
-            if(id) {
-              console.log(`inside the if id bit: practiceSession id is ${id}`)
-              console.log("the values inside the if statement for onClick?", values)
-              dispatch(setSession({sessionId: id, data: values}))
+            console.log("values?", values);
+            if (id) {
+              console.log(`inside the if id bit: practiceSession id is ${id}`);
+              console.log(
+                "the values inside the if statement for onClick?",
+                values
+              );
+              dispatch(setSession({ sessionId: id, data: values }));
             } else {
               dispatch(setTempSession({ data: values }));
             }

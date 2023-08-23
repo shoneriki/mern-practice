@@ -127,10 +127,6 @@ function AddPieceForm() {
   }, [id]);
 
   const onSubmit = async (values,e) => {
-    if (e && e.nativeEvent && !e.nativeEvent.submitter) {
-      e.preventDefault();
-      return;
-    }
     try {
       if (id) {
         await axios.put(

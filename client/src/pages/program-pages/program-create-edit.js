@@ -74,7 +74,7 @@ export const ProgramCreateEdit = () => {
             );
           }
           setProgram(programData);
-          
+
 
           setIsLoading(false);
         } catch (error) {
@@ -209,7 +209,7 @@ export const ProgramCreateEdit = () => {
         );
         alert("New Program Added!");
       }
-      navigate("/programs");
+      navigate("/");
     } catch (error) {
       alert("an error occurred");
       console.error(error.response.data);
