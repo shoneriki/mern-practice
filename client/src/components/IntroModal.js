@@ -47,7 +47,7 @@ export const IntroModal = ({ isModalOpen, onClose }) => {
             }}
           >
             <Typography variant="h6" gutterBottom>
-              It seems you don't have any pieces right now.
+              It seems you like don't have any pieces right now.
             </Typography>
             <Typography gutterBottom>
               You can add pieces through a program
