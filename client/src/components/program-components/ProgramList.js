@@ -96,9 +96,6 @@ export const ProgramList = () => {
 
   const handleClickOpen = (id) => {
     setOpen(true);
-    console.log(
-      `the actual id is ${id}`
-    );
     setProgramToDelete(id);
   };
 
@@ -111,12 +108,8 @@ export const ProgramList = () => {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/programs/program/${programToDelete}`
         );
-      console.log(
-        `the deleted program's id was ${programToDelete}`
-      );
       setOpen(false);
       setPrograms(programs.filter((program) => program._id !== programToDelete));
-      console.log("programs now? ", programs)
     } catch (err) {
       console.log("error: ", err);
     }
