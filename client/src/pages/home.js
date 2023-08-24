@@ -16,6 +16,8 @@ import {
 
 import {ProgramList} from "../components/program-components/ProgramList"
 
+import {IntroModal} from "../components/IntroModal"
+
 export const Home = () => {
 
 
@@ -71,50 +73,7 @@ export const Home = () => {
       }}
     >
       {isModalOpen ? (
-        <Modal
-          open={isModalOpen}
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "40%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "1px solid black",
-            borderRadius: "1rem",
-          }}
-        >
-          <Box
-            sx={{
-              width: "80%",
-              margin: "auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography>
-              Welcome! It seems you haven't added any pieces yet.
-            </Typography>
-            <Typography>
-              If you are in a hurry to prepare for a program, you can add pieces
-              through the program
-            </Typography>
-            <Button variant="contained" color="success" href="/program/create">
-              Add a program
-            </Button>
-            <Typography>
-              You can also add detailed info for each piece individually
-            </Typography>
-            <Button variant="contained" color="success" href="/piece/create">
-              Add a piece
-            </Button>
-          </Box>
-        </Modal>
+        <IntroModal isModalOpen={isModalOpen}/>
       ) : (
         <>
           <ProgramList />

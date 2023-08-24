@@ -10,8 +10,13 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import {
   Box,
+  Typography,
+  Button,
+  Modal,
 } from "@mui/material";
 import { PracticeSessionForm } from "../../components/practiceSession-components/PracticeSessionForm";
+
+import {IntroModal} from "../../components/IntroModal"
 
 
 import {useDispatch, useSelector} from "react-redux";
@@ -67,6 +72,39 @@ export const PracticeSessionCreateEdit = (props) => {
     pieces: Yup.array().of(Yup.object().nullable()),
     userOwner: Yup.string(),
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("fetching pieces right now");
+    const fetchPieces = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/pieces/user/${userID}`
+        );
+        console.log("response.data: ", response.data);
+        response.data && response.data.length > 0
+          ? setIsModalOpen(false)
+          : setIsModalOpen(true);
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code that falls out of the range of 2xx
+          console.log("Data:", error.response.data);
+          console.log("Status:", error.response.status);
+          console.log("Headers:", error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log("Request:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error:", error.message);
+        }
+      }
+    };
+    if (userID) {
+      fetchPieces();
+    }
+  }, [userID]);
 
 const currentSession = useSelector((state) => {
   if (id) {
@@ -268,19 +306,23 @@ useEffect(() => {
         width: "80%",
       }}
     >
-      <PracticeSessionForm
-        cookies={cookies}
-        currentSession={currentSession}
-        defaultValues={defaultValues}
-        id={id}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        selectedPieces={selectedPieces}
-        // selectedPiecesFromPiecesList={selectedPiecesFromPiecesList}
-        useLocation={useLocation}
-        validationSchema={validationSchema}
-        values={values}
-      />
+      {isModalOpen ? (
+        <IntroModal isModalOpen={isModalOpen}/>
+      ) : (
+        <PracticeSessionForm
+          cookies={cookies}
+          currentSession={currentSession}
+          defaultValues={defaultValues}
+          id={id}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          selectedPieces={selectedPieces}
+          // selectedPiecesFromPiecesList={selectedPiecesFromPiecesList}
+          useLocation={useLocation}
+          validationSchema={validationSchema}
+          values={values}
+        />
+      )}
     </Box>
   );
 };
