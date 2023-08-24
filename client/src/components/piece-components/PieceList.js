@@ -229,7 +229,13 @@ export const PieceList = () => {
         List of Pieces
       </Typography>
       {pieces.length === 0 ? (
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <Typography>
             You don't seem to have any pieces... It is highly suggested that you
             add at least one, so you can use it for your practiceSession or

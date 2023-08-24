@@ -112,7 +112,14 @@ export const PracticeSessionList = () => {
       </Typography>
       <Grid container spacing={3}>
         {practiceSessions.length === 0 ? (
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
             <Typography>
               You don't seem to have any practice sessions... Would you like to
               add one?
