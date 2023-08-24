@@ -64,6 +64,7 @@ export const ProgramList = () => {
             })
           );
           setPrograms(programs);
+          console.log("programs when the component is rendered", programs)
           setLoading(false); // Set loading to false once all data has been fetched
         } else {
           setPrograms([]);
@@ -95,6 +96,7 @@ export const ProgramList = () => {
 
   const handleClickOpen = (id) => {
     setOpen(true);
+    console.log(`is id 64e586e834184ed1956ba9ed? id is ${id}`);
     setToDelete(id);
   };
 
@@ -106,9 +108,13 @@ export const ProgramList = () => {
     try {
       await axios.delete(
         `${process.env.REACT_APP_API_URL}/programs/program/${id}`
+        );
+      console.log(
+        `program with intended id is 64e586e834184ed1956ba9ed. The program with id ${id} is deleted`
       );
       setOpen(false);
       setPrograms(programs.filter((program) => program._id !== id));
+      console.log("programs now? ", programs)
     } catch (err) {
       console.log("error: ", err);
     }
