@@ -97,7 +97,7 @@ export const ProgramList = () => {
   const handleClickOpen = (id) => {
     setOpen(true);
     console.log(
-      `the id should be this id 64e6d8606f4ce4412d41fcf1, the actual id is ${id}`
+      `the actual id is ${id}`
     );
     setProgramToDelete(id);
   };
@@ -112,7 +112,7 @@ export const ProgramList = () => {
         `${process.env.REACT_APP_API_URL}/programs/program/${programToDelete}`
         );
       console.log(
-        `the id should be 64e6d8606f4ce4412d41fcf1, the deleted program's id was ${programToDelete}`
+        `the deleted program's id was ${programToDelete}`
       );
       setOpen(false);
       setPrograms(programs.filter((program) => program._id !== programToDelete));
