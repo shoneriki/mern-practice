@@ -111,7 +111,7 @@ export const ProgramCreateEdit = () => {
       const piecePromises = data.pieces.map((piece, pieceIndex) => {
         const pieceData = { ...piece, userOwner: userID };
         if (piece._id) {
-          // If the piece has an ID, update the existing piece
+          console.log("this piece exists", piece.name)
           return axios
             .put(
               `${process.env.REACT_APP_API_URL}/pieces/piece/${piece._id}`,
@@ -131,6 +131,7 @@ export const ProgramCreateEdit = () => {
               return null;
             });
         } else {
+          console.log("pieceData doesn't exist yet", pieceData)
           // If the piece doesn't have an ID, create a new piece
           return axios
             .post(`${process.env.REACT_APP_API_URL}/pieces`, pieceData, {
@@ -169,12 +170,14 @@ export const ProgramCreateEdit = () => {
       }
 
       totalLengthInSeconds += data.intermission * 60;
+      console.log("totalLengthInSeconds", totalLengthInSeconds)
 
       const length = {
         hours: Math.floor(totalLengthInSeconds / 3600),
         minutes: Math.floor((totalLengthInSeconds % 3600) / 60),
         seconds: totalLengthInSeconds % 60,
       };
+      console.log("length: ",length)
 
       const programData = {
         ...data,
@@ -189,6 +192,8 @@ export const ProgramCreateEdit = () => {
         }),
         userOwner: userID,
       };
+
+      console.log("programData: ",programData)
 
       if (id) {
         await axios.put(
