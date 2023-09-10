@@ -38,7 +38,16 @@ export const ProgramCreateEdit = () => {
           const response = await axios.get(
             `${process.env.REACT_APP_API_URL}/programs/program/${id}`
           );
-          let programData = response.data;
+          console.log("API Response: ", response)
+          let programData;
+
+          if(response && response.data) {
+            programData = response.data
+          } else {
+            console.error("Data property does not exist on the response");
+            setIsLoading(false);
+            return;
+          }
 
           // Converting 'dayjs' instances to strings
           programData.date = dayjs(programData.date);
@@ -52,13 +61,19 @@ export const ProgramCreateEdit = () => {
                 .then((response) => response.data)
                 .catch((error) => {
                   if (
-                    axios.isAxiosError(error) &&
-                    error.response?.status === 404
+                    axios.isAxiosError(error)
                   ) {
-                    // If the piece was not found, return null
+                    console.log("error response data", error.response.data);
+                    console.log("error response status", error.response.status);
+                    console.log("error response headers", error.response.headers);
+                  } else {
+                    console.log("error message", error.message)
+                  }
+
+                  if(error.response?.stastus === 404) {
                     return null;
                   } else {
-                    // If it was another error, throw it to be caught by the outer catch block
+                    console.log("error from error.response?.status === 404 part")
                     throw error;
                   }
                 })
@@ -74,8 +89,6 @@ export const ProgramCreateEdit = () => {
             );
           }
           setProgram(programData);
-
-
           setIsLoading(false);
         } catch (error) {
           console.error(
@@ -138,13 +151,14 @@ export const ProgramCreateEdit = () => {
               headers: { authorization: cookies.access_token },
             })
             .then((response) => {
+              console.log("API response for POST: ",response)
               if (!response || !response.data) {
                 console.error("Invalid response:", response);
               }
               return response;
             })
             .catch((error) => {
-              alert("an error occurred");
+              alert("I'm sorry, something went wrong ");
               if (error.response) {
                 console.error(error.response.data);
               } else {

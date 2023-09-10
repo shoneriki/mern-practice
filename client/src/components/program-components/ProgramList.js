@@ -129,7 +129,15 @@ export const ProgramList = () => {
           >
             Programs
           </Typography>
-          <Grid container spacing={3}>
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gridGap: "16px",
+            }}
+          >
             {Array.isArray(programs) && programs.length !== 0 ? (
               <>
                 {programs.map((program, programIndex) => {
@@ -143,7 +151,12 @@ export const ProgramList = () => {
                           width: "80%",
                         }}
                       >
-                        <CardContent>
+                        <CardContent
+                          sx={{
+                            height: "16rem",
+                            overflowY: "auto",
+                          }}
+                        >
                           <Typography
                             variant={"h6"}
                             sx={{ fontWeight: "bold" }}
@@ -164,7 +177,7 @@ export const ProgramList = () => {
                             )}
                           </Typography>
                           <Box>
-                            {program.pieces.map((piece, index) => {
+                            {/* {program.pieces.map((piece, index) => {
                               const {
                                 hours: pieceHours,
                                 minutes: pieceMinutes,
@@ -190,7 +203,7 @@ export const ProgramList = () => {
                                   </Typography>
                                 </Box>
                               );
-                            })}
+                            })} */}
                           </Box>
                           <Typography>
                             Intermission: {program.intermission} minutes
