@@ -18,13 +18,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
 import dayjs from "dayjs";
 
-export const ProgramForm = ({
-  onSubmit,
-  userID,
-  id,
-  program,
-  setProgram,
-}) => {
+export const ProgramForm = ({ onSubmit, userID, id, program, setProgram }) => {
   const { register, control, handleSubmit, setValue, watch, reset } = useForm({
     defaultValues: program,
   });
@@ -63,7 +57,7 @@ export const ProgramForm = ({
     fetchAllPieces();
   }, []);
 
-  const [inputModes, setInputModes] = useState([])
+  const [inputModes, setInputModes] = useState([]);
 
   // const [inputModes, setInputModes] = useState(
   //   program.pieces.map((piece) => (piece._id ? "dropdown" : "text"))
@@ -74,7 +68,6 @@ export const ProgramForm = ({
       program.pieces.map((piece) => (piece._id ? "dropdown" : "text"))
     );
   }, [program.pieces]);
-
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -92,11 +85,11 @@ export const ProgramForm = ({
   }, [pieces, setValue]);
 
   useEffect(() => {
-    console.log("inside useEffect for inputModes")
+    console.log("inside useEffect for inputModes");
     console.log("Input Modes:", inputModes);
   }, [inputModes]);
 
-  const formRef = useRef(null)
+  const formRef = useRef(null);
 
   useEffect(() => {
     const formEl = document.getElementById("program-form");
@@ -121,7 +114,7 @@ export const ProgramForm = ({
       </Typography>
       <form ref={formRef} id="program-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={1}>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <TextField
                 {...register("name")}
@@ -129,11 +122,10 @@ export const ProgramForm = ({
                 id="name"
                 name="name"
                 label="Title:"
-                fullWidth
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
@@ -141,7 +133,7 @@ export const ProgramForm = ({
                   name="date"
                   value={dayjs(program.date || new Date())}
                   onChange={handleDateTimeChange}
-                  renderInput={(props) => <TextField {...props} fullWidth />}
+                  renderInput={(props) => <TextField {...props} />}
                 />
               </LocalizationProvider>
             </FormControl>
@@ -157,7 +149,7 @@ export const ProgramForm = ({
                 <Typography variant={"h6"}>Piece #{index + 1}</Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl>
                   <InputLabel htmlFor={`piece-${index}-existing`}></InputLabel>
                   {inputModes[index] === "text" ||
                   inputModes[index] === undefined ? (
@@ -170,6 +162,7 @@ export const ProgramForm = ({
                       />
                       <Button
                         size="small"
+                        variant="contained"
                         onClick={() => {
                           const updatedModes = [...inputModes];
                           updatedModes[index] = "dropdown";
@@ -250,6 +243,7 @@ export const ProgramForm = ({
                       </Select>
                       <Button
                         size="small"
+                        variant="contained"
                         onClick={() => {
                           const updatedModes = [...inputModes];
                           updatedModes[index] = "text";
@@ -272,7 +266,7 @@ export const ProgramForm = ({
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl>
                   <TextField
                     {...register(`pieces.${index}.composer`)}
                     id={`piece-${index}-composer`}
@@ -285,8 +279,8 @@ export const ProgramForm = ({
                 <InputLabel htmlFor={`piece-${index}-lengthInSeconds`}>
                   Length:
                 </InputLabel>
-                <Grid container spacing={1}>
-                  <Grid item xs={4} sm={4}>
+                <Grid container spacing={1} sx={{width: "40%"}}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...register(`pieces.${index}.length.hours`)}
                       type="number"
@@ -295,45 +289,49 @@ export const ProgramForm = ({
                       name={`pieces.${index}.length.hours`}
                       min="0"
                       max="10"
-                      fullWidth
                     />
                   </Grid>
-                  <Grid item xs={4} sm={4}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...register(`pieces.${index}.length.minutes`)}
                       type="number"
                       id={`piece-${index}-minutes`}
                       name={`pieces.${index}.length.minutes`}
                       label="Minutes"
-                      fullWidth
                     />
                   </Grid>
-                  <Grid item xs={4} sm={4}>
+                  <Grid item xs={12} sm={4}>
                     <TextField
                       {...register(`pieces.${index}.length.seconds`)}
                       type="number"
                       id={`piece-${index}-seconds`}
                       name={`pieces.${index}.length.seconds`}
                       label="Seconds"
-                      fullWidth
                     />
                   </Grid>
                 </Grid>
               </Grid>
-              <Button
+              <Box
                 sx={{
-                  backgroundColor: "#E53935",
-                  color: "white",
-                  margin: "1rem 0",
-                  "&:hover": {
-                    backgroundColor: "#C62828 ",
-                  },
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
                 }}
-                onClick={() => remove(index)}
-                fullWidth
               >
-                Remove this piece
-              </Button>
+                <Button
+                  sx={{
+                    backgroundColor: "#E53935",
+                    color: "white",
+                    margin: "1rem 0",
+                    "&:hover": {
+                      backgroundColor: "#C62828 ",
+                    },
+                  }}
+                  onClick={() => remove(index)}
+                >
+                  Remove this piece
+                </Button>
+              </Box>
             </Grid>
           ))}
           <Button
@@ -357,7 +355,7 @@ export const ProgramForm = ({
             Add A Piece?
           </Button>
           <Grid item xs={12} md={12}>
-            <FormControl fullWidth>
+            <FormControl>
               <TextField
                 {...register("numOfPieces")}
                 type="number"
@@ -365,12 +363,11 @@ export const ProgramForm = ({
                 label="Number of Pieces"
                 name="numOfPieces"
                 disabled
-                fullWidth
               />
             </FormControl>
           </Grid>
           <Grid item xs={12} md={12}>
-            <FormControl fullWidth>
+            <FormControl>
               <TextField
                 {...register("intermission")}
                 type="number"

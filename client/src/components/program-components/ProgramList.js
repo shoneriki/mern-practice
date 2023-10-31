@@ -136,6 +136,8 @@ export const ProgramList = () => {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
               gridGap: "16px",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {Array.isArray(programs) && programs.length !== 0 ? (
@@ -145,7 +147,6 @@ export const ProgramList = () => {
                     <Grid item centered xs={12} sm={6} md={4} key={program._id}>
                       <Card
                         sx={{
-                          border: "1px solid black",
                           borderRadius: "1rem",
                           padding: "1rem",
                           width: "80%",
@@ -297,7 +298,12 @@ export const ProgramList = () => {
               </>
             ) : (
               <Box
-                sx={{ textAlign: "center", marginTop: "2rem", width: "100%" }}
+                sx={{
+                  textAlign: "center",
+                  marginTop: "2rem",
+                  width: "100%",
+                  gridColumn: "1 / -1", // Make the Box span the entire width of the grid
+                }}
               >
                 <Typography variant="h6">
                   There are no programs yet. Would you like to add one?
