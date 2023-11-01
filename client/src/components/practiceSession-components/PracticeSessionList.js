@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 
+import { useMediaQuery, useTheme } from "@mui/material";
+
 import {
   Box,
   Typography,
@@ -22,6 +24,9 @@ export const PracticeSessionList = () => {
 
   const [practiceSessions, setPracticeSessions] = useState([]);
   console.log("practice sessions from the list component: ", practiceSessions);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const fetchPracticeSessions = async () => {
     try {
@@ -51,13 +56,10 @@ export const PracticeSessionList = () => {
             }))
           )
         : setPracticeSessions([]);
-
-
     } catch (error) {
       console.error("Error fetching practice plans:", error);
     }
   };
-
 
   useEffect(() => {
     if (userID) {
@@ -110,7 +112,7 @@ export const PracticeSessionList = () => {
       >
         Practice Sessions
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 0, sm: 3 }}>
         {practiceSessions.length === 0 ? (
           <Box
             sx={{
@@ -135,7 +137,13 @@ export const PracticeSessionList = () => {
         ) : (
           practiceSessions.map((practiceSession, practiceSessionIndex) => {
             return (
-              <Grid item sx={12} sm={6} md={4} key={practiceSessionIndex}>
+              <Grid
+                item
+                xs={12}
+                md={4}
+                key={practiceSessionIndex}
+                sx={{ width: isMobile ? "100%" : "auto" }}
+              >
                 <Box
                   sx={{
                     border: "1px solid black",
@@ -144,6 +152,8 @@ export const PracticeSessionList = () => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    maxHeight: "280px",
+                    overflowY: "auto",
                   }}
                 >
                   <Typography
@@ -160,7 +170,7 @@ export const PracticeSessionList = () => {
                     <Typography variant={"h6"} sx={{ fontWeight: "bold" }}>
                       Length Of Session:
                     </Typography>
-                    <Grid container sx={{ width: "50%" }}>
+                    <Grid container sx={{ width: "100%" }}>
                       <Grid item sx={4} sm={4}>
                         <Typography>
                           {practiceSession.totalSessionLength.hours > 0
@@ -239,6 +249,7 @@ export const PracticeSessionList = () => {
                           flexDirection: "column",
                           alignItems: "center",
                         }}
+                        xs={12}
                       >
                         <Grid item sx={12}>
                           <Typography
@@ -268,14 +279,16 @@ export const PracticeSessionList = () => {
                     </Box>
                   ))}
 
-                  {/* end of multiple pieces disply */}
+                  {/* end of multiple pieces display */}
 
                   <Box
                     name="delete-edit-btn-box"
                     sx={{
                       display: "flex",
+                      flexDirection: { xs: "column", sm: "row" },
                       justifyContent: "space-between",
                       alignItems: "center",
+                      gap: { xs: "1rem", sm: "0" },
                     }}
                   >
                     <Button
