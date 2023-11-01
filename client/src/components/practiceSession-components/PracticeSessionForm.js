@@ -153,77 +153,79 @@ export const PracticeSessionForm = ({
           <InputLabel sx={{ textAlign: "center" }}>
             Total Session Length:
           </InputLabel>
-          <Grid
-            container
-            sx={{
-              justifyContent: "center",
-              margin: "auto 1rem",
-              width: "20%",
-            }}
-          >
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Controller
-                  name="totalSessionLength.hours"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      type="number"
-                      label="hr"
-                      inputProps={{ min: 0, max: 10 }}
-                      onChange={(e) => {
-                        field.onChange(parseInt(e.target.value, 10));
-                      }}
-                    />
-                  )}
-                />
-              </Box>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={4} sm={4}>
+              <Controller
+                name="totalSessionLength.hours"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    type="number"
+                    label="hr"
+                    fullWidth
+                    inputProps={{ min: 0, max: 10 }}
+                    onChange={(e) => {
+                      field.onChange(parseInt(e.target.value, 10));
+                    }}
+                  />
+                )}
+              />
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Controller
-                  name="totalSessionLength.minutes"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      type="number"
-                      label="min"
-                      inputProps={{ min: 0, max: 59 }}
-                      onChange={(e) => {
-                        field.onChange(parseInt(e.target.value, 10));
-                      }}
-                    />
-                  )}
-                />
-              </Box>
+            <Grid item xs={4} sm={4}>
+              <Controller
+                name="totalSessionLength.minutes"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    type="number"
+                    label="min"
+                    fullWidth
+                    inputProps={{ min: 0, max: 59 }}
+                    onChange={(e) => {
+                      field.onChange(parseInt(e.target.value, 10));
+                    }}
+                  />
+                )}
+              />
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Controller
-                  name="totalSessionLength.seconds"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      type="number"
-                      label="sec"
-                      inputProps={{ min: 0, max: 59 }}
-                      onChange={(e) => {
-                        field.onChange(parseInt(e.target.value, 10));
-                      }}
-                    />
-                  )}
-                />
-              </Box>
+            <Grid item xs={4} sm={4}>
+              <Controller
+                name="totalSessionLength.seconds"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    type="number"
+                    label="sec"
+                    fullWidth
+                    inputProps={{ min: 0, max: 59 }}
+                    onChange={(e) => {
+                      field.onChange(parseInt(e.target.value, 10));
+                    }}
+                  />
+                )}
+              />
             </Grid>
           </Grid>
         </Box>
+
         <Grid container spacing={4}>
           {selectedPieces &&
             selectedPieces.map((piece, pieceIndex) => (
-              <Grid item xs={12} sm={6} md={4} key={pieceIndex}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                key={pieceIndex}
+                sx={{
+                  "@media (max-width: 300px)": {
+                    width: "100%",
+                  },
+                }}
+              >
                 <Box
                   sx={{
                     borderRadius: "1rem",
