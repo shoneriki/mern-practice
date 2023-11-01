@@ -122,10 +122,16 @@ export const ProgramList = () => {
       {loading ? (
         <section>Loading...</section>
       ) : (
-        <Box className="programList" sx={{ width: "80%", margin: "2rem auto" }}>
+        <Box
+          className="programList"
+          sx={{
+            width: "80%",
+            margin: "2rem auto",
+          }}
+        >
           <Typography
             variant={"h4"}
-            sx={{ textAlign: "center", margin: "1rem auto", width: "80%" }}
+            sx={{ textAlign: "center", margin: "1rem auto", width: "100%" }}
           >
             Programs
           </Typography>
@@ -138,24 +144,25 @@ export const ProgramList = () => {
               gridGap: "16px",
               justifyContent: "center",
               alignItems: "center",
+              width: "100%"
             }}
           >
             {Array.isArray(programs) && programs.length !== 0 ? (
               <>
                 {programs.map((program, programIndex) => {
                   return (
-                    <Grid item centered xs={12} sm={6} md={4} key={program._id}>
+                    <Grid item centered xs={12} key={program._id}>
                       <Card
                         sx={{
                           borderRadius: "1rem",
                           padding: "1rem",
-                          width: "80%",
+                          width: "100%",
                         }}
                       >
                         <CardContent
                           sx={{
-                            height: "16rem",
-                            overflowY: "auto",
+                            // overflowY: "auto",
+                            width: "100%",
                           }}
                         >
                           <Typography
@@ -286,15 +293,13 @@ export const ProgramList = () => {
                     </Grid>
                   );
                 })}
-                <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <Button
+                {/* <Button
                     variant="contained"
                     color="primary"
                     onClick={() => navigate(`/program/create`)}
                   >
                     Add Program?
-                  </Button>
-                </Grid>
+                  </Button> */}
               </>
             ) : (
               <Box
@@ -302,7 +307,6 @@ export const ProgramList = () => {
                   textAlign: "center",
                   marginTop: "2rem",
                   width: "100%",
-                  gridColumn: "1 / -1", // Make the Box span the entire width of the grid
                 }}
               >
                 <Typography variant="h6">
@@ -326,6 +330,23 @@ export const ProgramList = () => {
               </Box>
             )}
           </Grid>
+          {Array.isArray(programs) && programs.length !== 0 && (
+            <Box
+              sx={{
+                textAlign: "center",
+                marginTop: "2rem", // Adjust this value as needed
+                width: "100%",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(`/program/create`)}
+              >
+                Add Program?
+              </Button>
+            </Box>
+          )}
         </Box>
       )}
     </>
